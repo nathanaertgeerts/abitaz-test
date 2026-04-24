@@ -153,7 +153,7 @@ const MegaPanel = ({
         {showRail && (
           <nav
             aria-label="Categories"
-            className="col-span-12 md:col-span-3 lg:col-span-2"
+            className="col-span-12 md:col-span-3"
           >
             <ul className="space-y-1 border-r border-border pr-4">
               {groups.map((g, i) => {
@@ -171,13 +171,13 @@ const MegaPanel = ({
                         }
                         setActiveGroup(i);
                       }}
-                      className={`flex w-full items-center justify-between rounded-md px-3 py-2.5 text-left text-[13px] font-bold uppercase tracking-wider transition-colors ${
+                      className={`flex w-full items-center justify-between gap-2 rounded-md px-3 py-2.5 text-left text-[13px] font-bold uppercase tracking-wider transition-colors ${
                         active
                           ? "bg-cta/10 text-cta"
                           : "text-foreground hover:bg-surface hover:text-primary"
                       }`}
                     >
-                      <span>
+                      <span className="whitespace-nowrap">
                         {g.to ? (
                           <Link
                             to={g.to}
@@ -194,7 +194,7 @@ const MegaPanel = ({
                         )}
                       </span>
                       <ChevronRight
-                        className={`h-3.5 w-3.5 transition-opacity ${
+                        className={`h-3.5 w-3.5 flex-none transition-opacity ${
                           active ? "opacity-100" : "opacity-30"
                         }`}
                       />
@@ -209,7 +209,7 @@ const MegaPanel = ({
         {/* Right side: sub-columns + feature for the active group */}
         <div
           className={`col-span-12 ${
-            showRail ? "md:col-span-9 lg:col-span-10" : "md:col-span-12"
+            showRail ? "md:col-span-9" : "md:col-span-12"
           }`}
         >
           <div className="grid grid-cols-12 gap-8">
