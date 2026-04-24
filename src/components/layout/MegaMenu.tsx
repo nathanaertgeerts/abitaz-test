@@ -1,6 +1,6 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, ChevronRight } from "lucide-react";
 
 export type MegaColumn = {
   title: string;
@@ -16,9 +16,21 @@ export type MegaFeature = {
   image?: string;
 };
 
+/** A "group" represents one selectable top-category in the left rail.
+ *  Each group can have its own sub-columns and featured panel. */
+export type MegaGroup = {
+  label: string;
+  to?: string;
+  columns: MegaColumn[];
+  feature?: MegaFeature;
+};
+
 export type MegaMenuItem = {
   label: string;
   to: string;
+  /** Preferred: groups shown in a left rail; selecting one swaps the right side. */
+  groups?: MegaGroup[];
+  /** Legacy single-panel layout (still supported when no `groups`). */
   columns?: MegaColumn[];
   feature?: MegaFeature;
   viewAll?: { label: string; to: string };
@@ -30,10 +42,12 @@ type Props = {
 
 export const MegaMenu = ({ items }: Props) => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [activeGroup, setActiveGroup] = useState(0);
   const closeTimer = useRef<number | null>(null);
 
   const open = (i: number) => {
     if (closeTimer.current) window.clearTimeout(closeTimer.current);
+    if (i !== openIndex) setActiveGroup(0);
     setOpenIndex(i);
   };
   const scheduleClose = () => {
@@ -41,11 +55,18 @@ export const MegaMenu = ({ items }: Props) => {
     closeTimer.current = window.setTimeout(() => setOpenIndex(null), 120);
   };
 
+  // Reset selected group whenever menu closes
+  useEffect(() => {
+    if (openIndex === null) setActiveGroup(0);
+  }, [openIndex]);
+
+  const closeAll = () => setOpenIndex(null);
+
   return (
     <div className="relative" onMouseLeave={scheduleClose}>
       <ul className="container-abitaz flex h-11 items-center gap-6 overflow-x-auto text-sm font-medium">
         {items.map((item, i) => {
-          const hasMenu = !!(item.columns?.length || item.feature);
+          const hasMenu = !!(item.groups?.length || item.columns?.length || item.feature);
           const isOpen = openIndex === i;
           return (
             <li
@@ -74,90 +95,199 @@ export const MegaMenu = ({ items }: Props) => {
       </ul>
 
       {/* Panel */}
-      {openIndex !== null && items[openIndex] && (items[openIndex].columns?.length || items[openIndex].feature) && (
+      {openIndex !== null &&
+        items[openIndex] &&
+        (items[openIndex].groups?.length ||
+          items[openIndex].columns?.length ||
+          items[openIndex].feature) && (
         <div
           onMouseEnter={() => open(openIndex)}
           onMouseLeave={scheduleClose}
           className="absolute left-0 right-0 top-full z-50 border-t border-white/10 bg-background text-foreground shadow-lg animate-in fade-in-0 slide-in-from-top-1 duration-150"
         >
-          <div className="container-abitaz py-8">
-            <div className="grid grid-cols-12 gap-8">
-              {items[openIndex].columns?.map((col) => (
-                <div key={col.title} className="col-span-12 md:col-span-2">
-                  <h3 className="mb-3 text-xs font-bold uppercase tracking-wide">
-                    {col.to ? (
-                      <Link
-                        to={col.to}
-                        onClick={() => setOpenIndex(null)}
-                        className="text-foreground transition-colors hover:text-primary"
-                      >
-                        {col.title}
-                      </Link>
-                    ) : (
-                      <span className="text-muted-foreground">{col.title}</span>
-                    )}
-                  </h3>
-                  <ul className="space-y-2">
-                    {col.links.map((link) => (
-                      <li key={link.to + link.label}>
-                        <Link
-                          to={link.to}
-                          onClick={() => setOpenIndex(null)}
-                          className="block text-sm text-foreground transition-colors hover:text-primary"
-                        >
-                          {link.label}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
+          <MegaPanel
+            item={items[openIndex]}
+            activeGroup={activeGroup}
+            setActiveGroup={setActiveGroup}
+            onClose={closeAll}
+          />
+        </div>
+      )}
+    </div>
+  );
+};
 
-              {items[openIndex].feature && (
-                <div className="col-span-12 md:col-span-4">
-                  <div className="overflow-hidden rounded-lg bg-surface">
-                    {items[openIndex].feature!.image && (
-                      <img
-                        src={items[openIndex].feature!.image}
-                        alt=""
-                        className="h-40 w-full object-cover"
-                      />
-                    )}
-                    <div className="p-5">
-                      <span className="text-xs font-medium uppercase tracking-wide text-cta">
-                        {items[openIndex].feature!.eyebrow}
+/* -------- Panel rendered with optional left-rail groups -------- */
+const MegaPanel = ({
+  item,
+  activeGroup,
+  setActiveGroup,
+  onClose,
+}: {
+  item: MegaMenuItem;
+  activeGroup: number;
+  setActiveGroup: (i: number) => void;
+  onClose: () => void;
+}) => {
+  // If no explicit groups, synthesize one from legacy columns/feature
+  const groups: MegaGroup[] =
+    item.groups && item.groups.length > 0
+      ? item.groups
+      : [
+          {
+            label: item.label,
+            to: item.to,
+            columns: item.columns ?? [],
+            feature: item.feature,
+          },
+        ];
+
+  const showRail = (item.groups?.length ?? 0) > 0;
+  const idx = Math.min(activeGroup, groups.length - 1);
+  const current = groups[idx];
+
+  return (
+    <div className="container-abitaz py-8">
+      <div className="grid grid-cols-12 gap-8">
+        {/* Left rail with selectable top-categories */}
+        {showRail && (
+          <nav
+            aria-label="Categories"
+            className="col-span-12 md:col-span-3 lg:col-span-2"
+          >
+            <ul className="space-y-1 border-r border-border pr-4">
+              {groups.map((g, i) => {
+                const active = i === idx;
+                return (
+                  <li key={g.label}>
+                    <button
+                      type="button"
+                      onMouseEnter={() => setActiveGroup(i)}
+                      onFocus={() => setActiveGroup(i)}
+                      onClick={() => {
+                        if (g.to) {
+                          onClose();
+                          // allow Link below to navigate via wrapper
+                        }
+                        setActiveGroup(i);
+                      }}
+                      className={`flex w-full items-center justify-between rounded-md px-3 py-2.5 text-left text-[13px] font-bold uppercase tracking-wider transition-colors ${
+                        active
+                          ? "bg-cta/10 text-cta"
+                          : "text-foreground hover:bg-surface hover:text-primary"
+                      }`}
+                    >
+                      <span>
+                        {g.to ? (
+                          <Link
+                            to={g.to}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              onClose();
+                            }}
+                            className="block"
+                          >
+                            {g.label}
+                          </Link>
+                        ) : (
+                          g.label
+                        )}
                       </span>
-                      <h4 className="mt-1 font-display text-lg font-bold">
-                        {items[openIndex].feature!.title}
-                      </h4>
-                      <p className="mt-2 text-sm text-muted-foreground">
-                        {items[openIndex].feature!.description}
-                      </p>
+                      <ChevronRight
+                        className={`h-3.5 w-3.5 transition-opacity ${
+                          active ? "opacity-100" : "opacity-30"
+                        }`}
+                      />
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
+        )}
+
+        {/* Right side: sub-columns + feature for the active group */}
+        <div
+          className={`col-span-12 ${
+            showRail ? "md:col-span-9 lg:col-span-10" : "md:col-span-12"
+          }`}
+        >
+          <div className="grid grid-cols-12 gap-8">
+            {current.columns.map((col) => (
+              <div key={col.title} className="col-span-12 md:col-span-3">
+                <h3 className="mb-3 text-xs font-bold uppercase tracking-wide">
+                  {col.to ? (
+                    <Link
+                      to={col.to}
+                      onClick={onClose}
+                      className="text-foreground transition-colors hover:text-primary"
+                    >
+                      {col.title}
+                    </Link>
+                  ) : (
+                    <span className="text-muted-foreground">{col.title}</span>
+                  )}
+                </h3>
+                <ul className="space-y-2">
+                  {col.links.map((link) => (
+                    <li key={link.to + link.label}>
                       <Link
-                        to={items[openIndex].feature!.cta.to}
-                        onClick={() => setOpenIndex(null)}
-                        className="mt-3 inline-flex items-center text-sm font-semibold text-primary hover:underline"
+                        to={link.to}
+                        onClick={onClose}
+                        className="block text-sm text-foreground transition-colors hover:text-primary"
                       >
-                        {items[openIndex].feature!.cta.label} →
+                        {link.label}
                       </Link>
-                    </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+
+            {current.feature && (
+              <div className="col-span-12 md:col-span-3">
+                <div className="overflow-hidden rounded-lg bg-surface">
+                  {current.feature.image && (
+                    <img
+                      src={current.feature.image}
+                      alt=""
+                      className="h-32 w-full object-cover"
+                    />
+                  )}
+                  <div className="p-4">
+                    <span className="text-xs font-medium uppercase tracking-wide text-cta">
+                      {current.feature.eyebrow}
+                    </span>
+                    <h4 className="mt-1 font-display text-base font-bold">
+                      {current.feature.title}
+                    </h4>
+                    <p className="mt-1.5 line-clamp-3 text-xs text-muted-foreground">
+                      {current.feature.description}
+                    </p>
+                    <Link
+                      to={current.feature.cta.to}
+                      onClick={onClose}
+                      className="mt-2 inline-flex items-center text-sm font-semibold text-primary hover:underline"
+                    >
+                      {current.feature.cta.label} →
+                    </Link>
                   </div>
                 </div>
-              )}
-            </div>
-
-            {items[openIndex].viewAll && (
-              <div className="mt-6 border-t border-border pt-4">
-                <Link
-                  to={items[openIndex].viewAll!.to}
-                  onClick={() => setOpenIndex(null)}
-                  className="inline-flex items-center text-sm font-semibold text-primary hover:underline"
-                >
-                  {items[openIndex].viewAll!.label} →
-                </Link>
               </div>
             )}
           </div>
+        </div>
+      </div>
+
+      {item.viewAll && (
+        <div className="mt-6 border-t border-border pt-4">
+          <Link
+            to={item.viewAll.to}
+            onClick={onClose}
+            className="inline-flex items-center text-sm font-semibold text-primary hover:underline"
+          >
+            {item.viewAll.label} →
+          </Link>
         </div>
       )}
     </div>
