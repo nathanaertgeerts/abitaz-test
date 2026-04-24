@@ -86,6 +86,7 @@ const tiles: Tile[] = [
 export const HeroGrid = () => {
   const scrollerRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [reduceMotion, setReduceMotion] = useState(false);
   const dragState = useRef({
     isDown: false,
     startX: 0,
@@ -96,6 +97,15 @@ export const HeroGrid = () => {
     moved: false,
   });
   const momentumRaf = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.matchMedia) return;
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => setReduceMotion(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
 
   useEffect(() => {
     const el = scrollerRef.current;
@@ -127,7 +137,7 @@ export const HeroGrid = () => {
     const child = el.children[i] as HTMLElement | undefined;
     if (!child) return;
     const left = child.offsetLeft - (el.clientWidth - child.offsetWidth) / 2;
-    el.scrollTo({ left, behavior: "smooth" });
+    el.scrollTo({ left, behavior: reduceMotion ? "auto" : "smooth" });
   };
 
   const cancelMomentum = () => {
@@ -147,7 +157,7 @@ export const HeroGrid = () => {
     const target = Math.round(current + bias);
     const max = tiles.length - 1;
     const clamped = Math.max(0, Math.min(max, target));
-    el.scrollTo({ left: clamped * w, behavior: "smooth" });
+    el.scrollTo({ left: clamped * w, behavior: reduceMotion ? "auto" : "smooth" });
   };
 
   const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
@@ -224,7 +234,9 @@ export const HeroGrid = () => {
           onPointerMove={onPointerMove}
           onPointerUp={endDrag}
           onPointerCancel={endDrag}
-          className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain scroll-smooth rounded-lg px-4 pb-1 touch-pan-y select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 [scroll-behavior:smooth] [scroll-snap-stop:always] [-webkit-overflow-scrolling:touch] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+          className={`-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain rounded-lg px-4 pb-1 touch-pan-y select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 [scroll-snap-stop:always] [-webkit-overflow-scrolling:touch] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden ${
+            reduceMotion ? "[scroll-behavior:auto]" : "scroll-smooth [scroll-behavior:smooth]"
+          }`}
         >
           {tiles.map((tile, i) => (
             <Link
@@ -272,7 +284,9 @@ export const HeroGrid = () => {
               aria-label={`Go to slide ${i + 1}`}
               aria-current={activeIndex === i ? "true" : undefined}
               onClick={() => scrollToIndex(i)}
-              className={`h-1.5 rounded-full transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
+              className={`h-1.5 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
+                reduceMotion ? "" : "transition-all"
+              } ${
                 activeIndex === i ? "w-6 bg-primary" : "w-1.5 bg-border"
               }`}
             />
