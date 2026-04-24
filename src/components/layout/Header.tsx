@@ -11,6 +11,7 @@ const mainNav: MegaMenuItem[] = [
     columns: [
       {
         title: "Indoor lighting",
+        to: "/category/indoor-lighting",
         links: [
           { label: "Pendant lamps", to: "/category/pendant-lamps" },
           { label: "Ceiling lamps", to: "/category/ceiling-lamps" },
@@ -22,6 +23,7 @@ const mainNav: MegaMenuItem[] = [
       },
       {
         title: "Outdoor lighting",
+        to: "/category/outdoor-lighting",
         links: [
           { label: "Outdoor wall lamps", to: "/category/outdoor-wall-lamps" },
           { label: "Ceiling lamps", to: "/category/outdoor-ceiling" },
@@ -31,6 +33,7 @@ const mainNav: MegaMenuItem[] = [
       },
       {
         title: "Track lighting",
+        to: "/category/track-lighting",
         links: [
           { label: "Tracks", to: "/category/tracks" },
           { label: "Track fixtures", to: "/category/track-fixtures" },
@@ -40,6 +43,7 @@ const mainNav: MegaMenuItem[] = [
       },
       {
         title: "Light bulbs",
+        to: "/category/bulbs",
         links: [
           { label: "E27 bulbs", to: "/category/bulbs?socket=e27" },
           { label: "E14 bulbs", to: "/category/bulbs?socket=e14" },
@@ -64,6 +68,7 @@ const mainNav: MegaMenuItem[] = [
     columns: [
       {
         title: "Cables & cords",
+        to: "/category/cables",
         links: [
           { label: "Textile cords", to: "/category/textile-cords" },
           { label: "Power cables", to: "/category/power-cables" },
@@ -72,6 +77,7 @@ const mainNav: MegaMenuItem[] = [
       },
       {
         title: "Lampshades",
+        to: "/category/lampshades",
         links: [
           { label: "Fabric shades", to: "/category/fabric-shades" },
           { label: "Metal shades", to: "/category/metal-shades" },
@@ -80,6 +86,7 @@ const mainNav: MegaMenuItem[] = [
       },
       {
         title: "Dimmers & switches",
+        to: "/category/dimmers-switches",
         links: [
           { label: "Wall dimmers", to: "/category/wall-dimmers" },
           { label: "Plug-in dimmers", to: "/category/plug-dimmers" },
@@ -95,6 +102,7 @@ const mainNav: MegaMenuItem[] = [
     columns: [
       {
         title: "Seating",
+        to: "/category/seating",
         links: [
           { label: "Chairs", to: "/category/chairs" },
           { label: "Lounge chairs", to: "/category/lounge-chairs" },
@@ -103,6 +111,7 @@ const mainNav: MegaMenuItem[] = [
       },
       {
         title: "Tables",
+        to: "/category/tables",
         links: [
           { label: "Dining tables", to: "/category/dining-tables" },
           { label: "Coffee tables", to: "/category/coffee-tables" },
@@ -111,6 +120,7 @@ const mainNav: MegaMenuItem[] = [
       },
       {
         title: "Storage",
+        to: "/category/storage",
         links: [
           { label: "Shelving", to: "/category/shelving" },
           { label: "Cabinets", to: "/category/cabinets" },
@@ -125,6 +135,7 @@ const mainNav: MegaMenuItem[] = [
     columns: [
       {
         title: "Premium",
+        to: "/brands?tier=premium",
         links: [
           { label: "Louis Poulsen", to: "/brands/louis-poulsen" },
           { label: "Flos", to: "/brands/flos" },
@@ -134,6 +145,7 @@ const mainNav: MegaMenuItem[] = [
       },
       {
         title: "Everyday",
+        to: "/brands?tier=everyday",
         links: [
           { label: "Nordlux", to: "/brands/nordlux" },
           { label: "Philips", to: "/brands/philips" },
