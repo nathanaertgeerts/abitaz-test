@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { brands } from "@/data/products";
+import { brandLogos } from "./BrandLogos";
 
 export const BrandsBar = () => {
   return (
@@ -12,15 +13,23 @@ export const BrandsBar = () => {
           </Link>
         </div>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-6">
-          {brands.map((b) => (
-            <Link
-              key={b.slug}
-              to={`/brand/${b.slug}`}
-              className="flex h-20 items-center justify-center rounded-md bg-card font-display text-base font-semibold text-foreground transition hover:bg-primary hover:text-primary-foreground"
-            >
-              {b.name}
-            </Link>
-          ))}
+          {brands.map((b) => {
+            const Logo = brandLogos[b.slug];
+            return (
+              <Link
+                key={b.slug}
+                to={`/brand/${b.slug}`}
+                aria-label={b.name}
+                className="group flex h-20 items-center justify-center rounded-md bg-card px-4 text-foreground/70 transition hover:text-primary hover:shadow-md"
+              >
+                {Logo ? (
+                  <Logo className="h-8 w-auto max-w-full transition group-hover:scale-[1.03]" />
+                ) : (
+                  <span className="font-display font-semibold">{b.name}</span>
+                )}
+              </Link>
+            );
+          })}
         </div>
       </div>
     </section>
