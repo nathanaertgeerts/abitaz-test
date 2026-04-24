@@ -3,63 +3,150 @@ import { Link } from "react-router-dom";
 import { Logo } from "./Logo";
 import { MegaMenu, type MegaMenuItem } from "./MegaMenu";
 import heroIndoor from "@/assets/hero-indoor.jpg";
+import heroOutdoor from "@/assets/hero-outdoor.jpg";
+import heroDesigner from "@/assets/hero-designer.jpg";
+import heroInstall from "@/assets/hero-installation.jpg";
+import heroWinter from "@/assets/hero-winter-sale.jpg";
 
 const mainNav: MegaMenuItem[] = [
   {
     label: "Lighting",
     to: "/category/indoor-lighting",
-    columns: [
+    groups: [
       {
-        title: "Indoor lighting",
+        label: "Indoor lighting",
         to: "/category/indoor-lighting",
-        links: [
-          { label: "Pendant lamps", to: "/category/pendant-lamps" },
-          { label: "Ceiling lamps", to: "/category/ceiling-lamps" },
-          { label: "Wall lamps", to: "/category/wall-lamps" },
-          { label: "Floor lamps", to: "/category/floor-lamps" },
-          { label: "Table lamps", to: "/category/table-lamps" },
-          { label: "Recessed spots", to: "/category/recessed-spots" },
+        columns: [
+          {
+            title: "Pendants & ceiling",
+            to: "/category/pendant-lamps",
+            links: [
+              { label: "Pendant lamps", to: "/category/pendant-lamps" },
+              { label: "Ceiling lamps", to: "/category/ceiling-lamps" },
+              { label: "Recessed spots", to: "/category/recessed-spots" },
+              { label: "Track lighting", to: "/category/track-lighting" },
+            ],
+          },
+          {
+            title: "Wall & floor",
+            to: "/category/wall-lamps",
+            links: [
+              { label: "Wall lamps", to: "/category/wall-lamps" },
+              { label: "Floor lamps", to: "/category/floor-lamps" },
+              { label: "Table lamps", to: "/category/table-lamps" },
+              { label: "Reading lights", to: "/category/reading-lights" },
+            ],
+          },
         ],
+        feature: {
+          eyebrow: "Featured",
+          title: "Philips Hue",
+          description:
+            "Smart lighting at your fingertips. Full control in one app.",
+          cta: { label: "Discover Hue", to: "/brands/philips" },
+          image: heroIndoor,
+        },
       },
       {
-        title: "Outdoor lighting",
+        label: "Outdoor lighting",
         to: "/category/outdoor-lighting",
-        links: [
-          { label: "Outdoor wall lamps", to: "/category/outdoor-wall-lamps" },
-          { label: "Ceiling lamps", to: "/category/outdoor-ceiling" },
-          { label: "Ground spots", to: "/category/ground-spots" },
-          { label: "String lights", to: "/category/string-lights" },
+        columns: [
+          {
+            title: "Wall & ceiling",
+            to: "/category/outdoor-wall-lamps",
+            links: [
+              { label: "Outdoor wall lamps", to: "/category/outdoor-wall-lamps" },
+              { label: "Outdoor ceiling", to: "/category/outdoor-ceiling" },
+              { label: "Porch lights", to: "/category/porch-lights" },
+            ],
+          },
+          {
+            title: "Garden & path",
+            to: "/category/ground-spots",
+            links: [
+              { label: "Ground spots", to: "/category/ground-spots" },
+              { label: "Path lighting", to: "/category/path-lighting" },
+              { label: "String lights", to: "/category/string-lights" },
+              { label: "Solar lighting", to: "/category/solar-lighting" },
+            ],
+          },
         ],
+        feature: {
+          eyebrow: "Outdoor season",
+          title: "Garden ready —25%",
+          description:
+            "Light up your terrace and garden with weatherproof favourites.",
+          cta: { label: "Shop outdoor", to: "/category/outdoor-lighting" },
+          image: heroOutdoor,
+        },
       },
       {
-        title: "Track lighting",
-        to: "/category/track-lighting",
-        links: [
-          { label: "Tracks", to: "/category/tracks" },
-          { label: "Track fixtures", to: "/category/track-fixtures" },
-          { label: "Connectors & end caps", to: "/category/track-connectors" },
-          { label: "Power supplies", to: "/category/track-power" },
-        ],
-      },
-      {
-        title: "Light bulbs",
+        label: "LED & bulbs",
         to: "/category/bulbs",
-        links: [
-          { label: "E27 bulbs", to: "/category/bulbs?socket=e27" },
-          { label: "E14 bulbs", to: "/category/bulbs?socket=e14" },
-          { label: "GU10 spots", to: "/category/bulbs?socket=gu10" },
-          { label: "Smart bulbs", to: "/category/bulbs?type=smart" },
+        columns: [
+          {
+            title: "By socket",
+            to: "/category/bulbs",
+            links: [
+              { label: "E27 bulbs", to: "/category/bulbs?socket=e27" },
+              { label: "E14 bulbs", to: "/category/bulbs?socket=e14" },
+              { label: "GU10 spots", to: "/category/bulbs?socket=gu10" },
+              { label: "G9 capsules", to: "/category/bulbs?socket=g9" },
+            ],
+          },
+          {
+            title: "By type",
+            to: "/category/bulbs",
+            links: [
+              { label: "Filament bulbs", to: "/category/bulbs?type=filament" },
+              { label: "Smart bulbs", to: "/category/bulbs?type=smart" },
+              { label: "Dimmable LED", to: "/category/bulbs?type=dimmable" },
+              { label: "Colour LED", to: "/category/bulbs?type=color" },
+            ],
+          },
         ],
+        feature: {
+          eyebrow: "Save energy",
+          title: "Switch to LED",
+          description:
+            "Up to 80% less energy with the same warm, comfortable light.",
+          cta: { label: "Shop LED", to: "/category/bulbs" },
+          image: heroDesigner,
+        },
+      },
+      {
+        label: "Smart lighting",
+        to: "/category/smart-lighting",
+        columns: [
+          {
+            title: "Systems",
+            to: "/category/smart-lighting",
+            links: [
+              { label: "Philips Hue", to: "/brands/philips" },
+              { label: "Nordlux Smart", to: "/brands/nordlux" },
+              { label: "Smart switches", to: "/category/smart-switches" },
+            ],
+          },
+          {
+            title: "Accessories",
+            to: "/category/smart-accessories",
+            links: [
+              { label: "Remotes", to: "/category/smart-remotes" },
+              { label: "Sensors", to: "/category/smart-sensors" },
+              { label: "Bridges", to: "/category/smart-bridges" },
+            ],
+          },
+        ],
+        feature: {
+          eyebrow: "New",
+          title: "Smart starter sets",
+          description:
+            "Everything you need to make your home smart, in one box.",
+          cta: { label: "View sets", to: "/category/smart-lighting" },
+          image: heroIndoor,
+        },
       },
     ],
-    feature: {
-      eyebrow: "Featured",
-      title: "Philips Hue",
-      description:
-        "Philips' ingenious lighting system — smart lighting at your fingertips, with full control in your hands.",
-      cta: { label: "Discover Hue", to: "/brands/philips" },
-      image: heroIndoor,
-    },
     viewAll: { label: "View all lighting", to: "/category/indoor-lighting" },
   },
   {
@@ -132,24 +219,75 @@ const mainNav: MegaMenuItem[] = [
   {
     label: "Brands",
     to: "/brands",
-    columns: [
+    groups: [
       {
-        title: "Premium",
+        label: "Designer brands",
         to: "/brands?tier=premium",
-        links: [
-          { label: "Louis Poulsen", to: "/brands/louis-poulsen" },
-          { label: "Flos", to: "/brands/flos" },
-          { label: "&tradition", to: "/brands/tradition" },
-          { label: "Normann Copenhagen", to: "/brands/normann-copenhagen" },
+        columns: [
+          {
+            title: "Top designers",
+            to: "/brands?tier=premium",
+            links: [
+              { label: "Louis Poulsen", to: "/brands/louis-poulsen" },
+              { label: "Flos", to: "/brands/flos" },
+              { label: "&tradition", to: "/brands/tradition" },
+              { label: "Normann Copenhagen", to: "/brands/normann-copenhagen" },
+            ],
+          },
         ],
+        feature: {
+          eyebrow: "Iconic",
+          title: "Flos new collection",
+          description:
+            "Discover the latest Flos releases — sculptural, timeless designs.",
+          cta: { label: "Shop Flos", to: "/brands/flos" },
+          image: heroDesigner,
+        },
       },
       {
-        title: "Everyday",
+        label: "Everyday brands",
         to: "/brands?tier=everyday",
-        links: [
-          { label: "Nordlux", to: "/brands/nordlux" },
-          { label: "Philips", to: "/brands/philips" },
+        columns: [
+          {
+            title: "Popular brands",
+            to: "/brands?tier=everyday",
+            links: [
+              { label: "Nordlux", to: "/brands/nordlux" },
+              { label: "Philips", to: "/brands/philips" },
+            ],
+          },
         ],
+        feature: {
+          eyebrow: "Best value",
+          title: "Nordlux essentials",
+          description:
+            "Scandinavian design at honest prices — perfect for every room.",
+          cta: { label: "Shop Nordlux", to: "/brands/nordlux" },
+          image: heroInstall,
+        },
+      },
+      {
+        label: "On sale",
+        to: "/sale",
+        columns: [
+          {
+            title: "Sale by brand",
+            to: "/sale",
+            links: [
+              { label: "Louis Poulsen sale", to: "/brands/louis-poulsen?sale=1" },
+              { label: "Flos sale", to: "/brands/flos?sale=1" },
+              { label: "Nordlux sale", to: "/brands/nordlux?sale=1" },
+            ],
+          },
+        ],
+        feature: {
+          eyebrow: "Up to -45%",
+          title: "Winter Sale",
+          description:
+            "The lowest prices of the season across designer and everyday brands.",
+          cta: { label: "Shop the sale", to: "/sale" },
+          image: heroWinter,
+        },
       },
     ],
     viewAll: { label: "All brands A–Z", to: "/brands" },
