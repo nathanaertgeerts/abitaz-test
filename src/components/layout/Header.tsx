@@ -1,11 +1,147 @@
 import { Heart, Search, ShoppingCart, User } from "lucide-react";
-import { Link, NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Logo } from "./Logo";
+import { MegaMenu, type MegaMenuItem } from "./MegaMenu";
+import heroIndoor from "@/assets/hero-indoor.jpg";
 
-const mainNav = [
-  { label: "Lighting", to: "/category/pendant-lamps" },
-  { label: "Installation materials", to: "/category/installation" },
-  { label: "Brands", to: "/brands" },
+const mainNav: MegaMenuItem[] = [
+  {
+    label: "Lighting",
+    to: "/category/indoor-lighting",
+    columns: [
+      {
+        title: "Indoor lighting",
+        links: [
+          { label: "Pendant lamps", to: "/category/pendant-lamps" },
+          { label: "Ceiling lamps", to: "/category/ceiling-lamps" },
+          { label: "Wall lamps", to: "/category/wall-lamps" },
+          { label: "Floor lamps", to: "/category/floor-lamps" },
+          { label: "Table lamps", to: "/category/table-lamps" },
+          { label: "Recessed spots", to: "/category/recessed-spots" },
+        ],
+      },
+      {
+        title: "Outdoor lighting",
+        links: [
+          { label: "Outdoor wall lamps", to: "/category/outdoor-wall-lamps" },
+          { label: "Ceiling lamps", to: "/category/outdoor-ceiling" },
+          { label: "Ground spots", to: "/category/ground-spots" },
+          { label: "String lights", to: "/category/string-lights" },
+        ],
+      },
+      {
+        title: "Track lighting",
+        links: [
+          { label: "Tracks", to: "/category/tracks" },
+          { label: "Track fixtures", to: "/category/track-fixtures" },
+          { label: "Connectors & end caps", to: "/category/track-connectors" },
+          { label: "Power supplies", to: "/category/track-power" },
+        ],
+      },
+      {
+        title: "Light bulbs",
+        links: [
+          { label: "E27 bulbs", to: "/category/bulbs?socket=e27" },
+          { label: "E14 bulbs", to: "/category/bulbs?socket=e14" },
+          { label: "GU10 spots", to: "/category/bulbs?socket=gu10" },
+          { label: "Smart bulbs", to: "/category/bulbs?type=smart" },
+        ],
+      },
+    ],
+    feature: {
+      eyebrow: "Featured",
+      title: "Philips Hue",
+      description:
+        "Philips' ingenious lighting system — smart lighting at your fingertips, with full control in your hands.",
+      cta: { label: "Discover Hue", to: "/brands/philips" },
+      image: heroIndoor,
+    },
+    viewAll: { label: "View all lighting", to: "/category/indoor-lighting" },
+  },
+  {
+    label: "Accessories",
+    to: "/category/accessories",
+    columns: [
+      {
+        title: "Cables & cords",
+        links: [
+          { label: "Textile cords", to: "/category/textile-cords" },
+          { label: "Power cables", to: "/category/power-cables" },
+          { label: "Cable connectors", to: "/category/cable-connectors" },
+        ],
+      },
+      {
+        title: "Lampshades",
+        links: [
+          { label: "Fabric shades", to: "/category/fabric-shades" },
+          { label: "Metal shades", to: "/category/metal-shades" },
+          { label: "Glass shades", to: "/category/glass-shades" },
+        ],
+      },
+      {
+        title: "Dimmers & switches",
+        links: [
+          { label: "Wall dimmers", to: "/category/wall-dimmers" },
+          { label: "Plug-in dimmers", to: "/category/plug-dimmers" },
+          { label: "Smart switches", to: "/category/smart-switches" },
+        ],
+      },
+    ],
+    viewAll: { label: "View all accessories", to: "/category/accessories" },
+  },
+  {
+    label: "Furniture",
+    to: "/category/furniture",
+    columns: [
+      {
+        title: "Seating",
+        links: [
+          { label: "Chairs", to: "/category/chairs" },
+          { label: "Lounge chairs", to: "/category/lounge-chairs" },
+          { label: "Sofas", to: "/category/sofas" },
+        ],
+      },
+      {
+        title: "Tables",
+        links: [
+          { label: "Dining tables", to: "/category/dining-tables" },
+          { label: "Coffee tables", to: "/category/coffee-tables" },
+          { label: "Side tables", to: "/category/side-tables" },
+        ],
+      },
+      {
+        title: "Storage",
+        links: [
+          { label: "Shelving", to: "/category/shelving" },
+          { label: "Cabinets", to: "/category/cabinets" },
+        ],
+      },
+    ],
+    viewAll: { label: "View all furniture", to: "/category/furniture" },
+  },
+  {
+    label: "Brands",
+    to: "/brands",
+    columns: [
+      {
+        title: "Premium",
+        links: [
+          { label: "Louis Poulsen", to: "/brands/louis-poulsen" },
+          { label: "Flos", to: "/brands/flos" },
+          { label: "&tradition", to: "/brands/tradition" },
+          { label: "Normann Copenhagen", to: "/brands/normann-copenhagen" },
+        ],
+      },
+      {
+        title: "Everyday",
+        links: [
+          { label: "Nordlux", to: "/brands/nordlux" },
+          { label: "Philips", to: "/brands/philips" },
+        ],
+      },
+    ],
+    viewAll: { label: "All brands A–Z", to: "/brands" },
+  },
   { label: "Sale", to: "/sale" },
 ];
 
@@ -66,23 +202,9 @@ export const Header = () => {
           </nav>
         </div>
 
-        {/* Main category nav */}
+        {/* Main category nav with mega menu */}
         <div className="border-t border-white/10">
-          <div className="container-abitaz flex h-11 items-center gap-6 overflow-x-auto text-sm font-medium">
-            {mainNav.map((item) => (
-              <NavLink
-                key={item.to}
-                to={item.to}
-                className={({ isActive }) =>
-                  `whitespace-nowrap py-3 transition-colors ${
-                    isActive ? "text-cta" : "text-primary-foreground/90 hover:text-cta"
-                  }`
-                }
-              >
-                {item.label}
-              </NavLink>
-            ))}
-          </div>
+          <MegaMenu items={mainNav} />
         </div>
       </div>
 
