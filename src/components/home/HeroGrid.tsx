@@ -63,8 +63,8 @@ const tiles: Tile[] = [
 
 export const HeroGrid = () => {
   return (
-    <section aria-label="Featured collections" className="pt-4">
-      <div className="grid grid-cols-2 gap-2 px-4 md:grid-cols-8 md:auto-rows-[220px] md:gap-0 md:overflow-hidden md:rounded-lg md:px-0">
+    <section aria-label="Featured collections" className="container-abitaz pt-4">
+      <div className="grid grid-cols-2 gap-2 md:grid-cols-8 md:auto-rows-[220px] md:gap-px md:overflow-hidden md:rounded-lg md:bg-border">
         {tiles.map((tile, i) => (
           <Link
             key={tile.to + i}
