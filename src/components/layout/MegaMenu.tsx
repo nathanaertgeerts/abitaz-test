@@ -55,8 +55,10 @@ export const MegaMenu = ({ items }: Props) => {
             >
               <Link
                 to={item.to}
-                className={`flex items-center gap-1 whitespace-nowrap py-3 transition-colors ${
-                  isOpen ? "text-cta" : "text-primary-foreground/90 hover:text-cta"
+                className={`relative flex items-center gap-1 whitespace-nowrap py-3 font-semibold transition-colors after:absolute after:inset-x-0 after:bottom-0 after:h-[3px] after:bg-secondary after:transition-transform after:duration-200 ${
+                  isOpen
+                    ? "text-white after:scale-x-100"
+                    : "text-white/90 hover:text-white after:scale-x-0 hover:after:scale-x-100"
                 }`}
               >
                 {item.label}
