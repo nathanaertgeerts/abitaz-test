@@ -12,6 +12,8 @@ type Tile = {
   title: string;
   className: string;
   priority?: boolean;
+  /** Tailwind classes for rounding the outer corner this tile sits in (md+) */
+  roundClass?: string;
 };
 
 const tiles: Tile[] = [
@@ -22,6 +24,8 @@ const tiles: Tile[] = [
     title: "Winter Sale",
     className: "md:col-span-4 md:row-span-2",
     priority: true,
+    // Spans both rows on the left → rounds top-left + bottom-left
+    roundClass: "md:rounded-l-lg",
   },
   {
     to: "/category/pendant-lamps",
@@ -36,6 +40,8 @@ const tiles: Tile[] = [
     eyebrow: "All your lights for",
     title: "Outdoor",
     className: "md:col-span-2 md:row-span-1",
+    // Top-right corner
+    roundClass: "md:rounded-tr-lg",
   },
   {
     to: "/category/installation",
@@ -50,18 +56,20 @@ const tiles: Tile[] = [
     eyebrow: "New collection",
     title: "Flos",
     className: "md:col-span-2 md:row-span-1",
+    // Bottom-right corner
+    roundClass: "md:rounded-br-lg",
   },
 ];
 
 export const HeroGrid = () => {
   return (
-    <section aria-label="Featured collections" className="container-abitaz pt-6">
-      <div className="grid grid-cols-2 gap-3 md:grid-cols-8 md:gap-4 md:auto-rows-[260px]">
+    <section aria-label="Featured collections" className="pt-4">
+      <div className="grid grid-cols-2 gap-2 px-4 md:grid-cols-8 md:auto-rows-[220px] md:gap-0 md:overflow-hidden md:rounded-lg md:px-0">
         {tiles.map((tile, i) => (
           <Link
             key={tile.to + i}
             to={tile.to}
-            className={`group relative overflow-hidden rounded-lg bg-surface ${tile.className}`}
+            className={`group relative overflow-hidden rounded-lg bg-surface md:rounded-none ${tile.roundClass ?? ""} ${tile.className}`}
           >
             <img
               src={tile.image}
@@ -70,14 +78,14 @@ export const HeroGrid = () => {
               fetchPriority={tile.priority ? "high" : "auto"}
               className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
-            <div className="absolute bottom-0 left-0 right-0 p-5 text-white md:p-6">
+            <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
+            <div className="absolute bottom-0 left-0 right-0 p-4 text-white md:p-5">
               {tile.eyebrow && (
-                <span className="block text-xs font-medium opacity-90 md:text-sm">
+                <span className="block text-xs font-medium opacity-90">
                   {tile.eyebrow}
                 </span>
               )}
-              <span className="font-display text-2xl font-bold leading-tight md:text-4xl">
+              <span className="font-display text-xl font-bold leading-tight md:text-3xl">
                 {tile.title}
               </span>
             </div>
