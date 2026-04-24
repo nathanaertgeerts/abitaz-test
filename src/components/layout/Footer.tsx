@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Logo } from "./Logo";
+import { PaymentMethods } from "./PaymentMethods";
 
 const columns = [
   {
@@ -47,7 +48,9 @@ export const Footer = () => {
         </div>
         {columns.map((col) => (
           <div key={col.title}>
-            <h3 className="mb-4 text-sm font-semibold uppercase tracking-wide">{col.title}</h3>
+            <h3 className="mb-4 text-sm font-bold uppercase tracking-wide text-white">
+              {col.title}
+            </h3>
             <ul className="space-y-2 text-sm text-primary-foreground/85">
               {col.links.map((l) => (
                 <li key={l.label}>
@@ -60,6 +63,17 @@ export const Footer = () => {
           </div>
         ))}
       </div>
+
+      {/* Payment methods */}
+      <div className="border-t border-white/10">
+        <div className="container-abitaz flex flex-col items-center gap-4 py-6 md:flex-row md:justify-between">
+          <span className="text-xs font-semibold uppercase tracking-wide text-white">
+            Secure payment
+          </span>
+          <PaymentMethods />
+        </div>
+      </div>
+
       <div className="border-t border-white/10">
         <div className="container-abitaz flex flex-col items-center justify-between gap-2 py-4 text-xs text-primary-foreground/70 md:flex-row">
           <span>© {new Date().getFullYear()} Abitaz. All rights reserved.</span>
