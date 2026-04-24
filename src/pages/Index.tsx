@@ -3,6 +3,7 @@ import { BrandsBar } from "@/components/home/BrandsBar";
 import { CategoryStrip } from "@/components/home/CategoryStrip";
 import { HeroGrid } from "@/components/home/HeroGrid";
 import { PopularProducts } from "@/components/home/PopularProducts";
+import { PromoBanners } from "@/components/home/PromoBanners";
 import { TrustStrip } from "@/components/home/TrustStrip";
 import { SiteLayout } from "@/components/layout/SiteLayout";
 
@@ -27,6 +28,7 @@ const Index = () => {
       <TrustStrip />
       <CategoryStrip />
       <PopularProducts />
+      <PromoBanners />
       <BrandsBar />
     </SiteLayout>
   );
