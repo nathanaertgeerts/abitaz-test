@@ -55,7 +55,7 @@ export const MegaMenu = ({ items }: Props) => {
             >
               <Link
                 to={item.to}
-                className={`relative flex items-center gap-1 whitespace-nowrap py-3 font-semibold transition-colors after:absolute after:inset-x-0 after:bottom-0 after:h-[3px] after:bg-secondary after:transition-transform after:duration-200 ${
+                className={`relative flex items-center gap-1.5 whitespace-nowrap py-3 text-[15px] font-semibold tracking-[-0.005em] transition-colors after:absolute after:inset-x-0 after:bottom-0 after:h-[3px] after:bg-secondary after:transition-transform after:duration-200 ${
                   isOpen
                     ? "text-white after:scale-x-100"
                     : "text-white/90 hover:text-white after:scale-x-0 hover:after:scale-x-100"
@@ -64,7 +64,7 @@ export const MegaMenu = ({ items }: Props) => {
                 {item.label}
                 {hasMenu && (
                   <ChevronDown
-                    className={`h-3.5 w-3.5 transition-transform ${isOpen ? "rotate-180" : ""}`}
+                    className={`h-4 w-4 transition-transform ${isOpen ? "rotate-180" : ""}`}
                   />
                 )}
               </Link>
