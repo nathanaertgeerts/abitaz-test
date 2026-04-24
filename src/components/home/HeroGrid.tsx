@@ -195,22 +195,45 @@ export const HeroGrid = () => {
     snapToNearest(s.velocity * 1000); // convert to px/s-ish for the bias calc
   };
 
+  const onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key !== "ArrowLeft" && e.key !== "ArrowRight" && e.key !== "Home" && e.key !== "End") {
+      return;
+    }
+    e.preventDefault();
+    const max = tiles.length - 1;
+    let next = activeIndex;
+    if (e.key === "ArrowLeft") next = Math.max(0, activeIndex - 1);
+    else if (e.key === "ArrowRight") next = Math.min(max, activeIndex + 1);
+    else if (e.key === "Home") next = 0;
+    else if (e.key === "End") next = max;
+    scrollToIndex(next);
+  };
+
   return (
     <section aria-label="Featured collections" className="container-abitaz pt-4">
       {/* Mobile: swipe carousel */}
       <div className="md:hidden">
         <div
           ref={scrollerRef}
+          role="region"
+          aria-roledescription="carousel"
+          aria-label="Featured collections carousel"
+          tabIndex={0}
+          onKeyDown={onKeyDown}
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
           onPointerUp={endDrag}
           onPointerCancel={endDrag}
-          className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain scroll-smooth px-4 pb-1 touch-pan-y select-none [scroll-behavior:smooth] [scroll-snap-stop:always] [-webkit-overflow-scrolling:touch] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+          className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain scroll-smooth rounded-lg px-4 pb-1 touch-pan-y select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 [scroll-behavior:smooth] [scroll-snap-stop:always] [-webkit-overflow-scrolling:touch] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
         >
           {tiles.map((tile, i) => (
             <Link
               key={tile.to + i}
               to={tile.to}
+              role="group"
+              aria-roledescription="slide"
+              aria-label={`${i + 1} of ${tiles.length}: ${tile.title}`}
+              aria-current={activeIndex === i ? "true" : undefined}
               draggable={false}
               onClick={(e) => {
                 if (dragState.current.moved) {
@@ -218,7 +241,7 @@ export const HeroGrid = () => {
                   dragState.current.moved = false;
                 }
               }}
-              className="group relative h-56 w-[88%] flex-none snap-center overflow-hidden rounded-lg bg-surface"
+              className="group relative h-56 w-[88%] flex-none snap-center overflow-hidden rounded-lg bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             >
               <img
                 src={tile.image}
@@ -247,8 +270,9 @@ export const HeroGrid = () => {
               key={i}
               type="button"
               aria-label={`Go to slide ${i + 1}`}
+              aria-current={activeIndex === i ? "true" : undefined}
               onClick={() => scrollToIndex(i)}
-              className={`h-1.5 rounded-full transition-all ${
+              className={`h-1.5 rounded-full transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
                 activeIndex === i ? "w-6 bg-primary" : "w-1.5 bg-border"
               }`}
             />
