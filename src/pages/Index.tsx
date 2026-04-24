@@ -1,16 +1,35 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useEffect } from "react";
+import { BrandsBar } from "@/components/home/BrandsBar";
+import { CategoryStrip } from "@/components/home/CategoryStrip";
+import { HeroGrid } from "@/components/home/HeroGrid";
+import { PopularProducts } from "@/components/home/PopularProducts";
+import { TrustStrip } from "@/components/home/TrustStrip";
+import { SiteLayout } from "@/components/layout/SiteLayout";
 
-// IMPORTANT: Fully REPLACE this with your own code
-const PlaceholderIndex = () => {
-  // PLACEHOLDER: Replace this entire return statement with the user's app.
-  // The inline background color is intentionally not part of the design system.
+const Index = () => {
+  useEffect(() => {
+    document.title = "Abitaz — Smart shop for lighting & installation materials";
+    const desc =
+      "Abitaz: honest prices, real stock, expert support. Shop indoor and outdoor lighting, top brands and installation materials.";
+    let meta = document.querySelector('meta[name="description"]');
+    if (!meta) {
+      meta = document.createElement("meta");
+      meta.setAttribute("name", "description");
+      document.head.appendChild(meta);
+    }
+    meta.setAttribute("content", desc);
+  }, []);
+
   return (
-    <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: '#fcfbf8' }}>
-      <img data-lovable-blank-page-placeholder="REMOVE_THIS" src="/placeholder.svg" alt="Your app will live here!" />
-    </div>
+    <SiteLayout>
+      <h1 className="sr-only">Abitaz — the smart shop for lighting</h1>
+      <HeroGrid />
+      <TrustStrip />
+      <CategoryStrip />
+      <PopularProducts />
+      <BrandsBar />
+    </SiteLayout>
   );
 };
-
-const Index = PlaceholderIndex;
 
 export default Index;
