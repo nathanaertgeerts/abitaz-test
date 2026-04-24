@@ -80,9 +80,22 @@ export const HeroGrid = () => {
     const el = scrollerRef.current;
     if (!el) return;
     const onScroll = () => {
-      const i = Math.round(el.scrollLeft / el.clientWidth);
-      setActiveIndex(i);
+      const center = el.scrollLeft + el.clientWidth / 2;
+      const children = Array.from(el.children) as HTMLElement[];
+      let bestIdx = 0;
+      let bestDist = Infinity;
+      for (let i = 0; i < children.length; i++) {
+        const child = children[i];
+        const childCenter = child.offsetLeft + child.offsetWidth / 2;
+        const dist = Math.abs(childCenter - center);
+        if (dist < bestDist) {
+          bestDist = dist;
+          bestIdx = i;
+        }
+      }
+      setActiveIndex(bestIdx);
     };
+    onScroll();
     el.addEventListener("scroll", onScroll, { passive: true });
     return () => el.removeEventListener("scroll", onScroll);
   }, []);
@@ -90,7 +103,10 @@ export const HeroGrid = () => {
   const scrollToIndex = (i: number) => {
     const el = scrollerRef.current;
     if (!el) return;
-    el.scrollTo({ left: i * el.clientWidth, behavior: "smooth" });
+    const child = el.children[i] as HTMLElement | undefined;
+    if (!child) return;
+    const left = child.offsetLeft - (el.clientWidth - child.offsetWidth) / 2;
+    el.scrollTo({ left, behavior: "smooth" });
   };
 
   const cancelMomentum = () => {
