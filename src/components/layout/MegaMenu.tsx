@@ -4,6 +4,7 @@ import { ChevronDown } from "lucide-react";
 
 export type MegaColumn = {
   title: string;
+  to?: string;
   links: { label: string; to: string }[];
 };
 
@@ -81,8 +82,18 @@ export const MegaMenu = ({ items }: Props) => {
             <div className="grid grid-cols-12 gap-8">
               {items[openIndex].columns?.map((col) => (
                 <div key={col.title} className="col-span-12 md:col-span-2">
-                  <h3 className="mb-3 text-xs font-bold uppercase tracking-wide text-muted-foreground">
-                    {col.title}
+                  <h3 className="mb-3 text-xs font-bold uppercase tracking-wide">
+                    {col.to ? (
+                      <Link
+                        to={col.to}
+                        onClick={() => setOpenIndex(null)}
+                        className="text-foreground transition-colors hover:text-primary"
+                      >
+                        {col.title}
+                      </Link>
+                    ) : (
+                      <span className="text-muted-foreground">{col.title}</span>
+                    )}
                   </h3>
                   <ul className="space-y-2">
                     {col.links.map((link) => (
