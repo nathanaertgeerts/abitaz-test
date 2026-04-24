@@ -148,7 +148,7 @@ const ProductDetail = () => {
               </div>
               <button
                 type="button"
-                className="h-11 flex-1 rounded-md bg-success px-6 text-sm font-semibold text-success-foreground hover:opacity-90"
+                className="h-11 flex-1 rounded-md bg-cta px-6 text-sm font-semibold text-cta-foreground transition hover:bg-cta-hover"
               >
                 Add to cart
               </button>
