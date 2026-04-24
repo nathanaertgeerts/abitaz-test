@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import heroWinter from "@/assets/hero-winter-sale.jpg";
 import heroIndoor from "@/assets/hero-indoor.jpg";
@@ -62,14 +63,80 @@ const tiles: Tile[] = [
 ];
 
 export const HeroGrid = () => {
+  const scrollerRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    const el = scrollerRef.current;
+    if (!el) return;
+    const onScroll = () => {
+      const i = Math.round(el.scrollLeft / el.clientWidth);
+      setActiveIndex(i);
+    };
+    el.addEventListener("scroll", onScroll, { passive: true });
+    return () => el.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const scrollToIndex = (i: number) => {
+    const el = scrollerRef.current;
+    if (!el) return;
+    el.scrollTo({ left: i * el.clientWidth, behavior: "smooth" });
+  };
+
   return (
     <section aria-label="Featured collections" className="container-abitaz pt-4">
-      <div className="grid grid-cols-2 gap-2 md:grid-cols-8 md:auto-rows-[220px] md:gap-px md:overflow-hidden md:rounded-lg md:bg-border">
+      {/* Mobile: swipe carousel */}
+      <div className="md:hidden">
+        <div
+          ref={scrollerRef}
+          className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth px-4 pb-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+        >
+          {tiles.map((tile, i) => (
+            <Link
+              key={tile.to + i}
+              to={tile.to}
+              className="group relative h-56 w-[88%] flex-none snap-center overflow-hidden rounded-lg bg-surface"
+            >
+              <img
+                src={tile.image}
+                alt={tile.title}
+                loading={i === 0 ? "eager" : "lazy"}
+                fetchPriority={i === 0 ? "high" : "auto"}
+                className="absolute inset-0 h-full w-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/15 to-transparent" />
+              <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
+                {tile.eyebrow && (
+                  <span className="block text-xs font-medium opacity-90">{tile.eyebrow}</span>
+                )}
+                <span className="font-display text-2xl font-bold leading-tight">{tile.title}</span>
+              </div>
+            </Link>
+          ))}
+        </div>
+        {/* Dots */}
+        <div className="mt-3 flex justify-center gap-1.5">
+          {tiles.map((_, i) => (
+            <button
+              key={i}
+              type="button"
+              aria-label={`Go to slide ${i + 1}`}
+              onClick={() => scrollToIndex(i)}
+              className={`h-1.5 rounded-full transition-all ${
+                activeIndex === i ? "w-6 bg-primary" : "w-1.5 bg-border"
+              }`}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Desktop: 8-col grid */}
+      <div className="hidden md:grid md:grid-cols-8 md:auto-rows-[220px] md:gap-px md:overflow-hidden md:rounded-lg md:bg-border">
         {tiles.map((tile, i) => (
           <Link
             key={tile.to + i}
             to={tile.to}
-            className={`group relative overflow-hidden rounded-lg bg-surface md:rounded-none ${tile.roundClass ?? ""} ${tile.className}`}
+            className={`group relative overflow-hidden bg-surface ${tile.roundClass ?? ""} ${tile.className}`}
           >
             <img
               src={tile.image}
@@ -79,15 +146,11 @@ export const HeroGrid = () => {
               className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
-            <div className="absolute bottom-0 left-0 right-0 p-4 text-white md:p-5">
+            <div className="absolute bottom-0 left-0 right-0 p-5 text-white">
               {tile.eyebrow && (
-                <span className="block text-xs font-medium opacity-90">
-                  {tile.eyebrow}
-                </span>
+                <span className="block text-sm font-medium opacity-90">{tile.eyebrow}</span>
               )}
-              <span className="font-display text-xl font-bold leading-tight md:text-3xl">
-                {tile.title}
-              </span>
+              <span className="font-display text-3xl font-bold leading-tight">{tile.title}</span>
             </div>
           </Link>
         ))}
