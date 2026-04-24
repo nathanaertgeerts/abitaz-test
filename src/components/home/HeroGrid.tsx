@@ -1,64 +1,85 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+// Static fallback (full-size original)
 import heroWinter from "@/assets/hero-winter-sale.jpg";
 import heroIndoor from "@/assets/hero-indoor.jpg";
 import heroOutdoor from "@/assets/hero-outdoor.jpg";
 import heroInstall from "@/assets/hero-installation.jpg";
 import heroDesigner from "@/assets/hero-designer.jpg";
+// Responsive WebP srcsets generated at build time by vite-imagetools
+import heroWinterSet from "@/assets/hero-winter-sale.jpg?w=480;768;1200;1600&format=webp&as=srcset";
+import heroIndoorSet from "@/assets/hero-indoor.jpg?w=480;768;1200;1600&format=webp&as=srcset";
+import heroOutdoorSet from "@/assets/hero-outdoor.jpg?w=480;768;1200;1600&format=webp&as=srcset";
+import heroInstallSet from "@/assets/hero-installation.jpg?w=480;768;1200;1600&format=webp&as=srcset";
+import heroDesignerSet from "@/assets/hero-designer.jpg?w=480;768;1200;1600&format=webp&as=srcset";
 
 type Tile = {
   to: string;
   image: string;
+  srcSet: string;
   eyebrow?: string;
   title: string;
   className: string;
   priority?: boolean;
   /** Tailwind classes for rounding the outer corner this tile sits in (md+) */
   roundClass?: string;
+  /** Sizes attribute hinting layout width per breakpoint */
+  sizes: string;
 };
 
 const tiles: Tile[] = [
   {
     to: "/sale",
     image: heroWinter,
+    srcSet: heroWinterSet,
     eyebrow: "Up to -45%",
     title: "Winter Sale",
     className: "md:col-span-4 md:row-span-2",
     priority: true,
     // Spans both rows on the left → rounds top-left + bottom-left
     roundClass: "md:rounded-l-lg",
+    // Mobile: ~88vw. Desktop ≥768px: half the container (~50vw, capped by container)
+    sizes: "(min-width: 1280px) 640px, (min-width: 768px) 50vw, 88vw",
   },
   {
     to: "/category/pendant-lamps",
     image: heroIndoor,
+    srcSet: heroIndoorSet,
     eyebrow: "All your lights for",
     title: "Indoor",
     className: "md:col-span-2 md:row-span-1",
+    sizes: "(min-width: 1280px) 320px, (min-width: 768px) 25vw, 88vw",
   },
   {
     to: "/category/outdoor-lighting",
     image: heroOutdoor,
+    srcSet: heroOutdoorSet,
     eyebrow: "All your lights for",
     title: "Outdoor",
     className: "md:col-span-2 md:row-span-1",
     // Top-right corner
     roundClass: "md:rounded-tr-lg",
+    sizes: "(min-width: 1280px) 320px, (min-width: 768px) 25vw, 88vw",
   },
   {
     to: "/category/installation",
     image: heroInstall,
+    srcSet: heroInstallSet,
     eyebrow: "Everything for your project",
     title: "Installation materials",
     className: "md:col-span-2 md:row-span-1",
+    sizes: "(min-width: 1280px) 320px, (min-width: 768px) 25vw, 88vw",
   },
   {
     to: "/brands/flos",
     image: heroDesigner,
+    srcSet: heroDesignerSet,
     eyebrow: "New collection",
     title: "Flos",
     className: "md:col-span-2 md:row-span-1",
     // Bottom-right corner
     roundClass: "md:rounded-br-lg",
+    sizes: "(min-width: 1280px) 320px, (min-width: 768px) 25vw, 88vw",
   },
 ];
 
@@ -201,6 +222,8 @@ export const HeroGrid = () => {
             >
               <img
                 src={tile.image}
+                srcSet={tile.srcSet}
+                sizes={tile.sizes}
                 alt={tile.title}
                 loading={i === 0 ? "eager" : "lazy"}
                 fetchPriority={i === 0 ? "high" : "auto"}
@@ -243,6 +266,8 @@ export const HeroGrid = () => {
           >
             <img
               src={tile.image}
+              srcSet={tile.srcSet}
+              sizes={tile.sizes}
               alt={tile.title}
               loading={tile.priority ? "eager" : "lazy"}
               fetchPriority={tile.priority ? "high" : "auto"}
