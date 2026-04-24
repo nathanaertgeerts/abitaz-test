@@ -309,7 +309,7 @@ export const HeroGrid = () => {
               alt={tile.title}
               loading={tile.priority ? "eager" : "lazy"}
               fetchPriority={tile.priority ? "high" : "auto"}
-              className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+              className="absolute inset-0 h-full w-full object-cover motion-safe:transition-transform motion-safe:duration-500 motion-safe:group-hover:scale-[1.03]"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
             <div className="absolute bottom-0 left-0 right-0 p-5 text-white">
