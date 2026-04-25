@@ -71,25 +71,28 @@ const Category = () => {
   return (
     <SiteLayout>
       <div className="container-abitaz py-8">
-        <nav aria-label="Breadcrumb" className="mb-4 text-sm text-muted-foreground">
-          <ol className="flex items-center gap-2">
-            <li><a href="/" className="hover:text-primary">Home</a></li>
-            <li aria-hidden>/</li>
-            <li><a href="/category/pendant-lamps" className="hover:text-primary">Lighting</a></li>
-            <li aria-hidden>/</li>
-            <li className="text-foreground">{cat?.name ?? "Pendant lamps"}</li>
-          </ol>
-        </nav>
-
-        {/* Title row: heading on the left, slim promo banner on the right (desktop only) */}
+        {/* Header row: breadcrumb + title stacked on the left,
+            slim promo banner on the right (desktop only) — banner top
+            aligns with the breadcrumb. */}
         <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-stretch lg:gap-6">
-          <h1 className="font-display text-3xl font-bold md:text-4xl lg:w-[260px] lg:flex-none lg:self-end">
-            {cat?.name ?? "Pendant lamps"}
-          </h1>
+          <div className="lg:w-[260px] lg:flex-none">
+            <nav aria-label="Breadcrumb" className="mb-4 text-sm text-muted-foreground">
+              <ol className="flex items-center gap-2">
+                <li><a href="/" className="hover:text-primary">Home</a></li>
+                <li aria-hidden>/</li>
+                <li><a href="/category/pendant-lamps" className="hover:text-primary">Lighting</a></li>
+                <li aria-hidden>/</li>
+                <li className="text-foreground">{cat?.name ?? "Pendant lamps"}</li>
+              </ol>
+            </nav>
+            <h1 className="font-display text-3xl font-bold md:text-4xl">
+              {cat?.name ?? "Pendant lamps"}
+            </h1>
+          </div>
           <Link
             to="/sale"
             aria-label="Winter Sale — up to 45% off designer lighting"
-            className="group relative hidden h-20 flex-1 overflow-hidden rounded-lg bg-primary text-primary-foreground shadow-sm lg:block"
+            className="group relative hidden flex-1 overflow-hidden rounded-lg bg-primary text-primary-foreground shadow-sm lg:block"
           >
             <img
               src={promoDesigner}
@@ -104,7 +107,7 @@ const Category = () => {
                 <span className="rounded-sm bg-cta px-2 py-1 text-[11px] font-bold uppercase tracking-wider text-cta-foreground">
                   Winter Sale
                 </span>
-                <span className="font-display text-lg font-bold leading-tight">
+                <span className="font-display text-xl font-bold leading-tight">
                   Up to -45% on designer lighting
                 </span>
               </div>
