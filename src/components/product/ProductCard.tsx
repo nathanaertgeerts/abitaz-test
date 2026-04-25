@@ -13,7 +13,7 @@ export const ProductCard = ({ product }: { product: Product }) => {
   return (
     <Link
       to={`/product/${product.slug}`}
-      className="group flex flex-col rounded-lg bg-card p-3 transition hover:shadow-md"
+      className="group flex h-full flex-col rounded-lg bg-card p-3 transition hover:shadow-md"
     >
       <div className="relative aspect-square overflow-hidden rounded-md bg-surface">
         <img
@@ -35,7 +35,7 @@ export const ProductCard = ({ product }: { product: Product }) => {
         <h3 className="line-clamp-2 text-sm font-medium text-foreground group-hover:text-primary">
           {product.name}
         </h3>
-        <div className="mt-2 flex items-baseline gap-2">
+        <div className="mt-auto flex items-baseline gap-2 pt-2">
           <span className="text-base font-bold text-primary">{formatPrice(product.price)}</span>
           {hasDiscount && (
             <span className="text-xs text-muted-foreground line-through">
@@ -43,21 +43,21 @@ export const ProductCard = ({ product }: { product: Product }) => {
             </span>
           )}
         </div>
-        {product.colors && product.colors.length > 0 && (
-          <div className="mt-2 flex items-center gap-1">
-            {product.colors.slice(0, 5).map((c, i) => (
-              <span
-                key={i}
-                aria-hidden
-                className="h-3 w-5 rounded-sm border border-border"
-                style={{ backgroundColor: c }}
-              />
-            ))}
-            {product.colors.length > 5 && (
-              <span className="text-xs text-muted-foreground">+{product.colors.length - 5}</span>
-            )}
-          </div>
-        )}
+        {/* Always reserve space for the swatch row so cards stay the same
+            height whether or not the product has colour variants. */}
+        <div className="mt-2 flex h-5 items-center gap-1">
+          {product.colors?.slice(0, 5).map((c, i) => (
+            <span
+              key={i}
+              aria-hidden
+              className="h-3 w-5 rounded-sm border border-border"
+              style={{ backgroundColor: c }}
+            />
+          ))}
+          {product.colors && product.colors.length > 5 && (
+            <span className="text-xs text-muted-foreground">+{product.colors.length - 5}</span>
+          )}
+        </div>
       </div>
     </Link>
   );
