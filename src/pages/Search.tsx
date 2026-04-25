@@ -187,7 +187,7 @@ const Search = () => {
         {/* Header row mirrors the Category page: breadcrumb + compact heading on
             the left (260px), and the search form occupies the banner slot on
             the right (flex-1, desktop only spans full row). */}
-        <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-stretch lg:gap-6">
+        <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-start lg:gap-6">
           <div className="lg:w-[260px] lg:flex-none">
             <nav aria-label="Breadcrumb" className="mb-4 text-sm text-muted-foreground">
               <ol className="flex items-center gap-2">
@@ -213,7 +213,7 @@ const Search = () => {
           <form
             role="search"
             onSubmit={onSubmit}
-            className="flex h-12 w-full flex-1 items-center overflow-hidden rounded-md border border-border bg-card shadow-sm lg:h-auto lg:self-stretch"
+            className="flex h-11 w-full flex-1 items-center overflow-hidden rounded-md border border-border bg-card shadow-sm"
           >
             <label htmlFor="search-page-input" className="sr-only">
               Search products, brands or SKUs
