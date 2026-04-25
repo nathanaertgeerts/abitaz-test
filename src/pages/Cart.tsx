@@ -28,7 +28,7 @@ const Cart = () => {
   const { lines, itemCount, subtotal, totalSavings, setQty, removeItem, clear } = useCart();
 
   const [country, setCountry] = useState("BE");
-  const [delivery, setDelivery] = useState<"standard" | "express" | "pickup">("standard");
+  const [delivery, setDelivery] = useState<"standard" | "express">("standard");
   const [discountOpen, setDiscountOpen] = useState(false);
   const [discountCode, setDiscountCode] = useState("");
   const [confirmClear, setConfirmClear] = useState(false);
@@ -282,36 +282,6 @@ const Cart = () => {
                     </div>
                   </label>
 
-                  <label
-                    className={`flex cursor-pointer items-start gap-3 rounded-md border p-4 transition ${
-                      delivery === "pickup"
-                        ? "border-primary bg-primary/5"
-                        : "border-border hover:border-input"
-                    }`}
-                  >
-                    <input
-                      type="radio"
-                      name="delivery"
-                      value="pickup"
-                      checked={delivery === "pickup"}
-                      onChange={() => setDelivery("pickup")}
-                      className="mt-1 h-4 w-4 accent-primary"
-                    />
-                    <div className="flex-1">
-                      <div className="flex items-center justify-between">
-                        <span className="font-semibold text-foreground">
-                          Pickup at warehouse in Heist-op-den-Berg
-                        </span>
-                        <span className="text-sm font-medium text-success">Free</span>
-                      </div>
-                      <p className="mt-1 text-xs text-muted-foreground">
-                        Industriepark 13B Zone B, 2220 Heist-op-den-Berg
-                      </p>
-                      <p className="mt-1 inline-flex items-center gap-1 text-xs text-muted-foreground">
-                        <Clock className="h-3.5 w-3.5" /> Available from tomorrow
-                      </p>
-                    </div>
-                  </label>
                 </div>
               </fieldset>
             </section>
