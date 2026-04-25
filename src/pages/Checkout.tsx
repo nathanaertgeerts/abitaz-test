@@ -548,7 +548,15 @@ const RadioCard = ({
     <div className="flex-1">
       <div className="flex items-center justify-between">
         <span className="font-semibold text-foreground">{title}</span>
-        {meta && <span className="text-sm font-medium text-success">{meta}</span>}
+        {meta && (
+          <span
+            className={`text-sm font-medium tabular-nums ${
+              meta === "Free" ? "text-success" : "text-foreground"
+            }`}
+          >
+            {meta}
+          </span>
+        )}
       </div>
       {description && (
         <p className="mt-1 text-xs text-muted-foreground">{description}</p>
