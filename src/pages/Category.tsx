@@ -41,6 +41,31 @@ const categoryTree: { slug: string; name: string; subs: { slug: string; name: st
       { slug: "smart-lighting", name: "Smart bulbs" },
     ],
   },
+  {
+    slug: "accessories",
+    name: "Accessories",
+    subs: [
+      { slug: "textile-cords", name: "Textile cords" },
+      { slug: "power-cables", name: "Power cables" },
+      { slug: "cable-connectors", name: "Cable connectors" },
+      { slug: "lampshades", name: "Lampshades" },
+      { slug: "dimmers-switches", name: "Dimmers & switches" },
+    ],
+  },
+  {
+    slug: "furniture",
+    name: "Furniture",
+    subs: [
+      { slug: "chairs", name: "Chairs" },
+      { slug: "lounge-chairs", name: "Lounge chairs" },
+      { slug: "sofas", name: "Sofas" },
+      { slug: "dining-tables", name: "Dining tables" },
+      { slug: "coffee-tables", name: "Coffee tables" },
+      { slug: "side-tables", name: "Side tables" },
+      { slug: "shelving", name: "Shelving" },
+      { slug: "cabinets", name: "Cabinets" },
+    ],
+  },
 ];
 
 /* ---------- Filter facet definitions per top-category ---------- */
@@ -160,10 +185,115 @@ const bulbFilters: FilterSet = {
   ],
 };
 
+const accessoryFilters: FilterSet = {
+  range: { title: "Price", min: 1, max: 250, unit: "€" },
+  checks: [
+    {
+      title: "Type",
+      options: [
+        { name: "Textile cords", count: 142 },
+        { name: "Power cables", count: 98 },
+        { name: "Cable connectors", count: 64 },
+        { name: "Lampshades", count: 187 },
+        { name: "Dimmers & switches", count: 124 },
+      ],
+    },
+    {
+      title: "Compatible socket",
+      options: [
+        { name: "E27", count: 215 },
+        { name: "E14", count: 168 },
+        { name: "GU10", count: 92 },
+        { name: "G9", count: 41 },
+      ],
+    },
+    {
+      title: "Material",
+      options: [
+        { name: "Textile", count: 142 },
+        { name: "Fabric", count: 98 },
+        { name: "Metal", count: 124 },
+        { name: "Glass", count: 56 },
+        { name: "Plastic", count: 38 },
+      ],
+    },
+  ],
+  swatches: {
+    title: "Color",
+    options: [
+      { name: "Black", swatch: "#1f1f1f", count: 198 },
+      { name: "White", swatch: "#ffffff", count: 187 },
+      { name: "Red", swatch: "#d8423a", count: 56 },
+      { name: "Mustard", swatch: "#e8a13a", count: 42 },
+      { name: "Forest", swatch: "#3f5c3a", count: 38 },
+    ],
+  },
+};
+
+const furnitureFilters: FilterSet = {
+  range: { title: "Price", min: 50, max: 4500, unit: "€" },
+  checks: [
+    {
+      title: "Room",
+      options: [
+        { name: "Living room", count: 312 },
+        { name: "Dining room", count: 198 },
+        { name: "Bedroom", count: 145 },
+        { name: "Office", count: 87 },
+        { name: "Outdoor", count: 64 },
+      ],
+    },
+    {
+      title: "Type",
+      options: [
+        { name: "Chairs", count: 184 },
+        { name: "Lounge chairs", count: 96 },
+        { name: "Sofas", count: 58 },
+        { name: "Dining tables", count: 112 },
+        { name: "Coffee tables", count: 87 },
+        { name: "Side tables", count: 64 },
+        { name: "Shelving", count: 78 },
+        { name: "Cabinets", count: 45 },
+      ],
+    },
+    {
+      title: "Material",
+      options: [
+        { name: "Solid wood", count: 215 },
+        { name: "Veneer", count: 124 },
+        { name: "Metal", count: 168 },
+        { name: "Upholstered", count: 142 },
+        { name: "Marble", count: 38 },
+      ],
+    },
+    {
+      title: "Designer",
+      options: [
+        { name: "Hans J. Wegner", count: 24 },
+        { name: "Verner Panton", count: 18 },
+        { name: "Arne Jacobsen", count: 16 },
+        { name: "Charles & Ray Eames", count: 14 },
+      ],
+    },
+  ],
+  swatches: {
+    title: "Color",
+    options: [
+      { name: "Natural oak", swatch: "#cfa37a", count: 198 },
+      { name: "Walnut", swatch: "#5a3a24", count: 124 },
+      { name: "Black", swatch: "#1f1f1f", count: 142 },
+      { name: "White", swatch: "#ffffff", count: 87 },
+      { name: "Beige", swatch: "#e5e1d3", count: 76 },
+    ],
+  },
+};
+
 /** Pick the right filter set for the active top-category. */
 const getFiltersForGroup = (groupSlug: string): FilterSet => {
   if (groupSlug === "bulbs") return bulbFilters;
   if (groupSlug === "outdoor-lighting") return outdoorFilters;
+  if (groupSlug === "accessories") return accessoryFilters;
+  if (groupSlug === "furniture") return furnitureFilters;
   return lightingFilters;
 };
 
