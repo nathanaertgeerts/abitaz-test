@@ -214,6 +214,24 @@ export const MartinelliLuceLogo = ({ className }: LogoProps) => (
   </svg>
 );
 
+export const SlvLogo = ({ className }: LogoProps) => (
+  <svg viewBox="0 0 200 32" className={className} role="img" aria-label="SLV">
+    {/* Bold, square wordmark — echoes SLV's compact industrial logotype */}
+    <text
+      x="100"
+      y="25"
+      textAnchor="middle"
+      fontFamily="'Helvetica Neue', Arial, sans-serif"
+      fontWeight="900"
+      fontSize="28"
+      letterSpacing="2"
+      fill="currentColor"
+    >
+      SLV
+    </text>
+  </svg>
+);
+
 export const brandLogos: Record<string, (p: LogoProps) => JSX.Element> = {
   "louis-poulsen": LouisPoulsenLogo,
   tradition: TraditionLogo,
@@ -225,4 +243,5 @@ export const brandLogos: Record<string, (p: LogoProps) => JSX.Element> = {
   vysn: VysnLogo,
   artemide: ArtemideLogo,
   "martinelli-luce": MartinelliLuceLogo,
+  slv: SlvLogo,
 };

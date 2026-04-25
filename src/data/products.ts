@@ -18,6 +18,10 @@ import artemideTizio from "@/assets/product-artemide-tizio.jpg";
 import martinelliPipistrello from "@/assets/product-martinelli-pipistrello.jpg";
 import martinelliCobra from "@/assets/product-martinelli-cobra.jpg";
 import martinelliSerpente from "@/assets/product-martinelli-serpente.jpg";
+import slvNuminosSquareBlack from "@/assets/product-slv-numinos-square-black.jpg";
+import slvNuminosRecessedWhite from "@/assets/product-slv-numinos-recessed-white.jpg";
+import slvTrackSpotBlack from "@/assets/product-slv-track-spot-black.jpg";
+import slvWallUpdownBlack from "@/assets/product-slv-wall-updown-black.jpg";
 
 export type Product = {
   slug: string;
@@ -634,6 +638,99 @@ export const products: Product[] = [
       { label: "Color temperature", value: "3000K" },
     ],
   },
+  /* ---------- SLV — German architectural & professional lighting ---------- */
+  {
+    slug: "slv-numinos-surface-square-black",
+    name: "SLV Numinos Surface Square Black",
+    brand: "SLV",
+    brandSlug: "slv",
+    category: "Ceiling spot",
+    categorySlug: "ceiling-lamps",
+    sku: "SL 1003792",
+    price: 89.95,
+    image: slvNuminosSquareBlack,
+    inStock: true,
+    leadTime: "1-2 working days",
+    colors: ["#1f1f1f", "#ffffff"],
+    description:
+      "Square surface-mounted ceiling spot from SLV's Numinos family. Deep anti-glare reflector, swivel and tilt for precise beam aim — a workhorse for retail, hospitality and modern homes.",
+    specs: [
+      { label: "Lamp type", value: "Integrated LED 11W" },
+      { label: "Color temperature", value: "3000K warm white" },
+      { label: "Lumens", value: "1020 lm" },
+      { label: "Beam angle", value: "40°" },
+      { label: "IP rating", value: "IP20" },
+    ],
+  },
+  {
+    slug: "slv-numinos-recessed-round-white",
+    name: "SLV Numinos DL Recessed Downlight White",
+    brand: "SLV",
+    brandSlug: "slv",
+    category: "Recessed spot",
+    categorySlug: "recessed-spots",
+    sku: "SL 1003841",
+    price: 64.95,
+    originalPrice: 79.95,
+    image: slvNuminosRecessedWhite,
+    inStock: true,
+    leadTime: "1-2 working days",
+    colors: ["#ffffff", "#1f1f1f"],
+    description:
+      "Recessed round downlight with a tiltable inner module — set the beam exactly where you want it while the trim stays flush to the ceiling. Part of SLV's modular Numinos system.",
+    specs: [
+      { label: "Lamp type", value: "Integrated LED 8.6W" },
+      { label: "Color temperature", value: "3000K" },
+      { label: "Lumens", value: "830 lm" },
+      { label: "Cut-out", value: "Ø 75 mm" },
+      { label: "IP rating", value: "IP20" },
+    ],
+  },
+  {
+    slug: "slv-numinos-track-spot-3ph-black",
+    name: "SLV Numinos Track Spot 3-Phase Black",
+    brand: "SLV",
+    brandSlug: "slv",
+    category: "Ceiling spot",
+    categorySlug: "ceiling-lamps",
+    sku: "SL 1004119",
+    price: 119.0,
+    image: slvTrackSpotBlack,
+    inStock: true,
+    leadTime: "1-2 working days",
+    colors: ["#1f1f1f", "#ffffff"],
+    description:
+      "3-phase track spotlight engineered for retail and hospitality. Powerful integrated LED with high CRI, tool-free track adapter and a wide swivel range for precise accent lighting.",
+    specs: [
+      { label: "Lamp type", value: "Integrated LED 21W" },
+      { label: "Color temperature", value: "3000K" },
+      { label: "Lumens", value: "2150 lm" },
+      { label: "CRI", value: "≥ 90" },
+      { label: "Track", value: "3-phase, 230V" },
+    ],
+  },
+  {
+    slug: "slv-enola-wall-updown-black",
+    name: "SLV Enola Wall Up/Down Black",
+    brand: "SLV",
+    brandSlug: "slv",
+    category: "Wall lamp",
+    categorySlug: "wall-lamps",
+    sku: "SL 1003409",
+    price: 79.0,
+    image: slvWallUpdownBlack,
+    inStock: true,
+    leadTime: "1-2 working days",
+    colors: ["#1f1f1f", "#ffffff"],
+    description:
+      "Slim cylindrical wall light projecting a sharp up-and-down beam. Architectural finish for hallways, staircases and accent walls.",
+    specs: [
+      { label: "Lamp type", value: "2 x GU10 max. 35W" },
+      { label: "Dimensions", value: "Ø 65 × H 175 mm" },
+      { label: "Beam", value: "Up + down, narrow" },
+      { label: "IP rating", value: "IP20" },
+    ],
+  },
 ];
 
 export const productBySlug = (slug: string) => products.find((p) => p.slug === slug);
@@ -662,4 +759,5 @@ export const brands = [
   { slug: "normann-copenhagen", name: "Normann Copenhagen" },
   { slug: "absinthe", name: "Absinthe Lights" },
   { slug: "vysn", name: "VYSN" },
+  { slug: "slv", name: "SLV" },
 ];
