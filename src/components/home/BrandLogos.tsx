@@ -128,6 +128,27 @@ export const NormannLogo = ({ className }: LogoProps) => (
   </svg>
 );
 
+export const AbsintheLogo = ({ className }: LogoProps) => (
+  <svg viewBox="0 0 220 32" className={className} role="img" aria-label="Absinthe Lights">
+    {/* Small swift / bird mark in front of the wordmark — echoes the brand's logotype */}
+    <g transform="translate(4, 9)" fill="currentColor">
+      <path d="M0 8 C 4 4, 8 0, 14 2 L 11 5 C 9 4, 6 6, 4 9 Z" />
+      <path d="M14 2 C 18 0, 22 2, 24 6 L 18 6 C 17 4, 15 3, 14 4 Z" opacity="0.75" />
+    </g>
+    <text
+      x="34"
+      y="22"
+      fontFamily="'Helvetica Neue', Arial, sans-serif"
+      fontWeight="500"
+      fontSize="18"
+      letterSpacing="2.5"
+      fill="currentColor"
+    >
+      ABSINTHE
+    </text>
+  </svg>
+);
+
 export const brandLogos: Record<string, (p: LogoProps) => JSX.Element> = {
   "louis-poulsen": LouisPoulsenLogo,
   tradition: TraditionLogo,
@@ -135,4 +156,5 @@ export const brandLogos: Record<string, (p: LogoProps) => JSX.Element> = {
   flos: FlosLogo,
   philips: PhilipsLogo,
   "normann-copenhagen": NormannLogo,
+  absinthe: AbsintheLogo,
 };
