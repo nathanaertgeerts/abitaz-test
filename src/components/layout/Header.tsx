@@ -304,8 +304,8 @@ export const Header = () => {
           <Logo />
 
           {/* Mega menu nav — sits inline next to logo on desktop */}
-          <div className="hidden flex-none md:block">
-            <MegaMenu items={mainNav} />
+          <div className="hidden flex-none lg:block">
+            <MegaMenu items={mainNav} inline />
           </div>
 
           {/* Search */}
