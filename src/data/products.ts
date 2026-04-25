@@ -11,6 +11,10 @@ import absintheChuckDouble from "@/assets/product-absinthe-chuck-double.jpg";
 import vysnTevoMiniPendant from "@/assets/product-vysn-tevo-mini-pendant.jpg";
 import vysnTevo360Downlight from "@/assets/product-vysn-tevo-360-downlight.jpg";
 import vysnVelythFloor from "@/assets/product-vysn-velyth-floor.jpg";
+import artemideTolomeo from "@/assets/product-artemide-tolomeo.jpg";
+import artemideNesso from "@/assets/product-artemide-nesso.jpg";
+import artemidePirce from "@/assets/product-artemide-pirce.jpg";
+import artemideTizio from "@/assets/product-artemide-tizio.jpg";
 
 export type Product = {
   slug: string;
@@ -468,6 +472,96 @@ export const products: Product[] = [
       { label: "Height", value: "1950 mm" },
     ],
   },
+  /* ---------- Artemide — iconic Italian designer lighting ---------- */
+  {
+    slug: "artemide-tolomeo-tavolo",
+    name: "Artemide Tolomeo Tavolo Desk Lamp",
+    brand: "Artemide",
+    brandSlug: "artemide",
+    category: "Table lamp",
+    categorySlug: "table-lamps",
+    sku: "AR A004800",
+    price: 379.0,
+    image: artemideTolomeo,
+    inStock: true,
+    leadTime: "3-5 working days",
+    colors: ["#c9c9c9", "#1f1f1f"],
+    description:
+      "Designed in 1987 by Michele De Lucchi and Giancarlo Fassina, Tolomeo is one of the most recognised desk lamps in the world. Polished aluminium body with a fully articulated arm and rotating diffuser — a true icon of Italian industrial design.",
+    specs: [
+      { label: "Lamp type", value: "1 x E27 max. 60W" },
+      { label: "Dimmable", value: "Yes (dimmer not included)" },
+      { label: "Arm reach", value: "780 mm (max)" },
+      { label: "Base", value: "Ø 230 mm" },
+    ],
+  },
+  {
+    slug: "artemide-nesso-orange",
+    name: "Artemide Nesso Table Lamp Orange",
+    brand: "Artemide",
+    brandSlug: "artemide",
+    category: "Table lamp",
+    categorySlug: "table-lamps",
+    sku: "AR 0056010A",
+    price: 295.0,
+    image: artemideNesso,
+    inStock: true,
+    leadTime: "1-2 working days",
+    colors: ["#e8662a", "#ffffff", "#1f1f1f"],
+    description:
+      "Giancarlo Mattioli's mushroom-shaped Nesso, designed in 1967, is part of MoMA's permanent collection. Its sculptural ABS shade diffuses warm, even light — a pop-design classic that still feels contemporary.",
+    specs: [
+      { label: "Lamp type", value: "4 x E14 max. 25W" },
+      { label: "Dimmable", value: "Yes" },
+      { label: "Dimensions", value: "Ø 540 × H 340 mm" },
+      { label: "Material", value: "Injection-moulded ABS" },
+    ],
+  },
+  {
+    slug: "artemide-pirce-mini-suspension",
+    name: "Artemide Pirce Mini Suspension Aluminium",
+    brand: "Artemide",
+    brandSlug: "artemide",
+    category: "Pendant lamp",
+    categorySlug: "pendant-lamps",
+    sku: "AR 1255010A",
+    price: 1089.0,
+    originalPrice: 1289.0,
+    image: artemidePirce,
+    inStock: true,
+    leadTime: "5-10 working days",
+    colors: ["#c9c9c9", "#ffffff"],
+    description:
+      "Designed by Giuseppe Maurizio Scutellà, Pirce is a sculptural suspension built from a single sheet of die-cut aluminium spiralling outwards. Direct and indirect light combine for a soft, atmospheric glow.",
+    specs: [
+      { label: "Lamp type", value: "Integrated LED 27W" },
+      { label: "Dimmable", value: "Dali / push" },
+      { label: "Dimensions", value: "Ø 480 × H 200 mm" },
+      { label: "Color temperature", value: "3000K" },
+    ],
+  },
+  {
+    slug: "artemide-tizio-classic-black",
+    name: "Artemide Tizio Classic Desk Lamp Black",
+    brand: "Artemide",
+    brandSlug: "artemide",
+    category: "Table lamp",
+    categorySlug: "table-lamps",
+    sku: "AR A009010",
+    price: 459.0,
+    image: artemideTizio,
+    inStock: true,
+    leadTime: "3-5 working days",
+    colors: ["#1f1f1f"],
+    description:
+      "Richard Sapper's 1972 Tizio is the desk lamp that defined a generation. Counterweighted parallel arms move with a single fingertip and stay perfectly in place — engineering and sculpture in one.",
+    specs: [
+      { label: "Lamp type", value: "Integrated LED 10W" },
+      { label: "Dimmable", value: "Touch dimmer on base" },
+      { label: "Arm reach", value: "1100 mm" },
+      { label: "Color temperature", value: "2700K" },
+    ],
+  },
 ];
 
 export const productBySlug = (slug: string) => products.find((p) => p.slug === slug);
@@ -490,6 +584,7 @@ export const brands = [
   { slug: "tradition", name: "&tradition" },
   { slug: "nordlux", name: "Nordlux" },
   { slug: "flos", name: "Flos" },
+  { slug: "artemide", name: "Artemide" },
   { slug: "philips", name: "Philips" },
   { slug: "normann-copenhagen", name: "Normann Copenhagen" },
   { slug: "absinthe", name: "Absinthe Lights" },
