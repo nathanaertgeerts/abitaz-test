@@ -184,45 +184,41 @@ const Search = () => {
   return (
     <SiteLayout>
       <div className="container-abitaz py-8">
-        {/* Header row: breadcrumb + title left, prominent search input right
-            (replaces the promo banner used on category pages). */}
-        <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-stretch lg:gap-6">
-          <div className="lg:w-[260px] lg:flex-none">
-            <nav aria-label="Breadcrumb" className="mb-4 text-sm text-muted-foreground">
-              <ol className="flex items-center gap-2">
-                <li><Link to="/" className="hover:text-primary">Home</Link></li>
-                <li aria-hidden>/</li>
-                <li className="text-foreground">Search</li>
-              </ol>
-            </nav>
-            <h1 className="font-display text-3xl font-bold md:text-4xl">
-              {q ? <>Results for &ldquo;{q}&rdquo;</> : "Search"}
-            </h1>
-          </div>
+        {/* Header: breadcrumb + title, with a compact search input directly underneath.
+            The input is capped to a readable max-width — never stretches edge-to-edge. */}
+        <div className="mb-6">
+          <nav aria-label="Breadcrumb" className="mb-4 text-sm text-muted-foreground">
+            <ol className="flex items-center gap-2">
+              <li><Link to="/" className="hover:text-primary">Home</Link></li>
+              <li aria-hidden>/</li>
+              <li className="text-foreground">Search</li>
+            </ol>
+          </nav>
+          <h1 className="font-display text-3xl font-bold md:text-4xl">
+            {q ? <>Results for &ldquo;{q}&rdquo;</> : "Search"}
+          </h1>
 
           <form
             role="search"
             onSubmit={onSubmit}
-            className="flex flex-1 items-center overflow-hidden rounded-lg border border-border bg-card shadow-sm"
+            className="mt-4 flex h-11 w-full max-w-xl items-center overflow-hidden rounded-md border border-border bg-card shadow-sm"
           >
             <label htmlFor="search-page-input" className="sr-only">
               Search products, brands or SKUs
             </label>
-            <div className="flex h-full flex-1 items-center pl-4">
-              <SearchIcon className="h-5 w-5 text-muted-foreground" aria-hidden />
-              <input
-                id="search-page-input"
-                type="search"
-                autoFocus
-                value={draft}
-                onChange={(e) => setDraft(e.target.value)}
-                placeholder="Search products, brands or SKUs…"
-                className="h-12 w-full bg-transparent px-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
-              />
-            </div>
+            <SearchIcon className="ml-3 h-4 w-4 flex-none text-muted-foreground" aria-hidden />
+            <input
+              id="search-page-input"
+              type="search"
+              autoFocus
+              value={draft}
+              onChange={(e) => setDraft(e.target.value)}
+              placeholder="Search products, brands or SKUs…"
+              className="h-full w-full min-w-0 bg-transparent px-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
+            />
             <button
               type="submit"
-              className="h-12 self-stretch rounded-none bg-cta px-6 text-sm font-semibold text-cta-foreground transition hover:opacity-90"
+              className="h-full flex-none bg-cta px-5 text-sm font-semibold text-cta-foreground transition hover:opacity-90"
             >
               Search
             </button>
