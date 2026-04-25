@@ -15,9 +15,10 @@ export const Logo = ({ variant = "light", className = "" }: LogoProps) => {
       <span className="font-display text-2xl font-extrabold tracking-tight">
         ab
         <span className="relative inline-block">
-          i
+          {/* dotless i (ı) so we can replace the natural dot with our brand dot */}
+          ı
           <span
-            className="absolute left-1/2 -top-0.5 h-1.5 w-1.5 -translate-x-1/2 rounded-full bg-cta"
+            className="pointer-events-none absolute left-1/2 -translate-x-1/2 -top-[0.05em] h-[0.28em] w-[0.28em] rounded-full bg-cta"
             aria-hidden
           />
         </span>
