@@ -356,6 +356,11 @@ export const Header = () => {
             </Link>
           </nav>
         </div>
+
+        {/* Fallback category nav row for tablet (md) where inline nav is hidden */}
+        <div className="hidden border-t border-white/10 md:block lg:hidden">
+          <MegaMenu items={mainNav} />
+        </div>
       </div>
 
       {/* USP ribbon (yellow) */}
