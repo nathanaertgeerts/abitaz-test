@@ -1,4 +1,4 @@
-import { ArrowLeft, Check, ChevronDown, Clock, Headset, Minus, Package, Plus, RotateCcw, Trash2, Truck } from "lucide-react";
+import { ArrowLeft, Check, ChevronDown, Clock, Headset, Minus, Package, Plus, RotateCcw, Trash2, Truck, Zap } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { SiteLayout } from "@/components/layout/SiteLayout";
@@ -28,12 +28,13 @@ const Cart = () => {
   const { lines, itemCount, subtotal, totalSavings, setQty, removeItem, clear } = useCart();
 
   const [country, setCountry] = useState("BE");
-  const [delivery, setDelivery] = useState<"standard" | "pickup">("standard");
+  const [delivery, setDelivery] = useState<"standard" | "express" | "pickup">("standard");
   const [discountOpen, setDiscountOpen] = useState(false);
   const [discountCode, setDiscountCode] = useState("");
   const [confirmClear, setConfirmClear] = useState(false);
 
-  const shipping = 0; // Free standard delivery in this prototype
+  const EXPRESS_FEE = 14.95;
+  const shipping = delivery === "express" ? EXPRESS_FEE : 0;
   const total = subtotal + shipping;
 
   /* ---------- Empty state ---------- */
@@ -242,7 +243,41 @@ const Cart = () => {
                         Your products will be delivered when they are in stock.
                       </p>
                       <p className="mt-1 inline-flex items-center gap-1 text-xs text-muted-foreground">
-                        <Clock className="h-3.5 w-3.5" /> Lead time: 1-2 weeks
+                        <Clock className="h-3.5 w-3.5" /> Lead time: 3-5 days
+                      </p>
+                    </div>
+                  </label>
+
+                  <label
+                    className={`flex cursor-pointer items-start gap-3 rounded-md border p-4 transition ${
+                      delivery === "express"
+                        ? "border-primary bg-primary/5"
+                        : "border-border hover:border-input"
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="delivery"
+                      value="express"
+                      checked={delivery === "express"}
+                      onChange={() => setDelivery("express")}
+                      className="mt-1 h-4 w-4 accent-primary"
+                    />
+                    <div className="flex-1">
+                      <div className="flex items-center justify-between">
+                        <span className="inline-flex items-center gap-1.5 font-semibold text-foreground">
+                          <Zap className="h-4 w-4 text-cta" />
+                          Express delivery
+                        </span>
+                        <span className="text-sm font-medium text-foreground tabular-nums">
+                          {formatPrice(EXPRESS_FEE)}
+                        </span>
+                      </div>
+                      <p className="mt-1 text-xs text-muted-foreground">
+                        Priority handling — shipped the same business day when ordered before 14:00.
+                      </p>
+                      <p className="mt-1 inline-flex items-center gap-1 text-xs text-muted-foreground">
+                        <Clock className="h-3.5 w-3.5" /> Lead time: 2-3 days
                       </p>
                     </div>
                   </label>
@@ -303,7 +338,11 @@ const Cart = () => {
                     Shipping to{" "}
                     {COUNTRIES.find((c) => c.code === country)?.name ?? "Belgium"}
                   </dt>
-                  <dd className="font-medium text-success">Free</dd>
+                  {shipping === 0 ? (
+                    <dd className="font-medium text-success">Free</dd>
+                  ) : (
+                    <dd className="font-medium tabular-nums">{formatPrice(shipping)}</dd>
+                  )}
                 </div>
               </dl>
 
@@ -328,6 +367,50 @@ const Cart = () => {
               >
                 Continue to checkout
               </button>
+
+              {/* Quick checkout — Apple Pay / Google Pay */}
+              <div className="mt-3">
+                <div className="flex items-center gap-3 text-[11px] uppercase tracking-wider text-muted-foreground">
+                  <span className="h-px flex-1 bg-border" />
+                  Quick checkout
+                  <span className="h-px flex-1 bg-border" />
+                </div>
+                <div className="mt-3 grid grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      navigate("/checkout", {
+                        state: { country, delivery, payment: "applepay", express: true },
+                      })
+                    }
+                    aria-label="Pay with Apple Pay"
+                    className="inline-flex h-11 items-center justify-center gap-1.5 rounded-md bg-foreground text-sm font-semibold text-background transition hover:opacity-90"
+                  >
+                    <svg viewBox="0 0 24 24" aria-hidden className="h-4 w-4" fill="currentColor">
+                      <path d="M16.365 1.43c0 1.14-.42 2.22-1.13 3.02-.78.86-2.06 1.52-3.06 1.43-.13-1.11.42-2.27 1.1-3.01.77-.84 2.13-1.45 3.09-1.44zM20.5 17.06c-.36.83-.53 1.2-1 2-.66 1.13-1.59 2.54-2.74 2.55-1.02.01-1.28-.66-2.66-.65-1.38.01-1.66.67-2.68.66-1.15-.01-2.04-1.28-2.7-2.4C7.13 16.78 6.84 12.93 8.55 11.1c.95-1.02 2.32-1.65 3.61-1.65 1.32 0 2.15.66 3.24.66 1.05 0 1.69-.66 3.21-.66 1.15 0 2.37.62 3.24 1.69-2.85 1.56-2.39 5.66-1.35 5.92z" />
+                    </svg>
+                    Pay
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      navigate("/checkout", {
+                        state: { country, delivery, payment: "googlepay", express: true },
+                      })
+                    }
+                    aria-label="Pay with Google Pay"
+                    className="inline-flex h-11 items-center justify-center gap-1.5 rounded-md border border-input bg-background text-sm font-semibold text-foreground transition hover:bg-muted"
+                  >
+                    <svg viewBox="0 0 24 24" aria-hidden className="h-4 w-4">
+                      <path fill="#4285F4" d="M12.24 10.29v3.5h4.84c-.2 1.13-.82 2.08-1.74 2.72v2.26h2.81c1.65-1.52 2.6-3.76 2.6-6.42 0-.62-.06-1.22-.16-1.79H12.24z"/>
+                      <path fill="#34A853" d="M12.24 20c2.34 0 4.31-.78 5.74-2.12l-2.81-2.18c-.78.52-1.78.83-2.93.83-2.25 0-4.16-1.52-4.84-3.57H4.5v2.24A8.96 8.96 0 0 0 12.24 20z"/>
+                      <path fill="#FBBC05" d="M7.4 12.96a5.4 5.4 0 0 1 0-3.43V7.29H4.5a8.96 8.96 0 0 0 0 8.04l2.9-2.37z"/>
+                      <path fill="#EA4335" d="M12.24 5.96c1.27 0 2.41.44 3.31 1.3l2.49-2.49C16.55 3.4 14.58 2.49 12.24 2.49 8.74 2.49 5.7 4.5 4.5 7.29l2.9 2.24c.68-2.05 2.59-3.57 4.84-3.57z"/>
+                    </svg>
+                    Pay
+                  </button>
+                </div>
+              </div>
 
               {/* Discount accordion */}
               <button
