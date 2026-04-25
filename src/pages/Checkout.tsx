@@ -48,7 +48,12 @@ const Checkout = () => {
   }, [lines.length, navigate]);
 
   const initialFromCart =
-    (location.state as { country?: string; delivery?: "standard" | "pickup" } | null) ?? {};
+    (location.state as {
+      country?: string;
+      delivery?: "standard" | "express" | "pickup";
+      payment?: string;
+      express?: boolean;
+    } | null) ?? {};
 
   const [step, setStep] = useState<Step>(1);
   const [address, setAddress] = useState<Address>({
@@ -62,13 +67,14 @@ const Checkout = () => {
     country: initialFromCart.country ?? "BE",
     phone: "",
   });
-  const [delivery, setDelivery] = useState<"standard" | "pickup">(
+  const [delivery, setDelivery] = useState<"standard" | "express" | "pickup">(
     initialFromCart.delivery ?? "standard",
   );
-  const [payment, setPayment] = useState("bancontact");
+  const [payment, setPayment] = useState(initialFromCart.payment ?? "bancontact");
   const [acceptTerms, setAcceptTerms] = useState(false);
 
-  const shipping = 0;
+  const EXPRESS_FEE = 14.95;
+  const shipping = delivery === "express" ? EXPRESS_FEE : 0;
   const total = subtotal + shipping;
 
   const isAddressValid = useMemo(() => {
@@ -287,7 +293,14 @@ const Checkout = () => {
                       onChange={() => setDelivery("standard")}
                       title="Standard delivery"
                       meta="Free"
-                      description="Delivered when all products are in stock — usually 1-2 weeks."
+                      description="Delivered when all products are in stock — usually 3-5 days."
+                    />
+                    <RadioCard
+                      checked={delivery === "express"}
+                      onChange={() => setDelivery("express")}
+                      title="Express delivery"
+                      meta={formatPrice(EXPRESS_FEE)}
+                      description="Priority handling, shipped same business day before 14:00 — 2-3 days."
                     />
                     <RadioCard
                       checked={delivery === "pickup"}
@@ -360,9 +373,11 @@ const Checkout = () => {
                     onEdit={() => setStep(2)}
                     body={
                       <p>
-                        {delivery === "standard"
-                          ? "Standard delivery (free)"
-                          : "Pickup at warehouse Heist-op-den-Berg (free)"}
+                        {delivery === "standard" && "Standard delivery (free) — 3-5 days"}
+                        {delivery === "express" &&
+                          `Express delivery (${formatPrice(EXPRESS_FEE)}) — 2-3 days`}
+                        {delivery === "pickup" &&
+                          "Pickup at warehouse Heist-op-den-Berg (free)"}
                       </p>
                     }
                   />
