@@ -1,9 +1,10 @@
 import { ChevronDown, SlidersHorizontal } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { SiteLayout } from "@/components/layout/SiteLayout";
 import { ProductCard } from "@/components/product/ProductCard";
 import { categories, products } from "@/data/products";
+import promoDesigner from "@/assets/promo-designer-sale.jpg";
 
 const subcategories = [
   { slug: "pendant-lamps", name: "Pendant lamps" },
@@ -80,9 +81,39 @@ const Category = () => {
           </ol>
         </nav>
 
-        <h1 className="mb-6 font-display text-3xl font-bold md:text-4xl">
-          {cat?.name ?? "Pendant lamps"}
-        </h1>
+        {/* Title row: heading on the left, slim promo banner on the right (desktop only) */}
+        <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-stretch lg:gap-6">
+          <h1 className="font-display text-3xl font-bold md:text-4xl lg:w-[260px] lg:flex-none lg:self-end">
+            {cat?.name ?? "Pendant lamps"}
+          </h1>
+          <Link
+            to="/sale"
+            aria-label="Winter Sale — up to 45% off designer lighting"
+            className="group relative hidden h-20 flex-1 overflow-hidden rounded-lg bg-primary text-primary-foreground shadow-sm lg:block"
+          >
+            <img
+              src={promoDesigner}
+              alt=""
+              aria-hidden
+              loading="lazy"
+              className="absolute inset-0 h-full w-full object-cover opacity-70 transition-transform duration-500 group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary/85 to-primary/30" />
+            <div className="relative flex h-full items-center justify-between gap-4 px-5">
+              <div className="flex items-center gap-3">
+                <span className="rounded-sm bg-cta px-2 py-1 text-[11px] font-bold uppercase tracking-wider text-cta-foreground">
+                  Winter Sale
+                </span>
+                <span className="font-display text-lg font-bold leading-tight">
+                  Up to -45% on designer lighting
+                </span>
+              </div>
+              <span className="rounded-md bg-background/15 px-4 py-2 text-sm font-semibold ring-1 ring-inset ring-primary-foreground/30 transition group-hover:bg-background/25">
+                Shop the sale
+              </span>
+            </div>
+          </Link>
+        </div>
 
         <div className="grid gap-8 lg:grid-cols-[260px_1fr]">
           {/* Sidebar */}
