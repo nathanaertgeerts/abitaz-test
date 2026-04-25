@@ -18,7 +18,7 @@ export const Logo = ({ variant = "light", className = "" }: LogoProps) => {
           {/* dotless i (ı) so we can replace the natural dot with our brand dot */}
           ı
           <span
-            className="pointer-events-none absolute left-1/2 -translate-x-1/2 -top-[0.05em] h-[0.28em] w-[0.28em] rounded-full bg-cta"
+            className="pointer-events-none absolute left-1/2 -translate-x-1/2 top-[0.18em] h-[0.28em] w-[0.28em] rounded-full bg-cta"
             aria-hidden
           />
         </span>
