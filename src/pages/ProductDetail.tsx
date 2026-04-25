@@ -1,5 +1,5 @@
 import { Check, Clock, Download, Headset, Minus, Package, Plus, RotateCcw, Truck } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "sonner";
 import { SiteLayout } from "@/components/layout/SiteLayout";
@@ -12,7 +12,27 @@ const ProductDetail = () => {
   const product = productBySlug(slug) ?? products[0];
   const [qty, setQty] = useState(1);
   const [activeColor, setActiveColor] = useState(0);
+  const [activeImage, setActiveImage] = useState(0);
   const { addItem } = useCart();
+
+  /* Build a small gallery from related products in the same category so the
+     thumbnails are visually distinct (no extra image assets required). */
+  const gallery = useMemo(() => {
+    const related = products
+      .filter(
+        (p) =>
+          p.slug !== product.slug &&
+          (p.brandSlug === product.brandSlug || p.categorySlug === product.categorySlug),
+      )
+      .slice(0, 4)
+      .map((p) => ({ src: p.image, alt: `${product.name} — view ${p.name}` }));
+    return [{ src: product.image, alt: product.name }, ...related];
+  }, [product]);
+
+  // Reset selected image when navigating to a different product
+  useEffect(() => {
+    setActiveImage(0);
+  }, [product.slug]);
 
   const handleAddToCart = () => {
     addItem(product, qty);
@@ -55,27 +75,39 @@ const ProductDetail = () => {
           <div>
             <div className="aspect-square overflow-hidden rounded-lg bg-surface">
               <img
-                src={product.image}
-                alt={product.name}
+                key={gallery[activeImage]?.src}
+                src={gallery[activeImage]?.src ?? product.image}
+                alt={gallery[activeImage]?.alt ?? product.name}
                 width={800}
                 height={800}
-                className="h-full w-full object-contain"
+                className="h-full w-full object-contain animate-in fade-in-0 duration-200"
               />
             </div>
-            <div className="mt-3 grid grid-cols-5 gap-2">
-              {[0, 1, 2, 3, 4].map((i) => (
-                <button
-                  key={i}
-                  type="button"
-                  className={`aspect-square overflow-hidden rounded-md border ${
-                    i === 0 ? "border-primary" : "border-border"
-                  } bg-surface`}
-                  aria-label={`View image ${i + 1}`}
-                >
-                  <img src={product.image} alt="" className="h-full w-full object-contain opacity-90" />
-                </button>
-              ))}
-            </div>
+            {gallery.length > 1 && (
+              <div className="mt-3 grid grid-cols-5 gap-2">
+                {gallery.map((img, i) => (
+                  <button
+                    key={img.src + i}
+                    type="button"
+                    onClick={() => setActiveImage(i)}
+                    aria-label={`View image ${i + 1}`}
+                    aria-pressed={i === activeImage}
+                    className={`aspect-square overflow-hidden rounded-md border bg-surface transition ${
+                      i === activeImage
+                        ? "border-primary ring-2 ring-primary/20"
+                        : "border-border hover:border-primary/50"
+                    }`}
+                  >
+                    <img
+                      src={img.src}
+                      alt=""
+                      loading="lazy"
+                      className="h-full w-full object-contain"
+                    />
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Info */}
