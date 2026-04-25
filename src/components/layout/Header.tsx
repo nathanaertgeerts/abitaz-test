@@ -8,6 +8,12 @@ import heroOutdoor from "@/assets/hero-outdoor.jpg";
 import heroDesigner from "@/assets/hero-designer.jpg";
 import heroInstall from "@/assets/hero-installation.jpg";
 import heroWinter from "@/assets/hero-winter-sale.jpg";
+import promoDesigner from "@/assets/promo-designer-sale.jpg";
+import promoSummer from "@/assets/promo-summer-gift.jpg";
+import productPendantOrange from "@/assets/product-pendant-orange.jpg";
+import productPendantGreen from "@/assets/product-pendant-green.jpg";
+import productPendantWhite from "@/assets/product-pendant-white.jpg";
+import productPendantDome from "@/assets/product-pendant-dome.jpg";
 
 const mainNav: MegaMenuItem[] = [
   {
@@ -182,6 +188,14 @@ const mainNav: MegaMenuItem[] = [
         ],
       },
     ],
+    feature: {
+      eyebrow: "Make it yours",
+      title: "Textile cords & fittings",
+      description:
+        "Personalise any pendant with colourful cords, sockets and matching shades.",
+      cta: { label: "Shop accessories", to: "/category/accessories" },
+      image: heroInstall,
+    },
     viewAll: { label: "View all accessories", to: "/category/accessories" },
   },
   {
@@ -215,6 +229,14 @@ const mainNav: MegaMenuItem[] = [
         ],
       },
     ],
+    feature: {
+      eyebrow: "Designer picks",
+      title: "Scandinavian classics",
+      description:
+        "Iconic chairs and tables that pair beautifully with our designer lighting.",
+      cta: { label: "Shop furniture", to: "/category/furniture" },
+      image: promoSummer,
+    },
     viewAll: { label: "View all furniture", to: "/category/furniture" },
   },
   {
@@ -242,7 +264,7 @@ const mainNav: MegaMenuItem[] = [
           description:
             "Discover the latest Flos releases — sculptural, timeless designs.",
           cta: { label: "Shop Flos", to: "/brands/flos" },
-          image: heroDesigner,
+          image: productPendantOrange,
         },
       },
       {
@@ -264,7 +286,7 @@ const mainNav: MegaMenuItem[] = [
           description:
             "Scandinavian design at honest prices — perfect for every room.",
           cta: { label: "Shop Nordlux", to: "/brands/nordlux" },
-          image: heroInstall,
+          image: productPendantWhite,
         },
       },
       {
@@ -287,7 +309,7 @@ const mainNav: MegaMenuItem[] = [
           description:
             "The lowest prices of the season across designer and everyday brands.",
           cta: { label: "Shop the sale", to: "/sale" },
-          image: heroWinter,
+          image: promoDesigner,
         },
       },
     ],
