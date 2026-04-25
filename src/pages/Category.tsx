@@ -563,19 +563,39 @@ const Category = () => {
             <h2 className="mt-6 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               Filters
             </h2>
+            {activeFilterCount > 0 && (
+              <div className="mt-2 flex items-center justify-between text-xs">
+                <span className="text-muted-foreground">
+                  {activeFilterCount} active
+                </span>
+                <button
+                  type="button"
+                  onClick={clearFilters}
+                  className="font-semibold text-primary hover:underline"
+                >
+                  Clear all
+                </button>
+              </div>
+            )}
 
             <FilterSection title={filterSet.range.title}>
               <div className="flex items-center gap-2">
                 <input
                   type="number"
-                  defaultValue={filterSet.range.min}
+                  value={minPrice}
+                  min={filterSet.range.min}
+                  max={maxPrice}
+                  onChange={(e) => setMinPrice(Number(e.target.value) || filterSet.range.min)}
                   className="h-9 w-full rounded-md border border-input bg-background px-2 text-sm"
                   aria-label={`Min ${filterSet.range.title.toLowerCase()}`}
                 />
                 <span className="text-muted-foreground">to</span>
                 <input
                   type="number"
-                  defaultValue={filterSet.range.max}
+                  value={maxPrice}
+                  min={minPrice}
+                  max={filterSet.range.max}
+                  onChange={(e) => setMaxPrice(Number(e.target.value) || filterSet.range.max)}
                   className="h-9 w-full rounded-md border border-input bg-background px-2 text-sm"
                   aria-label={`Max ${filterSet.range.title.toLowerCase()}`}
                 />
@@ -586,7 +606,12 @@ const Category = () => {
               <FilterSection key={facet.title} title={facet.title}>
                 {facet.options.map((o) => (
                   <label key={o.name} className="flex cursor-pointer items-center gap-2">
-                    <input type="checkbox" className="h-4 w-4 rounded border-input text-primary" />
+                    <input
+                      type="checkbox"
+                      checked={checkedFacets[facet.title]?.has(o.name) ?? false}
+                      onChange={() => toggleFacet(facet.title, o.name)}
+                      className="h-4 w-4 rounded border-input text-primary"
+                    />
                     <span>{o.name}</span>
                     <span className="ml-auto text-xs text-muted-foreground">({o.count})</span>
                   </label>
@@ -598,7 +623,12 @@ const Category = () => {
               <FilterSection title={filterSet.swatches.title}>
                 {filterSet.swatches.options.map((c) => (
                   <label key={c.name} className="flex cursor-pointer items-center gap-2">
-                    <input type="checkbox" className="h-4 w-4 rounded border-input text-primary" />
+                    <input
+                      type="checkbox"
+                      checked={checkedSwatches.has(c.name)}
+                      onChange={() => toggleSwatch(c.name)}
+                      className="h-4 w-4 rounded border-input text-primary"
+                    />
                     <span
                       className="h-4 w-6 rounded-sm border border-border"
                       style={{ backgroundColor: c.swatch }}
