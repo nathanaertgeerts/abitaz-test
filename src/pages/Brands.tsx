@@ -15,7 +15,7 @@ const TIERS: { id: Tier; label: string; description: string; brandSlugs: string[
     label: "Premium designer",
     description:
       "Iconic Scandinavian and Italian houses — the pieces you'll keep for a lifetime.",
-    brandSlugs: ["louis-poulsen", "flos", "artemide", "tradition", "normann-copenhagen"],
+    brandSlugs: ["louis-poulsen", "flos", "artemide", "martinelli-luce", "tradition", "normann-copenhagen"],
   },
   {
     id: "everyday",
