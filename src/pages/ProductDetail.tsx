@@ -1,15 +1,26 @@
 import { Check, Clock, Download, Headset, Minus, Package, Plus, RotateCcw, Truck } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { toast } from "sonner";
 import { SiteLayout } from "@/components/layout/SiteLayout";
 import { ProductCard, formatPrice } from "@/components/product/ProductCard";
 import { productBySlug, products } from "@/data/products";
+import { useCart } from "@/context/CartContext";
 
 const ProductDetail = () => {
   const { slug = "" } = useParams();
   const product = productBySlug(slug) ?? products[0];
   const [qty, setQty] = useState(1);
   const [activeColor, setActiveColor] = useState(0);
+  const { addItem } = useCart();
+
+  const handleAddToCart = () => {
+    addItem(product, qty);
+    toast.success(`Added to cart: ${product.name}`, {
+      description: `${qty} × ${formatPrice(product.price)}`,
+      action: { label: "View cart", onClick: () => { window.location.href = "/cart"; } },
+    });
+  };
 
   useEffect(() => {
     document.title = `${product.name} — Abitaz`;
@@ -148,6 +159,7 @@ const ProductDetail = () => {
               </div>
               <button
                 type="button"
+                onClick={handleAddToCart}
                 className="h-11 flex-1 rounded-md bg-cta px-6 text-sm font-semibold text-cta-foreground transition hover:bg-cta-hover"
               >
                 Add to cart
