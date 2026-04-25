@@ -7,13 +7,10 @@ import heroIndoor from "@/assets/hero-indoor.jpg";
 import heroOutdoor from "@/assets/hero-outdoor.jpg";
 import heroDesigner from "@/assets/hero-designer.jpg";
 import heroInstall from "@/assets/hero-installation.jpg";
-import heroWinter from "@/assets/hero-winter-sale.jpg";
 import promoDesigner from "@/assets/promo-designer-sale.jpg";
 import promoSummer from "@/assets/promo-summer-gift.jpg";
 import productPendantOrange from "@/assets/product-pendant-orange.jpg";
-import productPendantGreen from "@/assets/product-pendant-green.jpg";
 import productPendantWhite from "@/assets/product-pendant-white.jpg";
-import productPendantDome from "@/assets/product-pendant-dome.jpg";
 
 const mainNav: MegaMenuItem[] = [
   {
