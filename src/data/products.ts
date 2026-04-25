@@ -15,6 +15,9 @@ import artemideTolomeo from "@/assets/product-artemide-tolomeo.jpg";
 import artemideNesso from "@/assets/product-artemide-nesso.jpg";
 import artemidePirce from "@/assets/product-artemide-pirce.jpg";
 import artemideTizio from "@/assets/product-artemide-tizio.jpg";
+import martinelliPipistrello from "@/assets/product-martinelli-pipistrello.jpg";
+import martinelliCobra from "@/assets/product-martinelli-cobra.jpg";
+import martinelliSerpente from "@/assets/product-martinelli-serpente.jpg";
 
 export type Product = {
   slug: string;
@@ -562,6 +565,75 @@ export const products: Product[] = [
       { label: "Color temperature", value: "2700K" },
     ],
   },
+  /* ---------- Martinelli Luce — Tuscan sculptural Italian lighting ---------- */
+  {
+    slug: "martinelli-pipistrello-medium-white",
+    name: "Martinelli Luce Pipistrello Medium White",
+    brand: "Martinelli Luce",
+    brandSlug: "martinelli-luce",
+    category: "Table lamp",
+    categorySlug: "table-lamps",
+    sku: "ML 620/BI",
+    price: 1149.0,
+    image: martinelliPipistrello,
+    inStock: true,
+    leadTime: "5-10 working days",
+    colors: ["#ffffff", "#1f1f1f", "#e8662a"],
+    description:
+      "Designed by Gae Aulenti in 1965, the Pipistrello is one of the most recognised Italian lamps of the 20th century. Its scalloped opal methacrylate diffuser blooms like a flower above a telescopic stainless-steel stem on a stepped lacquered base — height-adjustable from 66 to 86 cm.",
+    specs: [
+      { label: "Lamp type", value: "Integrated LED 24W" },
+      { label: "Dimmable", value: "Touch dimmer on base" },
+      { label: "Height", value: "660 – 860 mm (telescopic)" },
+      { label: "Diffuser", value: "Ø 550 mm opal methacrylate" },
+      { label: "Color temperature", value: "2700K" },
+    ],
+  },
+  {
+    slug: "martinelli-cobra-table-white",
+    name: "Martinelli Luce Cobra Table Lamp White",
+    brand: "Martinelli Luce",
+    brandSlug: "martinelli-luce",
+    category: "Table lamp",
+    categorySlug: "table-lamps",
+    sku: "ML 629/BI",
+    price: 419.0,
+    originalPrice: 489.0,
+    image: martinelliCobra,
+    inStock: true,
+    leadTime: "3-5 working days",
+    colors: ["#ffffff", "#1f1f1f", "#e8662a"],
+    description:
+      "Designed by Elio Martinelli in 1968, Cobra is a sculptural icon of Italian Space-Age design. Its rotating head pivots on a single axis, allowing the light to be aimed precisely while the curved body remains a quiet sculpture on the desk.",
+    specs: [
+      { label: "Lamp type", value: "Integrated LED 8W" },
+      { label: "Dimmable", value: "On/off touch on base" },
+      { label: "Dimensions", value: "H 320 × Ø base 180 mm" },
+      { label: "Material", value: "Lacquered methacrylate" },
+    ],
+  },
+  {
+    slug: "martinelli-serpente-floor-white",
+    name: "Martinelli Luce Serpente Floor Lamp White",
+    brand: "Martinelli Luce",
+    brandSlug: "martinelli-luce",
+    category: "Floor lamp",
+    categorySlug: "floor-lamps",
+    sku: "ML 2199/BI",
+    price: 879.0,
+    image: martinelliSerpente,
+    inStock: true,
+    leadTime: "5-10 working days",
+    colors: ["#ffffff", "#1f1f1f"],
+    description:
+      "Elio Martinelli's Serpente is a single sweeping arc of light — a flexible LED tube rising from a weighted base. A graphic, almost calligraphic floor lamp that draws a line in the room.",
+    specs: [
+      { label: "Lamp type", value: "Integrated LED 18W" },
+      { label: "Dimmable", value: "Touch dimmer on base" },
+      { label: "Height", value: "1450 mm" },
+      { label: "Color temperature", value: "3000K" },
+    ],
+  },
 ];
 
 export const productBySlug = (slug: string) => products.find((p) => p.slug === slug);
@@ -585,6 +657,7 @@ export const brands = [
   { slug: "nordlux", name: "Nordlux" },
   { slug: "flos", name: "Flos" },
   { slug: "artemide", name: "Artemide" },
+  { slug: "martinelli-luce", name: "Martinelli Luce" },
   { slug: "philips", name: "Philips" },
   { slug: "normann-copenhagen", name: "Normann Copenhagen" },
   { slug: "absinthe", name: "Absinthe Lights" },

@@ -184,6 +184,36 @@ export const ArtemideLogo = ({ className }: LogoProps) => (
   </svg>
 );
 
+export const MartinelliLuceLogo = ({ className }: LogoProps) => (
+  <svg viewBox="0 0 240 32" className={className} role="img" aria-label="Martinelli Luce">
+    <text
+      x="120"
+      y="14"
+      textAnchor="middle"
+      fontFamily="'Helvetica Neue', Arial, sans-serif"
+      fontWeight="700"
+      fontSize="13"
+      letterSpacing="2"
+      fill="currentColor"
+    >
+      MARTINELLI
+    </text>
+    <text
+      x="120"
+      y="27"
+      textAnchor="middle"
+      fontFamily="Georgia, 'Times New Roman', serif"
+      fontStyle="italic"
+      fontWeight="400"
+      fontSize="12"
+      letterSpacing="2"
+      fill="currentColor"
+    >
+      luce
+    </text>
+  </svg>
+);
+
 export const brandLogos: Record<string, (p: LogoProps) => JSX.Element> = {
   "louis-poulsen": LouisPoulsenLogo,
   tradition: TraditionLogo,
@@ -194,4 +224,5 @@ export const brandLogos: Record<string, (p: LogoProps) => JSX.Element> = {
   absinthe: AbsintheLogo,
   vysn: VysnLogo,
   artemide: ArtemideLogo,
+  "martinelli-luce": MartinelliLuceLogo,
 };
