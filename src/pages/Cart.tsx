@@ -326,60 +326,76 @@ const Cart = () => {
                 <p className="mt-0.5 text-right text-xs text-muted-foreground">incl. VAT</p>
               </div>
 
-              <button
-                type="button"
-                onClick={() =>
-                  navigate("/checkout", {
-                    state: { country, delivery },
-                  })
-                }
-                className="mt-5 inline-flex h-12 w-full items-center justify-center rounded-md bg-success px-6 text-sm font-semibold text-success-foreground transition hover:opacity-90"
-              >
-                Continue to checkout
-              </button>
+              {/* Checkout actions — on mobile we promote the quick wallet
+                  buttons above the regular checkout button to speed up
+                  one-tap purchases. On desktop the order is reversed
+                  (regular checkout first, quick wallets below). */}
+              <div className="mt-5 flex flex-col gap-3">
+                {/* Quick checkout — Apple Pay / Google Pay
+                    order-1 on mobile (first), order-3 on desktop (last) */}
+                <div className="order-1 lg:order-3">
+                  <div className="flex items-center gap-3 text-[11px] uppercase tracking-wider text-muted-foreground">
+                    <span className="h-px flex-1 bg-border" />
+                    <span className="lg:hidden">Express checkout</span>
+                    <span className="hidden lg:inline">Quick checkout</span>
+                    <span className="h-px flex-1 bg-border" />
+                  </div>
+                  <div className="mt-3 grid grid-cols-2 gap-2">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        navigate("/checkout", {
+                          state: { country, delivery, payment: "applepay", express: true },
+                        })
+                      }
+                      aria-label="Pay with Apple Pay"
+                      className="inline-flex h-12 items-center justify-center gap-1.5 rounded-md bg-foreground text-sm font-semibold text-background transition hover:opacity-90"
+                    >
+                      <svg viewBox="0 0 24 24" aria-hidden className="h-4 w-4" fill="currentColor">
+                        <path d="M16.365 1.43c0 1.14-.42 2.22-1.13 3.02-.78.86-2.06 1.52-3.06 1.43-.13-1.11.42-2.27 1.1-3.01.77-.84 2.13-1.45 3.09-1.44zM20.5 17.06c-.36.83-.53 1.2-1 2-.66 1.13-1.59 2.54-2.74 2.55-1.02.01-1.28-.66-2.66-.65-1.38.01-1.66.67-2.68.66-1.15-.01-2.04-1.28-2.7-2.4C7.13 16.78 6.84 12.93 8.55 11.1c.95-1.02 2.32-1.65 3.61-1.65 1.32 0 2.15.66 3.24.66 1.05 0 1.69-.66 3.21-.66 1.15 0 2.37.62 3.24 1.69-2.85 1.56-2.39 5.66-1.35 5.92z" />
+                      </svg>
+                      Pay
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        navigate("/checkout", {
+                          state: { country, delivery, payment: "googlepay", express: true },
+                        })
+                      }
+                      aria-label="Pay with Google Pay"
+                      className="inline-flex h-12 items-center justify-center gap-1.5 rounded-md border border-input bg-background text-sm font-semibold text-foreground transition hover:bg-muted"
+                    >
+                      <svg viewBox="0 0 24 24" aria-hidden className="h-4 w-4">
+                        <path fill="#4285F4" d="M12.24 10.29v3.5h4.84c-.2 1.13-.82 2.08-1.74 2.72v2.26h2.81c1.65-1.52 2.6-3.76 2.6-6.42 0-.62-.06-1.22-.16-1.79H12.24z"/>
+                        <path fill="#34A853" d="M12.24 20c2.34 0 4.31-.78 5.74-2.12l-2.81-2.18c-.78.52-1.78.83-2.93.83-2.25 0-4.16-1.52-4.84-3.57H4.5v2.24A8.96 8.96 0 0 0 12.24 20z"/>
+                        <path fill="#FBBC05" d="M7.4 12.96a5.4 5.4 0 0 1 0-3.43V7.29H4.5a8.96 8.96 0 0 0 0 8.04l2.9-2.37z"/>
+                        <path fill="#EA4335" d="M12.24 5.96c1.27 0 2.41.44 3.31 1.3l2.49-2.49C16.55 3.4 14.58 2.49 12.24 2.49 8.74 2.49 5.7 4.5 4.5 7.29l2.9 2.24c.68-2.05 2.59-3.57 4.84-3.57z"/>
+                      </svg>
+                      Pay
+                    </button>
+                  </div>
+                </div>
 
-              {/* Quick checkout — Apple Pay / Google Pay */}
-              <div className="mt-3">
-                <div className="flex items-center gap-3 text-[11px] uppercase tracking-wider text-muted-foreground">
+                {/* "or" divider — only visible on mobile, between wallets and standard checkout */}
+                <div className="order-2 flex items-center gap-3 text-[11px] uppercase tracking-wider text-muted-foreground lg:hidden">
                   <span className="h-px flex-1 bg-border" />
-                  Quick checkout
+                  or
                   <span className="h-px flex-1 bg-border" />
                 </div>
-                <div className="mt-3 grid grid-cols-2 gap-2">
-                  <button
-                    type="button"
-                    onClick={() =>
-                      navigate("/checkout", {
-                        state: { country, delivery, payment: "applepay", express: true },
-                      })
-                    }
-                    aria-label="Pay with Apple Pay"
-                    className="inline-flex h-11 items-center justify-center gap-1.5 rounded-md bg-foreground text-sm font-semibold text-background transition hover:opacity-90"
-                  >
-                    <svg viewBox="0 0 24 24" aria-hidden className="h-4 w-4" fill="currentColor">
-                      <path d="M16.365 1.43c0 1.14-.42 2.22-1.13 3.02-.78.86-2.06 1.52-3.06 1.43-.13-1.11.42-2.27 1.1-3.01.77-.84 2.13-1.45 3.09-1.44zM20.5 17.06c-.36.83-.53 1.2-1 2-.66 1.13-1.59 2.54-2.74 2.55-1.02.01-1.28-.66-2.66-.65-1.38.01-1.66.67-2.68.66-1.15-.01-2.04-1.28-2.7-2.4C7.13 16.78 6.84 12.93 8.55 11.1c.95-1.02 2.32-1.65 3.61-1.65 1.32 0 2.15.66 3.24.66 1.05 0 1.69-.66 3.21-.66 1.15 0 2.37.62 3.24 1.69-2.85 1.56-2.39 5.66-1.35 5.92z" />
-                    </svg>
-                    Pay
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      navigate("/checkout", {
-                        state: { country, delivery, payment: "googlepay", express: true },
-                      })
-                    }
-                    aria-label="Pay with Google Pay"
-                    className="inline-flex h-11 items-center justify-center gap-1.5 rounded-md border border-input bg-background text-sm font-semibold text-foreground transition hover:bg-muted"
-                  >
-                    <svg viewBox="0 0 24 24" aria-hidden className="h-4 w-4">
-                      <path fill="#4285F4" d="M12.24 10.29v3.5h4.84c-.2 1.13-.82 2.08-1.74 2.72v2.26h2.81c1.65-1.52 2.6-3.76 2.6-6.42 0-.62-.06-1.22-.16-1.79H12.24z"/>
-                      <path fill="#34A853" d="M12.24 20c2.34 0 4.31-.78 5.74-2.12l-2.81-2.18c-.78.52-1.78.83-2.93.83-2.25 0-4.16-1.52-4.84-3.57H4.5v2.24A8.96 8.96 0 0 0 12.24 20z"/>
-                      <path fill="#FBBC05" d="M7.4 12.96a5.4 5.4 0 0 1 0-3.43V7.29H4.5a8.96 8.96 0 0 0 0 8.04l2.9-2.37z"/>
-                      <path fill="#EA4335" d="M12.24 5.96c1.27 0 2.41.44 3.31 1.3l2.49-2.49C16.55 3.4 14.58 2.49 12.24 2.49 8.74 2.49 5.7 4.5 4.5 7.29l2.9 2.24c.68-2.05 2.59-3.57 4.84-3.57z"/>
-                    </svg>
-                    Pay
-                  </button>
-                </div>
+
+                {/* Standard checkout — order-3 on mobile (last), order-1 on desktop (first) */}
+                <button
+                  type="button"
+                  onClick={() =>
+                    navigate("/checkout", {
+                      state: { country, delivery },
+                    })
+                  }
+                  className="order-3 inline-flex h-12 w-full items-center justify-center rounded-md bg-success px-6 text-sm font-semibold text-success-foreground transition hover:opacity-90 lg:order-1"
+                >
+                  Continue to checkout
+                </button>
               </div>
 
               {/* Discount accordion */}
