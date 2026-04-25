@@ -225,4 +225,5 @@ export const brandLogos: Record<string, (p: LogoProps) => JSX.Element> = {
   vysn: VysnLogo,
   artemide: ArtemideLogo,
   "martinelli-luce": MartinelliLuceLogo,
+  slv: SlvLogo,
 };
