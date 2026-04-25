@@ -298,22 +298,27 @@ const mainNav: MegaMenuItem[] = [
 export const Header = () => {
   return (
     <header className="sticky top-0 z-40 w-full">
-      {/* Top blue bar */}
+      {/* Combined blue bar: logo + nav + search + actions */}
       <div className="bg-primary text-primary-foreground">
-        <div className="container-abitaz flex h-16 items-center gap-4 md:gap-8">
+        <div className="container-abitaz flex h-16 items-center gap-3 md:gap-6">
           <Logo />
+
+          {/* Mega menu nav — sits inline next to logo on desktop */}
+          <div className="hidden flex-none md:block">
+            <MegaMenu items={mainNav} />
+          </div>
 
           {/* Search */}
           <form
             role="search"
             onSubmit={(e) => e.preventDefault()}
-            className="ml-2 hidden flex-1 md:block"
+            className="hidden min-w-0 flex-1 md:block"
           >
             <label htmlFor="site-search" className="sr-only">
               Search products, brands or SKUs
             </label>
             <div className="relative">
-              <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <input
                 id="site-search"
                 type="search"
@@ -324,7 +329,7 @@ export const Header = () => {
           </form>
 
           {/* Right actions */}
-          <nav aria-label="Account" className="ml-auto flex items-center gap-1 md:gap-2">
+          <nav aria-label="Account" className="ml-auto flex flex-none items-center gap-1 md:gap-2">
             <Link
               to="/account"
               className="hidden items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-primary-hover md:inline-flex"
@@ -350,11 +355,6 @@ export const Header = () => {
               </span>
             </Link>
           </nav>
-        </div>
-
-        {/* Main category nav with mega menu */}
-        <div className="border-t border-white/10">
-          <MegaMenu items={mainNav} />
         </div>
       </div>
 
