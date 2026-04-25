@@ -167,6 +167,23 @@ export const VysnLogo = ({ className }: LogoProps) => (
   </svg>
 );
 
+export const ArtemideLogo = ({ className }: LogoProps) => (
+  <svg viewBox="0 0 220 32" className={className} role="img" aria-label="Artemide">
+    <text
+      x="110"
+      y="23"
+      textAnchor="middle"
+      fontFamily="'Helvetica Neue', Arial, sans-serif"
+      fontWeight="300"
+      fontSize="22"
+      letterSpacing="6"
+      fill="currentColor"
+    >
+      ARTEMIDE
+    </text>
+  </svg>
+);
+
 export const brandLogos: Record<string, (p: LogoProps) => JSX.Element> = {
   "louis-poulsen": LouisPoulsenLogo,
   tradition: TraditionLogo,
@@ -176,4 +193,5 @@ export const brandLogos: Record<string, (p: LogoProps) => JSX.Element> = {
   "normann-copenhagen": NormannLogo,
   absinthe: AbsintheLogo,
   vysn: VysnLogo,
+  artemide: ArtemideLogo,
 };

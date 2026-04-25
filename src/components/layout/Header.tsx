@@ -252,6 +252,7 @@ const mainNav: MegaMenuItem[] = [
             links: [
               { label: "Louis Poulsen", to: "/brands/louis-poulsen" },
               { label: "Flos", to: "/brands/flos" },
+              { label: "Artemide", to: "/brands/artemide" },
               { label: "&tradition", to: "/brands/tradition" },
               { label: "Normann Copenhagen", to: "/brands/normann-copenhagen" },
             ],
