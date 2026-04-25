@@ -8,6 +8,9 @@ import bulbEdison from "@/assets/product-bulb-edison.jpg";
 import absintheClickfitBlack from "@/assets/product-absinthe-clickfit-black.jpg";
 import absintheCylinderWhite from "@/assets/product-absinthe-cylinder-white.jpg";
 import absintheChuckDouble from "@/assets/product-absinthe-chuck-double.jpg";
+import vysnTevoMiniPendant from "@/assets/product-vysn-tevo-mini-pendant.jpg";
+import vysnTevo360Downlight from "@/assets/product-vysn-tevo-360-downlight.jpg";
+import vysnVelythFloor from "@/assets/product-vysn-velyth-floor.jpg";
 
 export type Product = {
   slug: string;
@@ -329,6 +332,142 @@ export const products: Product[] = [
       { label: "IP rating", value: "IP20" },
     ],
   },
+  /* ---------- VYSN — German technical / professional lighting ---------- */
+  {
+    slug: "vysn-tevo-mini-pendant-white",
+    name: "Tevo Mini Pendant White",
+    brand: "VYSN",
+    brandSlug: "vysn",
+    category: "Pendant lamp",
+    categorySlug: "pendant-lamps",
+    sku: "VY V107013N9W",
+    price: 49.9,
+    image: vysnTevoMiniPendant,
+    inStock: true,
+    leadTime: "1-2 working days",
+    colors: ["#ffffff", "#1f1f1f", "#9b8b6a"],
+    description:
+      "Compact GU10 pendant from the Tevo Mini series. Modular, elegant and ready to install — perfect above kitchen islands, dining tables and counters.",
+    specs: [
+      { label: "Lamp type", value: "1 x GU10 max. 35W" },
+      { label: "Dimensions", value: "Ø 60 × H 110 mm" },
+      { label: "Cable length", value: "1.8 m (shortenable)" },
+      { label: "IP rating", value: "IP20" },
+    ],
+  },
+  {
+    slug: "vysn-tevo-mini-pendant-black",
+    name: "Tevo Mini Pendant Black",
+    brand: "VYSN",
+    brandSlug: "vysn",
+    category: "Pendant lamp",
+    categorySlug: "pendant-lamps",
+    sku: "VY V107013N9B",
+    price: 49.9,
+    image: vysnTevoMiniPendant,
+    inStock: true,
+    leadTime: "1-2 working days",
+    colors: ["#1f1f1f", "#ffffff"],
+    description:
+      "The matte black version of the Tevo Mini Pendant. A discreet architectural pendant with directed GU10 light — ideal for modern hospitality and residential interiors.",
+    specs: [
+      { label: "Lamp type", value: "1 x GU10 max. 35W" },
+      { label: "Dimensions", value: "Ø 60 × H 110 mm" },
+      { label: "Cable length", value: "1.8 m (shortenable)" },
+      { label: "IP rating", value: "IP20" },
+    ],
+  },
+  {
+    slug: "vysn-tevo-360-downlight-white",
+    name: "Tevo 360 Downlight White",
+    brand: "VYSN",
+    brandSlug: "vysn",
+    category: "Recessed spot",
+    categorySlug: "recessed-spots",
+    sku: "VY V104100T2W",
+    price: 49.9,
+    image: vysnTevo360Downlight,
+    inStock: true,
+    leadTime: "1-2 working days",
+    colors: ["#ffffff", "#1f1f1f"],
+    description:
+      "Integrated LED downlight with a fully rotating and tiltable inner module — set the beam exactly where you need it, then leave the trim flush to the ceiling.",
+    specs: [
+      { label: "Lamp type", value: "Integrated LED 7W" },
+      { label: "Color temperature", value: "3000K warm white" },
+      { label: "Lumens", value: "560 lm" },
+      { label: "Cut-out", value: "Ø 75 mm" },
+      { label: "IP rating", value: "IP20" },
+    ],
+  },
+  {
+    slug: "vysn-onis-1-w",
+    name: "Onis 1 W Surface Spot",
+    brand: "VYSN",
+    brandSlug: "vysn",
+    category: "Ceiling spot",
+    categorySlug: "ceiling-lamps",
+    sku: "VY V101101N9W",
+    price: 49.9,
+    image: vysnTevo360Downlight,
+    inStock: true,
+    leadTime: "1-2 working days",
+    colors: ["#ffffff", "#1f1f1f", "#9b8b6a"],
+    description:
+      "Single surface-mounted GU10 spot with a tiltable head. Minimal, plaster-friendly cylinder for ceilings where recessing is not possible.",
+    specs: [
+      { label: "Lamp type", value: "1 x GU10 max. 50W" },
+      { label: "Dimensions", value: "Ø 80 × H 100 mm" },
+      { label: "Beam angle", value: "36° (adjustable ±30°)" },
+      { label: "IP rating", value: "IP20" },
+    ],
+  },
+  {
+    slug: "vysn-tevo-1phase-gu10-white",
+    name: "Tevo 1-Phase Track Spot GU10",
+    brand: "VYSN",
+    brandSlug: "vysn",
+    category: "Ceiling spot",
+    categorySlug: "ceiling-lamps",
+    sku: "VY V114100N9W",
+    price: 29.9,
+    image: vysnTevo360Downlight,
+    inStock: true,
+    leadTime: "1-2 working days",
+    colors: ["#ffffff", "#1f1f1f"],
+    description:
+      "GU10 spot for the VYSN 1-phase track system. Pair with the Tevo Mini Wing or 1-Phase Set for a complete modular ceiling solution.",
+    specs: [
+      { label: "Lamp type", value: "1 x GU10 max. 35W" },
+      { label: "Track", value: "1-phase, 230V" },
+      { label: "Beam angle", value: "36° (adjustable)" },
+      { label: "IP rating", value: "IP20" },
+    ],
+  },
+  {
+    slug: "vysn-velyth-floor-4000k",
+    name: "Velyth Floor 4000K Office Lamp",
+    brand: "VYSN",
+    brandSlug: "vysn",
+    category: "Floor lamp",
+    categorySlug: "floor-lamps",
+    sku: "VY V108120B4W",
+    price: 729.0,
+    originalPrice: 799.0,
+    image: vysnVelythFloor,
+    inStock: true,
+    leadTime: "3-5 working days",
+    colors: ["#1f1f1f", "#ffffff"],
+    description:
+      "Professional LED office floor lamp with up- and down-light distribution. Touch-dimmable with integrated motion and daylight sensors — UGR < 13 for glare-free workspace lighting.",
+    specs: [
+      { label: "Power", value: "120W LED, integrated" },
+      { label: "Color temperature", value: "4000K neutral white" },
+      { label: "Color rendering", value: "CRI 90+" },
+      { label: "Glare rating", value: "UGR < 13" },
+      { label: "Height", value: "1950 mm" },
+    ],
+  },
 ];
 
 export const productBySlug = (slug: string) => products.find((p) => p.slug === slug);
@@ -354,4 +493,5 @@ export const brands = [
   { slug: "philips", name: "Philips" },
   { slug: "normann-copenhagen", name: "Normann Copenhagen" },
   { slug: "absinthe", name: "Absinthe Lights" },
+  { slug: "vysn", name: "VYSN" },
 ];

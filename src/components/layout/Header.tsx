@@ -287,6 +287,28 @@ const mainNav: MegaMenuItem[] = [
         },
       },
       {
+        label: "Technical lighting",
+        to: "/brands?tier=technical",
+        columns: [
+          {
+            title: "Architectural & professional",
+            to: "/brands?tier=technical",
+            links: [
+              { label: "Absinthe Lights", to: "/brands/absinthe" },
+              { label: "VYSN", to: "/brands/vysn" },
+            ],
+          },
+        ],
+        feature: {
+          eyebrow: "Pro grade",
+          title: "Spots, tracks & downlights",
+          description:
+            "Belgian and German technical brands for recessed spots, track systems and workspace lighting.",
+          cta: { label: "Shop technical", to: "/brands?tier=technical" },
+          image: productPendantWhite,
+        },
+      },
+      {
         label: "On sale",
         to: "/sale",
         columns: [
