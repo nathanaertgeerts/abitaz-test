@@ -38,9 +38,13 @@ export type MegaMenuItem = {
 
 type Props = {
   items: MegaMenuItem[];
+  /** When true, the trigger row renders inline (no container, no fixed height)
+   *  and the dropdown panel is positioned to span the full viewport width
+   *  beneath the sticky header. */
+  inline?: boolean;
 };
 
-export const MegaMenu = ({ items }: Props) => {
+export const MegaMenu = ({ items, inline = false }: Props) => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const [activeGroup, setActiveGroup] = useState(0);
   const closeTimer = useRef<number | null>(null);
@@ -63,8 +67,14 @@ export const MegaMenu = ({ items }: Props) => {
   const closeAll = () => setOpenIndex(null);
 
   return (
-    <div className="relative" onMouseLeave={scheduleClose}>
-      <ul className="container-abitaz flex h-11 items-center gap-6 overflow-x-auto text-sm font-medium">
+    <div className={inline ? "" : "relative"} onMouseLeave={scheduleClose}>
+      <ul
+        className={
+          inline
+            ? "flex items-center gap-5 text-sm font-medium"
+            : "container-abitaz flex h-11 items-center gap-6 overflow-x-auto text-sm font-medium"
+        }
+      >
         {items.map((item, i) => {
           const hasMenu = !!(item.groups?.length || item.columns?.length || item.feature);
           const isOpen = openIndex === i;
@@ -103,7 +113,11 @@ export const MegaMenu = ({ items }: Props) => {
         <div
           onMouseEnter={() => open(openIndex)}
           onMouseLeave={scheduleClose}
-          className="absolute left-0 right-0 top-full z-50 border-t border-white/10 bg-background text-foreground shadow-lg animate-in fade-in-0 slide-in-from-top-1 duration-150"
+          className={
+            inline
+              ? "fixed left-0 right-0 top-16 z-50 border-t border-white/10 bg-background text-foreground shadow-lg animate-in fade-in-0 slide-in-from-top-1 duration-150"
+              : "absolute left-0 right-0 top-full z-50 border-t border-white/10 bg-background text-foreground shadow-lg animate-in fade-in-0 slide-in-from-top-1 duration-150"
+          }
         >
           <MegaPanel
             item={items[openIndex]}
