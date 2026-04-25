@@ -212,7 +212,7 @@ const SaleHero = () => (
           <span className="inline-block w-fit rounded-sm bg-cta px-2.5 py-1 text-xs font-bold uppercase tracking-wider text-cta-foreground">
             Winter Sale · Up to -45%
           </span>
-          <h1 className="font-display text-3xl font-extrabold leading-tight md:text-5xl">
+          <h1 className="font-display text-3xl font-extrabold leading-tight text-primary-foreground md:text-5xl">
             Light up your home for less
           </h1>
           <p className="max-w-md text-sm text-primary-foreground/85 md:text-base">
