@@ -6,12 +6,41 @@ import { ProductCard } from "@/components/product/ProductCard";
 import { categories, products } from "@/data/products";
 import promoDesigner from "@/assets/promo-designer-sale.jpg";
 
-const subcategories = [
-  { slug: "pendant-lamps", name: "Pendant lamps" },
-  { slug: "ceiling-lamps", name: "Ceiling lamps" },
-  { slug: "wall-lamps", name: "Wall lamps" },
-  { slug: "floor-lamps", name: "Floor lamps" },
-  { slug: "table-lamps", name: "Table lamps" },
+/**
+ * Sidebar tree: top-level groups, each with their own subcategories.
+ * Drives both highlighting the current page and which group auto-opens.
+ */
+const categoryTree: { slug: string; name: string; subs: { slug: string; name: string }[] }[] = [
+  {
+    slug: "indoor-lighting",
+    name: "Indoor lighting",
+    subs: [
+      { slug: "pendant-lamps", name: "Pendant lamps" },
+      { slug: "ceiling-lamps", name: "Ceiling lamps" },
+      { slug: "wall-lamps", name: "Wall lamps" },
+      { slug: "floor-lamps", name: "Floor lamps" },
+      { slug: "table-lamps", name: "Table lamps" },
+    ],
+  },
+  {
+    slug: "outdoor-lighting",
+    name: "Outdoor lighting",
+    subs: [
+      { slug: "outdoor-wall-lamps", name: "Outdoor wall lamps" },
+      { slug: "outdoor-ceiling", name: "Outdoor ceiling" },
+      { slug: "ground-spots", name: "Ground spots" },
+      { slug: "path-lighting", name: "Path lighting" },
+      { slug: "string-lights", name: "String lights" },
+    ],
+  },
+  {
+    slug: "bulbs",
+    name: "Light bulbs",
+    subs: [
+      { slug: "bulbs", name: "All bulbs" },
+      { slug: "smart-lighting", name: "Smart bulbs" },
+    ],
+  },
 ];
 
 const materials = [
@@ -43,7 +72,13 @@ const FilterSection = ({ title, children }: { title: string; children: React.Rea
 const Category = () => {
   const { slug = "pendant-lamps" } = useParams();
   const cat = useMemo(() => categories.find((c) => c.slug === slug), [slug]);
-  const list = products; // demo: show all
+  // Filter the product grid down to the active category, but fall back to
+  // all products when the demo dataset has no items for that slug — this
+  // keeps every category page populated for the prototype.
+  const list = useMemo(() => {
+    const inCat = products.filter((p) => p.categorySlug === slug);
+    return inCat.length > 0 ? inCat : products;
+  }, [slug]);
   const [sort, setSort] = useState("popularity");
   // Filters are collapsed by default on mobile, always shown on desktop (lg+)
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -141,28 +176,47 @@ const Category = () => {
             <div id="category-filters" className={`${filtersOpen ? "block" : "hidden"} lg:block`}>
             <details open className="border-b border-border py-4">
               <summary className="cursor-pointer text-sm font-semibold">Categories</summary>
-              <ul className="mt-3 space-y-2 text-sm">
-                <li className="font-medium text-primary">Lighting</li>
-                <li className="ml-3">
-                  <span className="font-medium text-foreground">Indoor lighting</span>
-                  <ul className="ml-3 mt-1 space-y-1 text-muted-foreground">
-                    {subcategories.map((s) => (
-                      <li key={s.slug}>
-                        <a
-                          href={`/category/${s.slug}`}
-                          aria-current={s.slug === slug ? "page" : undefined}
-                          className={
-                            s.slug === slug
-                              ? "font-semibold text-primary"
-                              : "hover:text-primary"
-                          }
-                        >
-                          {s.name}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </li>
+              <ul className="mt-3 space-y-3 text-sm">
+                <li className="font-semibold text-primary">Lighting</li>
+                {categoryTree.map((group) => {
+                  const isActiveGroup =
+                    group.slug === slug || group.subs.some((s) => s.slug === slug);
+                  return (
+                    <li key={group.slug} className="ml-3">
+                      <Link
+                        to={`/category/${group.slug}`}
+                        aria-current={group.slug === slug ? "page" : undefined}
+                        className={
+                          group.slug === slug
+                            ? "font-semibold text-primary"
+                            : "font-medium text-foreground hover:text-primary"
+                        }
+                      >
+                        {group.name}
+                      </Link>
+                      {/* Auto-expand the group that contains the active page */}
+                      {isActiveGroup && (
+                        <ul className="ml-3 mt-1.5 space-y-1.5 text-muted-foreground">
+                          {group.subs.map((s) => (
+                            <li key={s.slug}>
+                              <Link
+                                to={`/category/${s.slug}`}
+                                aria-current={s.slug === slug ? "page" : undefined}
+                                className={
+                                  s.slug === slug
+                                    ? "font-semibold text-primary"
+                                    : "hover:text-primary"
+                                }
+                              >
+                                {s.name}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </li>
+                  );
+                })}
               </ul>
             </details>
 
