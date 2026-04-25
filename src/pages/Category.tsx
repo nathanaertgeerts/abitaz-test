@@ -17,6 +17,7 @@ const categoryTree: { slug: string; name: string; subs: { slug: string; name: st
     subs: [
       { slug: "pendant-lamps", name: "Pendant lamps" },
       { slug: "ceiling-lamps", name: "Ceiling lamps" },
+      { slug: "recessed-spots", name: "Recessed spots" },
       { slug: "wall-lamps", name: "Wall lamps" },
       { slug: "floor-lamps", name: "Floor lamps" },
       { slug: "table-lamps", name: "Table lamps" },

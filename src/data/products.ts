@@ -5,6 +5,9 @@ import pendantBlack from "@/assets/product-pendant-black.jpg";
 import pendantDome from "@/assets/product-pendant-dome.jpg";
 import pendantGlobe from "@/assets/product-pendant-globe.jpg";
 import bulbEdison from "@/assets/product-bulb-edison.jpg";
+import absintheClickfitBlack from "@/assets/product-absinthe-clickfit-black.jpg";
+import absintheCylinderWhite from "@/assets/product-absinthe-cylinder-white.jpg";
+import absintheChuckDouble from "@/assets/product-absinthe-chuck-double.jpg";
 
 export type Product = {
   slug: string;
@@ -192,6 +195,140 @@ export const products: Product[] = [
       { label: "Lifespan", value: "25,000 hours" },
     ],
   },
+  /* ---------- Absinthe Lights — Belgian architectural lighting ---------- */
+  {
+    slug: "absinthe-clickfit-smooth-adjustable-black",
+    name: "Clickfit Smooth Adjustable Recessed Spot",
+    brand: "Absinthe",
+    brandSlug: "absinthe",
+    category: "Recessed spot",
+    categorySlug: "recessed-spots",
+    sku: "AB 02C1SA811B0",
+    price: 31.9,
+    image: absintheClickfitBlack,
+    inStock: true,
+    leadTime: "1-2 working days",
+    colors: ["#1f1f1f", "#ffffff"],
+    description:
+      "Adjustable recessed downlight from the Clickfit collection. Smooth black trim with a tiltable inner reflector for precise light placement.",
+    specs: [
+      { label: "Lamp type", value: "1 x GU10 max. 50W" },
+      { label: "Beam angle", value: "36° (adjustable ±25°)" },
+      { label: "Cut-out", value: "Ø 80 mm" },
+      { label: "IP rating", value: "IP20" },
+    ],
+  },
+  {
+    slug: "absinthe-clickfit-deep-large-black",
+    name: "Clickfit Deep Large Recessed Spot",
+    brand: "Absinthe",
+    brandSlug: "absinthe",
+    category: "Recessed spot",
+    categorySlug: "recessed-spots",
+    sku: "AB 02C1D8011B0",
+    price: 31.9,
+    image: absintheClickfitBlack,
+    inStock: true,
+    leadTime: "1-2 working days",
+    colors: ["#1f1f1f", "#ffffff"],
+    description:
+      "Deep-set black recessed spot for a flush, glare-free look. Pairs perfectly with concrete and plaster ceilings.",
+    specs: [
+      { label: "Lamp type", value: "1 x GU10 max. 50W" },
+      { label: "Beam angle", value: "36°" },
+      { label: "Cut-out", value: "Ø 80 mm" },
+      { label: "IP rating", value: "IP20" },
+    ],
+  },
+  {
+    slug: "absinthe-djup-recessed-black",
+    name: "Djup Recessed Spot",
+    brand: "Absinthe",
+    brandSlug: "absinthe",
+    category: "Recessed spot",
+    categorySlug: "recessed-spots",
+    sku: "AB 01C107611B0T",
+    price: 16.95,
+    image: absintheClickfitBlack,
+    inStock: true,
+    leadTime: "1-2 working days",
+    colors: ["#1f1f1f"],
+    description:
+      "An entry-level deep recessed spot from Absinthe — minimalist black trim, easy installation, excellent value.",
+    specs: [
+      { label: "Lamp type", value: "1 x GU10 max. 35W" },
+      { label: "Beam angle", value: "36°" },
+      { label: "Cut-out", value: "Ø 75 mm" },
+      { label: "IP rating", value: "IP20" },
+    ],
+  },
+  {
+    slug: "absinthe-clickfit-cylinder-large-white",
+    name: "Clickfit Cylinder Large White",
+    brand: "Absinthe",
+    brandSlug: "absinthe",
+    category: "Ceiling spot",
+    categorySlug: "ceiling-lamps",
+    sku: "AB 02C31220201",
+    price: 42.9,
+    image: absintheCylinderWhite,
+    inStock: true,
+    leadTime: "3-5 working days",
+    colors: ["#ffffff", "#1f1f1f"],
+    description:
+      "Surface-mounted cylindrical downlight in matt white with a deep black anti-glare reflector. A clean architectural finish for any ceiling.",
+    specs: [
+      { label: "Lamp type", value: "1 x GU10 max. 50W" },
+      { label: "Dimensions", value: "Ø 80 × H 120 mm" },
+      { label: "Beam angle", value: "36°" },
+      { label: "IP rating", value: "IP20" },
+    ],
+  },
+  {
+    slug: "absinthe-clickfit-cylinder-medium-white",
+    name: "Clickfit Cylinder Medium White",
+    brand: "Absinthe",
+    brandSlug: "absinthe",
+    category: "Ceiling spot",
+    categorySlug: "ceiling-lamps",
+    sku: "AB 02C31220101",
+    price: 33.9,
+    image: absintheCylinderWhite,
+    inStock: true,
+    leadTime: "1-2 working days",
+    colors: ["#ffffff"],
+    description:
+      "The medium-sized version of Absinthe's Clickfit Cylinder — minimalist surface-mounted spot, ideal above kitchen islands and corridors.",
+    specs: [
+      { label: "Lamp type", value: "1 x GU10 max. 50W" },
+      { label: "Dimensions", value: "Ø 70 × H 100 mm" },
+      { label: "Beam angle", value: "36°" },
+      { label: "IP rating", value: "IP20" },
+    ],
+  },
+  {
+    slug: "absinthe-chuck-2-double-black",
+    name: "Chuck 2 Double Surface-Mounted Spot Black",
+    brand: "Absinthe",
+    brandSlug: "absinthe",
+    category: "Ceiling spot",
+    categorySlug: "ceiling-lamps",
+    sku: "AB CHK2-B",
+    price: 89.0,
+    originalPrice: 119.0,
+    image: absintheChuckDouble,
+    inStock: true,
+    leadTime: "1-2 working days",
+    colors: ["#1f1f1f", "#ffffff"],
+    description:
+      "Twin adjustable spot from the Chuck collection. Two tiltable heads on a slim black bar — perfect for highlighting art, kitchens or hallways.",
+    specs: [
+      { label: "Lamp type", value: "2 x GU10 max. 50W" },
+      { label: "Dimensions", value: "L 280 × W 80 × H 130 mm" },
+      { label: "Beam angle", value: "36° per head, fully adjustable" },
+      { label: "IP rating", value: "IP20" },
+    ],
+  },
 ];
 
 export const productBySlug = (slug: string) => products.find((p) => p.slug === slug);
@@ -216,4 +353,5 @@ export const brands = [
   { slug: "flos", name: "Flos" },
   { slug: "philips", name: "Philips" },
   { slug: "normann-copenhagen", name: "Normann Copenhagen" },
+  { slug: "absinthe", name: "Absinthe Lights" },
 ];
