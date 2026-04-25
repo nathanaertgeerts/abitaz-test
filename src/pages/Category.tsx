@@ -1,4 +1,4 @@
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, SlidersHorizontal } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { SiteLayout } from "@/components/layout/SiteLayout";
@@ -44,6 +44,8 @@ const Category = () => {
   const cat = useMemo(() => categories.find((c) => c.slug === slug), [slug]);
   const list = products; // demo: show all
   const [sort, setSort] = useState("popularity");
+  // Filters are collapsed by default on mobile, always shown on desktop (lg+)
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
   useEffect(() => {
     const name = cat?.name ?? "Lighting";
@@ -85,6 +87,24 @@ const Category = () => {
         <div className="grid gap-8 lg:grid-cols-[260px_1fr]">
           {/* Sidebar */}
           <aside className="lg:sticky lg:top-32 lg:self-start">
+            {/* Mobile toggle for the whole filter panel */}
+            <button
+              type="button"
+              onClick={() => setFiltersOpen((v) => !v)}
+              aria-expanded={filtersOpen}
+              aria-controls="category-filters"
+              className="flex w-full items-center justify-between rounded-md border border-border bg-card px-4 py-3 text-sm font-semibold text-foreground lg:hidden"
+            >
+              <span className="inline-flex items-center gap-2">
+                <SlidersHorizontal className="h-4 w-4" />
+                Filters
+              </span>
+              <ChevronDown
+                className={`h-4 w-4 transition-transform ${filtersOpen ? "rotate-180" : ""}`}
+              />
+            </button>
+
+            <div id="category-filters" className={`${filtersOpen ? "block" : "hidden"} lg:block`}>
             <details open className="border-b border-border py-4">
               <summary className="cursor-pointer text-sm font-semibold">Categories</summary>
               <ul className="mt-3 space-y-2 text-sm">
@@ -150,6 +170,7 @@ const Category = () => {
                 </label>
               ))}
             </FilterSection>
+            </div>
           </aside>
 
           {/* Product grid */}
