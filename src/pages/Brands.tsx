@@ -28,7 +28,7 @@ const TIERS: { id: Tier; label: string; description: string; brandSlugs: string[
     label: "Architectural & professional",
     description:
       "Specification-grade luminaires engineered for retail, hospitality and offices.",
-    brandSlugs: ["absinthe", "vysn"],
+    brandSlugs: ["absinthe", "vysn", "slv"],
   },
 ];
 

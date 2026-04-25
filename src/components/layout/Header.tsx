@@ -300,6 +300,7 @@ const mainNav: MegaMenuItem[] = [
             links: [
               { label: "Absinthe Lights", to: "/brands/absinthe" },
               { label: "VYSN", to: "/brands/vysn" },
+              { label: "SLV", to: "/brands/slv" },
             ],
           },
         ],
