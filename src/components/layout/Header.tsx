@@ -1,6 +1,7 @@
 import { Heart, Search, ShoppingCart, User } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useCart } from "@/context/CartContext";
 import { Logo } from "./Logo";
 import { MegaMenu, type MegaMenuItem } from "./MegaMenu";
 import { MobileMenu } from "./MobileMenu";
@@ -341,6 +342,7 @@ const mainNav: MegaMenuItem[] = [
 export const Header = () => {
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
+  const { itemCount } = useCart();
 
   const submitSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -408,9 +410,11 @@ export const Header = () => {
               className="relative inline-flex items-center justify-center rounded-md p-2 hover:bg-primary-hover"
             >
               <ShoppingCart className="h-5 w-5" />
-              <span className="absolute -right-1 -top-1 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-cta px-1 text-[11px] font-semibold text-cta-foreground">
-                0
-              </span>
+              {itemCount > 0 && (
+                <span className="absolute -right-1 -top-1 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-cta px-1 text-[11px] font-semibold text-cta-foreground">
+                  {itemCount}
+                </span>
+              )}
             </Link>
           </nav>
         </div>
