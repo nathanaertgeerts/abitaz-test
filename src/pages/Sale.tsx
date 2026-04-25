@@ -36,7 +36,7 @@ const TileCard = ({
   to: string;
   tiles: GridTile[];
 }) => (
-  <section className="rounded-lg bg-card p-4 shadow-sm md:p-5">
+  <section className="flex h-full flex-col rounded-lg bg-card p-4 shadow-sm md:p-5">
     <h2 className="mb-3 font-display text-xl font-bold leading-tight md:text-2xl">{title}</h2>
     <div className="grid grid-cols-2 gap-2.5">
       {tiles.slice(0, 4).map((t) => (
@@ -61,7 +61,7 @@ const TileCard = ({
     </div>
     <Link
       to={to}
-      className="mt-4 inline-block text-sm font-semibold text-primary hover:text-primary-hover hover:underline"
+      className="mt-auto inline-block pt-4 text-sm font-semibold text-primary hover:text-primary-hover hover:underline"
     >
       {cta}
     </Link>
@@ -74,18 +74,22 @@ const BigCard = ({
   cta,
   to,
   image,
-  ratio = "aspect-[4/5]",
 }: {
   title: string;
   cta: string;
   to: string;
   image: string;
-  ratio?: string;
 }) => (
-  <section className="rounded-lg bg-card p-4 shadow-sm md:p-5">
+  <section className="flex h-full flex-col rounded-lg bg-card p-4 shadow-sm md:p-5">
     <h2 className="mb-3 font-display text-xl font-bold leading-tight md:text-2xl">{title}</h2>
-    <Link to={to} className="group block">
-      <div className={`overflow-hidden rounded-md bg-surface ${ratio}`}>
+    <Link to={to} className="group block flex-1">
+      {/*
+        On desktop (lg+) the card sits in a row of equal-height TileCards.
+        We stretch the image to fill remaining height so all blocks line up.
+        On smaller screens the card stacks alone, so a fixed aspect keeps
+        it from collapsing.
+      */}
+      <div className="aspect-[4/5] overflow-hidden rounded-md bg-surface lg:aspect-auto lg:h-full">
         <img
           src={image}
           alt={title}
@@ -96,7 +100,7 @@ const BigCard = ({
     </Link>
     <Link
       to={to}
-      className="mt-4 inline-block text-sm font-semibold text-primary hover:text-primary-hover hover:underline"
+      className="mt-auto inline-block pt-4 text-sm font-semibold text-primary hover:text-primary-hover hover:underline"
     >
       {cta}
     </Link>
