@@ -62,8 +62,8 @@ export const PromoBanners = () => {
             <div
               className={`absolute inset-0 ${
                 p.align === "left"
-                  ? "bg-gradient-to-r from-black/70 via-black/30 to-transparent"
-                  : "bg-gradient-to-l from-black/70 via-black/30 to-transparent"
+                  ? "bg-gradient-to-r from-black/80 via-black/50 to-black/10"
+                  : "bg-gradient-to-l from-black/80 via-black/50 to-black/10"
               }`}
             />
 
@@ -83,7 +83,7 @@ export const PromoBanners = () => {
                   {p.eyebrow}
                 </span>
               )}
-              <h3 className="font-display text-2xl font-bold leading-tight md:text-4xl">
+              <h3 className="font-display text-2xl font-bold leading-tight text-white [text-shadow:0_2px_8px_rgba(0,0,0,0.45)] md:text-4xl">
                 {p.title}
               </h3>
               {p.subtitle && (
