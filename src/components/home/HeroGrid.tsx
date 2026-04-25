@@ -234,7 +234,7 @@ export const HeroGrid = () => {
           onPointerMove={onPointerMove}
           onPointerUp={endDrag}
           onPointerCancel={endDrag}
-          className={`-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain rounded-lg px-4 pb-1 touch-pan-y select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 [scroll-snap-stop:always] [-webkit-overflow-scrolling:touch] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden ${
+          className={`-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain rounded-lg px-4 pb-1 [touch-action:pan-x_pan-y] select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 [scroll-snap-stop:always] [-webkit-overflow-scrolling:touch] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden ${
             reduceMotion ? "[scroll-behavior:auto]" : "scroll-smooth [scroll-behavior:smooth]"
           }`}
         >
