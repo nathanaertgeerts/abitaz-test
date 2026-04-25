@@ -2,6 +2,7 @@ import { Heart, Search, ShoppingCart, User } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Logo } from "./Logo";
 import { MegaMenu, type MegaMenuItem } from "./MegaMenu";
+import { MobileMenu } from "./MobileMenu";
 import heroIndoor from "@/assets/hero-indoor.jpg";
 import heroOutdoor from "@/assets/hero-outdoor.jpg";
 import heroDesigner from "@/assets/hero-designer.jpg";
@@ -301,6 +302,9 @@ export const Header = () => {
       {/* Combined blue bar: logo + nav + search + actions */}
       <div className="bg-primary text-primary-foreground">
         <div className="container-abitaz flex h-16 items-center gap-3 md:gap-6">
+          {/* Mobile hamburger */}
+          <MobileMenu items={mainNav} />
+
           <Logo />
 
           {/* Mega menu nav — sits inline next to logo on desktop */}
