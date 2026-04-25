@@ -37,8 +37,8 @@ export const MobileMenu = ({ items }: Props) => {
           <Menu className="h-6 w-6" />
         </button>
       </SheetTrigger>
-      <SheetContent side="left" className="w-[88vw] max-w-sm p-0">
-        <SheetHeader className="border-b border-border px-4 py-4 text-left">
+      <SheetContent side="left" className="flex w-[88vw] max-w-sm flex-col p-0">
+        <SheetHeader className="shrink-0 border-b border-border px-4 py-4 text-left">
           <SheetTitle className="font-display text-lg">Menu</SheetTitle>
         </SheetHeader>
 
@@ -46,7 +46,7 @@ export const MobileMenu = ({ items }: Props) => {
         <form
           role="search"
           onSubmit={(e) => e.preventDefault()}
-          className="border-b border-border px-4 py-3"
+          className="shrink-0 border-b border-border px-4 py-3"
         >
           <label htmlFor="mobile-search" className="sr-only">
             Search
@@ -62,7 +62,7 @@ export const MobileMenu = ({ items }: Props) => {
           </div>
         </form>
 
-        <nav aria-label="Main" className="overflow-y-auto py-2">
+        <nav aria-label="Main" className="min-h-0 flex-1 overflow-y-auto py-2">
           <ul>
             {items.map((item) => {
               const groups: MegaGroup[] =
@@ -152,7 +152,7 @@ export const MobileMenu = ({ items }: Props) => {
           </ul>
         </nav>
 
-        <div className="mt-2 border-t border-border px-4 py-4">
+        <div className="shrink-0 border-t border-border px-4 py-4">
           <SheetClose asChild>
             <Link
               to="/account"
