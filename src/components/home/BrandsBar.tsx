@@ -12,7 +12,12 @@ export const BrandsBar = () => {
             All brands
           </Link>
         </div>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-6">
+        {/* Single-row horizontal scroller — never wraps to a second line.
+            Snap + hidden scrollbar give a clean swipe / drag feel. */}
+        <div
+          className="-mx-2 flex snap-x snap-mandatory gap-3 overflow-x-auto px-2 pb-1
+                     [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        >
           {brands.map((b) => {
             const Logo = brandLogos[b.slug];
             return (
@@ -20,7 +25,7 @@ export const BrandsBar = () => {
                 key={b.slug}
                 to={`/brand/${b.slug}`}
                 aria-label={b.name}
-                className="group flex h-20 items-center justify-center rounded-md bg-card px-4 text-foreground/70 transition hover:text-primary hover:shadow-md"
+                className="group flex h-20 w-[160px] flex-none snap-start items-center justify-center rounded-md bg-card px-4 text-foreground/70 transition hover:text-primary hover:shadow-md sm:w-[180px] md:w-[200px]"
               >
                 {Logo ? (
                   <Logo className="h-8 w-auto max-w-full transition group-hover:scale-[1.03]" />

@@ -321,16 +321,107 @@ const Category = () => {
     [slug],
   );
   const filterSet = useMemo(() => getFiltersForGroup(activeGroup.slug), [activeGroup]);
-  // Filter the product grid down to the active category, but fall back to
-  // all products when the demo dataset has no items for that slug — this
-  // keeps every category page populated for the prototype.
-  const list = useMemo(() => {
+  // Base category list — falls back to the full catalogue when the demo
+  // dataset has no items for that slug, so every page is populated.
+  const baseList = useMemo(() => {
     const inCat = products.filter((p) => p.categorySlug === slug);
     return inCat.length > 0 ? inCat : products;
   }, [slug]);
+
   const [sort, setSort] = useState("popularity");
   // Filters are collapsed by default on mobile, always shown on desktop (lg+)
   const [filtersOpen, setFiltersOpen] = useState(false);
+
+  // ----- Active filter state (reset whenever the filter set changes) -----
+  const [minPrice, setMinPrice] = useState<number>(filterSet.range.min);
+  const [maxPrice, setMaxPrice] = useState<number>(filterSet.range.max);
+  const [checkedFacets, setCheckedFacets] = useState<Record<string, Set<string>>>({});
+  const [checkedSwatches, setCheckedSwatches] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    setMinPrice(filterSet.range.min);
+    setMaxPrice(filterSet.range.max);
+    setCheckedFacets({});
+    setCheckedSwatches(new Set());
+  }, [filterSet]);
+
+  const toggleFacet = (facetTitle: string, optionName: string) => {
+    setCheckedFacets((prev) => {
+      const next = { ...prev };
+      const set = new Set(next[facetTitle] ?? []);
+      if (set.has(optionName)) set.delete(optionName);
+      else set.add(optionName);
+      next[facetTitle] = set;
+      return next;
+    });
+  };
+
+  const toggleSwatch = (name: string) => {
+    setCheckedSwatches((prev) => {
+      const next = new Set(prev);
+      if (next.has(name)) next.delete(name);
+      else next.add(name);
+      return next;
+    });
+  };
+
+  const activeFilterCount =
+    Object.values(checkedFacets).reduce((n, s) => n + s.size, 0) +
+    checkedSwatches.size +
+    (minPrice !== filterSet.range.min || maxPrice !== filterSet.range.max ? 1 : 0);
+
+  const clearFilters = () => {
+    setMinPrice(filterSet.range.min);
+    setMaxPrice(filterSet.range.max);
+    setCheckedFacets({});
+    setCheckedSwatches(new Set());
+  };
+
+  /** Apply price + checkbox + swatch filters against the prototype dataset.
+   *  Matching is intentionally fuzzy (substring against name/description/specs/colors)
+   *  because the demo products don't carry every facet as structured data. */
+  const list = useMemo(() => {
+    return baseList.filter((p) => {
+      // Price range
+      if (p.price < minPrice || p.price > maxPrice) return false;
+
+      // Checkbox facets — a product passes a facet group if ANY selected
+      // option matches its searchable text (name/description/specs).
+      for (const [, options] of Object.entries(checkedFacets)) {
+        if (options.size === 0) continue;
+        const haystack = [
+          p.name,
+          p.description,
+          ...p.specs.map((s) => `${s.label} ${s.value}`),
+        ]
+          .join(" ")
+          .toLowerCase();
+        const anyMatch = Array.from(options).some((opt) => {
+          // Strip everything after an em/en dash so labels like
+          // "IP44 — splash proof" still match the spec value "IP44".
+          const token = opt.split(/[—–-]/)[0].trim().toLowerCase();
+          return haystack.includes(token);
+        });
+        if (!anyMatch) return false;
+      }
+
+      // Colour swatches — match by colour name OR by hex against product.colors
+      if (checkedSwatches.size > 0) {
+        const swatchOpts = filterSet.swatches?.options ?? [];
+        const selectedHexes = new Set(
+          swatchOpts.filter((o) => checkedSwatches.has(o.name)).map((o) => o.swatch.toLowerCase()),
+        );
+        const productColors = (p.colors ?? []).map((c) => c.toLowerCase());
+        const nameMatch = Array.from(checkedSwatches).some((n) =>
+          p.name.toLowerCase().includes(n.toLowerCase()),
+        );
+        const hexMatch = productColors.some((c) => selectedHexes.has(c));
+        if (!nameMatch && !hexMatch) return false;
+      }
+
+      return true;
+    });
+  }, [baseList, minPrice, maxPrice, checkedFacets, checkedSwatches, filterSet]);
 
   useEffect(() => {
     const name = cat?.name ?? "Lighting";
@@ -472,19 +563,39 @@ const Category = () => {
             <h2 className="mt-6 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               Filters
             </h2>
+            {activeFilterCount > 0 && (
+              <div className="mt-2 flex items-center justify-between text-xs">
+                <span className="text-muted-foreground">
+                  {activeFilterCount} active
+                </span>
+                <button
+                  type="button"
+                  onClick={clearFilters}
+                  className="font-semibold text-primary hover:underline"
+                >
+                  Clear all
+                </button>
+              </div>
+            )}
 
             <FilterSection title={filterSet.range.title}>
               <div className="flex items-center gap-2">
                 <input
                   type="number"
-                  defaultValue={filterSet.range.min}
+                  value={minPrice}
+                  min={filterSet.range.min}
+                  max={maxPrice}
+                  onChange={(e) => setMinPrice(Number(e.target.value) || filterSet.range.min)}
                   className="h-9 w-full rounded-md border border-input bg-background px-2 text-sm"
                   aria-label={`Min ${filterSet.range.title.toLowerCase()}`}
                 />
                 <span className="text-muted-foreground">to</span>
                 <input
                   type="number"
-                  defaultValue={filterSet.range.max}
+                  value={maxPrice}
+                  min={minPrice}
+                  max={filterSet.range.max}
+                  onChange={(e) => setMaxPrice(Number(e.target.value) || filterSet.range.max)}
                   className="h-9 w-full rounded-md border border-input bg-background px-2 text-sm"
                   aria-label={`Max ${filterSet.range.title.toLowerCase()}`}
                 />
@@ -495,7 +606,12 @@ const Category = () => {
               <FilterSection key={facet.title} title={facet.title}>
                 {facet.options.map((o) => (
                   <label key={o.name} className="flex cursor-pointer items-center gap-2">
-                    <input type="checkbox" className="h-4 w-4 rounded border-input text-primary" />
+                    <input
+                      type="checkbox"
+                      checked={checkedFacets[facet.title]?.has(o.name) ?? false}
+                      onChange={() => toggleFacet(facet.title, o.name)}
+                      className="h-4 w-4 rounded border-input text-primary"
+                    />
                     <span>{o.name}</span>
                     <span className="ml-auto text-xs text-muted-foreground">({o.count})</span>
                   </label>
@@ -507,7 +623,12 @@ const Category = () => {
               <FilterSection title={filterSet.swatches.title}>
                 {filterSet.swatches.options.map((c) => (
                   <label key={c.name} className="flex cursor-pointer items-center gap-2">
-                    <input type="checkbox" className="h-4 w-4 rounded border-input text-primary" />
+                    <input
+                      type="checkbox"
+                      checked={checkedSwatches.has(c.name)}
+                      onChange={() => toggleSwatch(c.name)}
+                      className="h-4 w-4 rounded border-input text-primary"
+                    />
                     <span
                       className="h-4 w-6 rounded-sm border border-border"
                       style={{ backgroundColor: c.swatch }}

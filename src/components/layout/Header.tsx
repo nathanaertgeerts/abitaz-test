@@ -1,5 +1,6 @@
 import { Heart, Search, ShoppingCart, User } from "lucide-react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Logo } from "./Logo";
 import { MegaMenu, type MegaMenuItem } from "./MegaMenu";
 import { MobileMenu } from "./MobileMenu";
@@ -338,6 +339,16 @@ const mainNav: MegaMenuItem[] = [
 ];
 
 export const Header = () => {
+  const navigate = useNavigate();
+  const [query, setQuery] = useState("");
+
+  const submitSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    const q = query.trim();
+    if (!q) return;
+    navigate(`/search?q=${encodeURIComponent(q)}`);
+  };
+
   return (
     <header className="sticky top-0 z-40 w-full">
       {/* Combined blue bar: logo + nav + search + actions */}
@@ -356,7 +367,7 @@ export const Header = () => {
           {/* Search */}
           <form
             role="search"
-            onSubmit={(e) => e.preventDefault()}
+            onSubmit={submitSearch}
             className="hidden min-w-0 flex-1 md:block"
           >
             <label htmlFor="site-search" className="sr-only">
@@ -367,6 +378,8 @@ export const Header = () => {
               <input
                 id="site-search"
                 type="search"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
                 placeholder="Search products, brands or SKUs…"
                 className="h-10 w-full rounded-md border-0 bg-background pl-10 pr-4 text-sm text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cta"
               />
