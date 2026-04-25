@@ -6,6 +6,7 @@ import { PopularProducts } from "@/components/home/PopularProducts";
 import { PromoBanners } from "@/components/home/PromoBanners";
 import { TrustStrip } from "@/components/home/TrustStrip";
 import { SiteLayout } from "@/components/layout/SiteLayout";
+import { SaleContent } from "@/pages/Sale";
 
 const Index = () => {
   useEffect(() => {
@@ -24,12 +25,19 @@ const Index = () => {
   return (
     <SiteLayout>
       <h1 className="sr-only">Abitaz — the smart shop for lighting</h1>
-      <HeroGrid />
-      <TrustStrip />
-      <CategoryStrip />
-      <PopularProducts />
-      <PromoBanners />
-      <BrandsBar />
+      {/* Mobile: Amazon-style sale layout */}
+      <div className="md:hidden">
+        <SaleContent />
+      </div>
+      {/* Desktop: original homepage */}
+      <div className="hidden md:block">
+        <HeroGrid />
+        <TrustStrip />
+        <CategoryStrip />
+        <PopularProducts />
+        <PromoBanners />
+        <BrandsBar />
+      </div>
     </SiteLayout>
   );
 };

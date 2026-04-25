@@ -278,20 +278,11 @@ const SaleBrands = () => {
   );
 };
 
-const Sale = () => {
-  useEffect(() => {
-    document.title = "Winter Sale — Up to -45% off lighting | Abitaz";
-    const desc =
-      "Abitaz Winter Sale: save up to 45% on designer pendants, outdoor lighting, smart bulbs and installation materials. Limited time deals.";
-    let meta = document.querySelector('meta[name="description"]');
-    if (!meta) {
-      meta = document.createElement("meta");
-      meta.setAttribute("name", "description");
-      document.head.appendChild(meta);
-    }
-    meta.setAttribute("content", desc);
-  }, []);
-
+/**
+ * The full Sale page body (everything inside SiteLayout).
+ * Exported so other pages (e.g. mobile homepage) can reuse the same layout.
+ */
+export const SaleContent = () => {
   /* Build deal data from products with a generated "was" price */
   const deals: Deal[] = products.map((p) => ({
     slug: p.slug,
@@ -338,7 +329,7 @@ const Sale = () => {
   ];
 
   return (
-    <SiteLayout>
+    <>
       <SaleHero />
 
       {/* Row 1: 4 tile cards (Amazon's classic 4-col category grid) */}
@@ -433,6 +424,27 @@ const Sale = () => {
       <div className="container-abitaz mt-4 mb-12">
         <DealsRow title="More limited time deals" deals={[...deals].reverse()} />
       </div>
+    </>
+  );
+};
+
+const Sale = () => {
+  useEffect(() => {
+    document.title = "Winter Sale — Up to -45% off lighting | Abitaz";
+    const desc =
+      "Abitaz Winter Sale: save up to 45% on designer pendants, outdoor lighting, smart bulbs and installation materials. Limited time deals.";
+    let meta = document.querySelector('meta[name="description"]');
+    if (!meta) {
+      meta = document.createElement("meta");
+      meta.setAttribute("name", "description");
+      document.head.appendChild(meta);
+    }
+    meta.setAttribute("content", desc);
+  }, []);
+
+  return (
+    <SiteLayout>
+      <SaleContent />
     </SiteLayout>
   );
 };
