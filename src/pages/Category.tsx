@@ -148,7 +148,15 @@ const Category = () => {
                   <ul className="ml-3 mt-1 space-y-1 text-muted-foreground">
                     {subcategories.map((s) => (
                       <li key={s.slug}>
-                        <a href={`/category/${s.slug}`} className="hover:text-primary">
+                        <a
+                          href={`/category/${s.slug}`}
+                          aria-current={s.slug === slug ? "page" : undefined}
+                          className={
+                            s.slug === slug
+                              ? "font-semibold text-primary"
+                              : "hover:text-primary"
+                          }
+                        >
                           {s.name}
                         </a>
                       </li>
