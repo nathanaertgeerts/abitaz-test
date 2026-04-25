@@ -474,7 +474,11 @@ const Checkout = () => {
                 </div>
                 <div className="flex justify-between">
                   <dt className="text-muted-foreground">Shipping</dt>
-                  <dd className="font-medium text-success">Free</dd>
+                  {shipping === 0 ? (
+                    <dd className="font-medium text-success">Free</dd>
+                  ) : (
+                    <dd className="font-medium tabular-nums">{formatPrice(shipping)}</dd>
+                  )}
                 </div>
               </dl>
 
