@@ -229,7 +229,7 @@ const MegaPanel = ({
           <div className="grid grid-cols-12 gap-8">
             {current.columns.map((col) => (
               <div key={col.title} className="col-span-12 md:col-span-3">
-                <h3 className="mb-3 text-xs font-bold uppercase tracking-wide">
+                <h3 className="mb-3 text-xs font-bold uppercase tracking-wide md:whitespace-nowrap">
                   {col.to ? (
                     <Link
                       to={col.to}
