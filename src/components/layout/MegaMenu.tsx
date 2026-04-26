@@ -67,7 +67,7 @@ export const MegaMenu = ({ items, inline = false }: Props) => {
   const closeAll = () => setOpenIndex(null);
 
   return (
-    <div className={inline ? "" : "relative"} onMouseLeave={scheduleClose}>
+    <div className="relative" onMouseLeave={scheduleClose}>
       <ul
         className={
           inline
