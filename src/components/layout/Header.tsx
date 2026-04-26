@@ -408,14 +408,21 @@ export const Header = () => {
     <header className="sticky top-0 z-40 w-full">
       {/* USP bar (light grey, matches footer) — visible on all viewports */}
       <div className="border-b border-border bg-surface text-foreground">
-        <div className="container-abitaz flex h-10 items-center justify-between gap-3 text-[11px] md:gap-6 md:overflow-x-auto md:text-xs">
+        <div className="container-abitaz flex h-10 items-center justify-between gap-2 text-[11px] sm:gap-3 md:gap-6 md:overflow-x-auto md:text-xs">
           <span className="flex min-w-0 items-center gap-1.5 md:gap-2">
             <Truck className="h-3.5 w-3.5 flex-none text-cta md:h-4 md:w-4" aria-hidden />
-            <span className="truncate"><strong className="font-semibold">Free shipping</strong> €50+</span>
+            <span className="truncate">
+              <strong className="font-semibold">Free shipping</strong>
+              <span className="hidden xs:inline"> €50+</span>
+            </span>
           </span>
           <span className="flex min-w-0 items-center gap-1.5 md:gap-2">
             <RotateCcw className="h-3.5 w-3.5 flex-none text-cta md:h-4 md:w-4" aria-hidden />
-            <span className="truncate"><strong className="font-semibold">30-day</strong> returns</span>
+            <span className="truncate">
+              <strong className="font-semibold">30-day</strong>
+              <span className="hidden xs:inline"> returns</span>
+              <span className="inline xs:hidden"> ret.</span>
+            </span>
           </span>
           <span className="hidden items-center gap-2 whitespace-nowrap md:flex">
             <Headset className="h-4 w-4 text-cta" aria-hidden />
@@ -423,7 +430,10 @@ export const Header = () => {
           </span>
           <span className="flex min-w-0 items-center gap-1.5 md:gap-2">
             <PackageCheck className="h-3.5 w-3.5 flex-none text-cta md:h-4 md:w-4" aria-hidden />
-            <span className="truncate md:hidden">Ships in <strong className="font-semibold">1-2 days</strong></span>
+            <span className="truncate md:hidden">
+              <span className="hidden xs:inline">Ships in </span>
+              <strong className="font-semibold">1-2 days</strong>
+            </span>
             <span className="hidden md:inline"><strong className="font-semibold">In stock</strong> — ships in 1-2 days</span>
           </span>
         </div>
