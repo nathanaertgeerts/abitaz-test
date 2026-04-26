@@ -358,11 +358,23 @@ export const Header = () => {
     <header className="sticky top-0 z-40 w-full">
       {/* USP bar (light grey, matches footer) */}
       <div className="hidden border-b border-border bg-surface text-foreground md:block">
-        <div className="container-abitaz flex h-9 items-center justify-between gap-6 overflow-x-auto text-xs font-medium">
-          <span className="whitespace-nowrap">✓ Free shipping from €50</span>
-          <span className="whitespace-nowrap">✓ 30-day returns</span>
-          <span className="whitespace-nowrap">✓ Professional support</span>
-          <span className="whitespace-nowrap">✓ In stock — ships in 1-2 days</span>
+        <div className="container-abitaz flex h-10 items-center justify-between gap-6 overflow-x-auto text-xs">
+          <span className="flex items-center gap-2 whitespace-nowrap">
+            <Truck className="h-4 w-4 text-cta" aria-hidden />
+            <span><strong className="font-semibold">Free shipping</strong> from €50</span>
+          </span>
+          <span className="flex items-center gap-2 whitespace-nowrap">
+            <RotateCcw className="h-4 w-4 text-cta" aria-hidden />
+            <span><strong className="font-semibold">30-day</strong> returns</span>
+          </span>
+          <span className="flex items-center gap-2 whitespace-nowrap">
+            <Headset className="h-4 w-4 text-cta" aria-hidden />
+            <span><strong className="font-semibold">Expert</strong> support</span>
+          </span>
+          <span className="flex items-center gap-2 whitespace-nowrap">
+            <PackageCheck className="h-4 w-4 text-cta" aria-hidden />
+            <span><strong className="font-semibold">In stock</strong> — ships in 1-2 days</span>
+          </span>
         </div>
       </div>
 
@@ -452,10 +464,19 @@ export const Header = () => {
 
       {/* USP bar on mobile — below header so it doesn't crowd the logo row */}
       <div className="border-b border-border bg-surface text-foreground md:hidden">
-        <div className="container-abitaz flex h-9 items-center gap-6 overflow-x-auto text-xs font-medium">
-          <span className="whitespace-nowrap">✓ Free shipping €50+</span>
-          <span className="whitespace-nowrap">✓ 30-day returns</span>
-          <span className="whitespace-nowrap">✓ Ships in 1-2 days</span>
+        <div className="container-abitaz flex h-10 items-center gap-5 overflow-x-auto text-xs">
+          <span className="flex items-center gap-1.5 whitespace-nowrap">
+            <Truck className="h-3.5 w-3.5 text-cta" aria-hidden />
+            <span><strong className="font-semibold">Free shipping</strong> €50+</span>
+          </span>
+          <span className="flex items-center gap-1.5 whitespace-nowrap">
+            <RotateCcw className="h-3.5 w-3.5 text-cta" aria-hidden />
+            <span><strong className="font-semibold">30-day</strong> returns</span>
+          </span>
+          <span className="flex items-center gap-1.5 whitespace-nowrap">
+            <PackageCheck className="h-3.5 w-3.5 text-cta" aria-hidden />
+            <span>Ships in <strong className="font-semibold">1-2 days</strong></span>
+          </span>
         </div>
       </div>
     </header>
