@@ -210,16 +210,33 @@ const DealsRow = ({ title, deals }: { title: string; deals: Deal[] }) => {
 /* ---------- Sticky sub-hero banner (Amazon "Today's Deals" style) ---------- */
 const SaleHero = () => (
   <section className="container-abitaz pt-4">
-    <div className="relative overflow-hidden rounded-lg bg-primary text-primary-foreground">
+    {/*
+      Mobile: image first, then text + buttons stacked below on a clean
+      background — no blue surface so the photo gets full visual weight.
+      Desktop (md+): two-column blue card with image on the right, padded
+      to match the inner content edges of the card row below it.
+    */}
+    <div className="overflow-hidden rounded-lg md:bg-primary md:text-primary-foreground">
       <div className="grid grid-cols-1 md:grid-cols-2">
-        <div className="flex flex-col justify-center gap-4 p-6 md:p-10">
+        {/* Image — first on mobile, right column on desktop */}
+        <div className="relative order-1 h-56 sm:h-64 md:order-2 md:h-auto md:min-h-[360px]">
+          <img
+            src={heroWinter}
+            alt="Winter Sale"
+            className="absolute inset-0 h-full w-full rounded-lg object-cover md:rounded-none"
+          />
+          {/* Subtle gradient only on desktop, to blend image into the blue card */}
+          <div className="absolute inset-0 hidden bg-gradient-to-r from-primary/80 via-primary/0 to-transparent md:block" />
+        </div>
+        {/* Copy block */}
+        <div className="order-2 flex flex-col gap-4 px-1 pt-5 md:order-1 md:justify-center md:p-5 lg:p-8">
           <span className="inline-block w-fit rounded-sm bg-cta px-2.5 py-1 text-xs font-bold uppercase tracking-wider text-cta-foreground">
             Winter Sale · Up to -45%
           </span>
-          <h1 className="font-display text-3xl font-extrabold leading-tight text-primary-foreground md:text-5xl">
+          <h1 className="font-display text-3xl font-extrabold leading-tight text-foreground md:text-4xl md:text-primary-foreground lg:text-5xl">
             Light up your home for less
           </h1>
-          <p className="max-w-md text-sm text-primary-foreground/85 md:text-base">
+          <p className="max-w-md text-sm text-muted-foreground md:text-base md:text-primary-foreground/85">
             Hundreds of designer pendants, outdoor lights and bulbs at their lowest prices of the
             season. While stocks last.
           </p>
@@ -232,19 +249,11 @@ const SaleHero = () => (
             </Link>
             <Link
               to="/category/outdoor-lighting"
-              className="rounded-md bg-background/10 px-5 py-2.5 text-sm font-semibold text-primary-foreground ring-1 ring-inset ring-primary-foreground/30 transition hover:bg-background/20"
+              className="rounded-md bg-surface px-5 py-2.5 text-sm font-semibold text-foreground ring-1 ring-inset ring-border transition hover:bg-surface-muted md:bg-background/10 md:text-primary-foreground md:ring-primary-foreground/30 md:hover:bg-background/20"
             >
               Shop outdoor
             </Link>
           </div>
-        </div>
-        <div className="relative h-48 md:h-auto">
-          <img
-            src={heroWinter}
-            alt="Winter Sale"
-            className="absolute inset-0 h-full w-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/60 via-primary/0 to-transparent md:from-primary/80" />
         </div>
       </div>
     </div>
