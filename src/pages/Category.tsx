@@ -595,50 +595,100 @@ const Category = () => {
     setCheckedSwatches(new Set());
   };
 
-  /** Apply price + checkbox + swatch filters against the prototype dataset.
-   *  Matching is intentionally fuzzy (substring against name/description/specs/colors)
-   *  because the demo products don't carry every facet as structured data. */
-  const list = useMemo(() => {
-    return baseList.filter((p) => {
-      // Price range
-      if (p.price < minPrice || p.price > maxPrice) return false;
+  /** Build a haystack string for a product (name + description + specs).
+   *  Memoised per render via inline call — small dataset so cost is fine. */
+  const productHaystack = (p: (typeof baseList)[number]) =>
+    [p.name, p.description, ...p.specs.map((s) => `${s.label} ${s.value}`)]
+      .join(" ")
+      .toLowerCase();
 
-      // Checkbox facets — a product passes a facet group if ANY selected
-      // option matches its searchable text (name/description/specs).
-      for (const [, options] of Object.entries(checkedFacets)) {
-        if (options.size === 0) continue;
-        const haystack = [
-          p.name,
-          p.description,
-          ...p.specs.map((s) => `${s.label} ${s.value}`),
-        ]
-          .join(" ")
-          .toLowerCase();
-        const anyMatch = Array.from(options).some((opt) => {
-          // Strip everything after an em/en dash so labels like
-          // "IP44 — splash proof" still match the spec value "IP44".
-          const token = opt.split(/[—–-]/)[0].trim().toLowerCase();
-          return haystack.includes(token);
-        });
-        if (!anyMatch) return false;
-      }
-
-      // Colour swatches — match by colour name OR by hex against product.colors
-      if (checkedSwatches.size > 0) {
-        const swatchOpts = filterSet.swatches?.options ?? [];
-        const selectedHexes = new Set(
-          swatchOpts.filter((o) => checkedSwatches.has(o.name)).map((o) => o.swatch.toLowerCase()),
-        );
-        const productColors = (p.colors ?? []).map((c) => c.toLowerCase());
-        const nameMatch = Array.from(checkedSwatches).some((n) =>
-          p.name.toLowerCase().includes(n.toLowerCase()),
-        );
-        const hexMatch = productColors.some((c) => selectedHexes.has(c));
-        if (!nameMatch && !hexMatch) return false;
-      }
-
-      return true;
+  /** Does this product satisfy the given facet selection?
+   *  Matches "any selected option" against the haystack. */
+  const productMatchesFacet = (
+    p: (typeof baseList)[number],
+    options: Set<string>,
+  ) => {
+    if (options.size === 0) return true;
+    const haystack = productHaystack(p);
+    return Array.from(options).some((opt) => {
+      const token = opt.split(/[—–-]/)[0].trim().toLowerCase();
+      return haystack.includes(token);
     });
+  };
+
+  /** Does this product satisfy the colour swatch selection? */
+  const productMatchesSwatches = (
+    p: (typeof baseList)[number],
+    selectedNames: Set<string>,
+  ) => {
+    if (selectedNames.size === 0) return true;
+    const swatchOpts = filterSet.swatches?.options ?? [];
+    const selectedHexes = new Set(
+      swatchOpts
+        .filter((o) => selectedNames.has(o.name))
+        .map((o) => o.swatch.toLowerCase()),
+    );
+    const productColors = (p.colors ?? []).map((c) => c.toLowerCase());
+    const nameMatch = Array.from(selectedNames).some((n) =>
+      p.name.toLowerCase().includes(n.toLowerCase()),
+    );
+    const hexMatch = productColors.some((c) => selectedHexes.has(c));
+    return nameMatch || hexMatch;
+  };
+
+  /** Apply ALL active filters; optionally exclude one facet from consideration
+   *  (used to compute "would-be" counts for that facet's own options). */
+  const productPasses = (
+    p: (typeof baseList)[number],
+    excludeFacetTitle?: string,
+    excludeSwatches = false,
+  ) => {
+    if (p.price < minPrice || p.price > maxPrice) return false;
+    for (const [title, options] of Object.entries(checkedFacets)) {
+      if (title === excludeFacetTitle) continue;
+      if (!productMatchesFacet(p, options)) return false;
+    }
+    if (!excludeSwatches && !productMatchesSwatches(p, checkedSwatches)) return false;
+    return true;
+  };
+
+  /** Final filtered list. */
+  const list = useMemo(
+    () => baseList.filter((p) => productPasses(p)),
+    // productPasses depends on baseList + filter state via closure
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [baseList, minPrice, maxPrice, checkedFacets, checkedSwatches, filterSet],
+  );
+
+  /** Live, dependent counts:
+   *  - For each facet, count products that pass ALL OTHER filters
+   *    AND match this single option. (Standard "non-self-filtering" pattern.)
+   *  - Options with 0 results are dimmed and disabled (unless already checked,
+   *    so users can always uncheck their own selection). */
+  const dependentCounts = useMemo(() => {
+    const checkCounts: Record<string, Record<string, number>> = {};
+    for (const facet of filterSet.checks) {
+      const candidates = baseList.filter((p) => productPasses(p, facet.title));
+      const counts: Record<string, number> = {};
+      for (const opt of facet.options) {
+        const single = new Set([opt.name]);
+        counts[opt.name] = candidates.filter((p) => productMatchesFacet(p, single)).length;
+      }
+      checkCounts[facet.title] = counts;
+    }
+
+    const swatchCounts: Record<string, number> = {};
+    if (filterSet.swatches) {
+      const candidates = baseList.filter((p) => productPasses(p, undefined, true));
+      for (const opt of filterSet.swatches.options) {
+        const single = new Set([opt.name]);
+        swatchCounts[opt.name] = candidates.filter((p) =>
+          productMatchesSwatches(p, single),
+        ).length;
+      }
+    }
+    return { checkCounts, swatchCounts };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [baseList, minPrice, maxPrice, checkedFacets, checkedSwatches, filterSet]);
 
   useEffect(() => {
