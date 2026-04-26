@@ -411,7 +411,7 @@ export const SaleContent = () => {
 
       {/* Best of sale grid (full product cards) */}
       <section className="container-abitaz mt-6">
-        <div className="rounded-lg bg-card p-4 shadow-sm md:p-5">
+        <div className="rounded-lg border border-border bg-card p-4 shadow-sm md:p-5">
           <div className="mb-4 flex items-end justify-between">
             <h2 className="font-display text-xl font-bold md:text-2xl">Best of the sale</h2>
             <Link to="/sale" className="text-sm font-semibold text-primary hover:underline">
