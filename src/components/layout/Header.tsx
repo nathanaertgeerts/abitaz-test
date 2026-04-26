@@ -452,14 +452,21 @@ export const Header = () => {
 
       {/* Promo ribbon (yellow) — current campaign */}
       <div className="bg-secondary text-secondary-foreground">
-        <div className="container-abitaz flex h-9 items-center justify-center gap-2 overflow-x-auto text-xs font-medium md:text-sm">
-          <span aria-hidden className="hidden md:inline">⚡</span>
-          <span className="whitespace-nowrap font-semibold">Spring Sale —</span>
-          <span className="whitespace-nowrap">up to <strong>−40%</strong> on selected designer brands.</span>
-          <Link to="/sale" className="whitespace-nowrap font-semibold underline underline-offset-2 hover:no-underline">
-            Shop the sale →
-          </Link>
-        </div>
+        <Link
+          to="/sale"
+          className="container-abitaz flex h-9 items-center justify-center gap-1.5 overflow-hidden text-xs md:gap-2 md:text-sm"
+        >
+          {/* Mobile: short version */}
+          <span className="truncate md:hidden">
+            <strong className="font-semibold">Spring Sale</strong> — up to <strong>−40%</strong>
+            <span className="ml-1 font-semibold underline underline-offset-2">Shop now →</span>
+          </span>
+          {/* Desktop: full version */}
+          <span className="hidden whitespace-nowrap md:inline">
+            <strong className="font-semibold">Spring Sale</strong> — up to <strong>−40%</strong> on selected designer brands.
+            <span className="ml-2 font-semibold underline underline-offset-2">Shop the sale →</span>
+          </span>
+        </Link>
       </div>
 
       {/* USP bar on mobile — below header so it doesn't crowd the logo row */}
