@@ -519,7 +519,10 @@ const Category = () => {
       ) ?? categoryTree[0],
     [slug],
   );
-  const filterSet = useMemo(() => getFiltersForGroup(activeGroup.slug), [activeGroup]);
+  const filterSet = useMemo(
+    () => getFiltersForGroup(activeGroup.slug, slug),
+    [activeGroup, slug],
+  );
   // Base category list — falls back to the full catalogue when the demo
   // dataset has no items for that slug, so every page is populated.
   const baseList = useMemo(() => {
