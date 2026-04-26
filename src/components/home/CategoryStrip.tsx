@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import {
   Armchair,
+  ArrowRight,
   Lamp,
   LampCeiling,
   LampDesk,
@@ -29,8 +30,18 @@ const categoryIcons: Record<string, LucideIcon> = {
 export const CategoryStrip = () => {
   return (
     <section aria-label="Shop by category" className="container-abitaz mt-12">
-      <div className="mb-4">
+      <div className="mb-4 flex items-baseline justify-between gap-4">
         <h2 className="font-display text-2xl font-bold md:text-3xl">Shop by category</h2>
+        <Link
+          to="/categories"
+          className="group inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
+        >
+          View all
+          <ArrowRight
+            className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
+            aria-hidden
+          />
+        </Link>
       </div>
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-8">
         {categories.map((cat) => {
