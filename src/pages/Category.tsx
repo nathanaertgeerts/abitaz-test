@@ -712,26 +712,152 @@ const Category = () => {
         </div>
 
         <div className="grid gap-8 lg:grid-cols-[260px_1fr]">
-          {/* Sidebar */}
-          <aside className="lg:sticky lg:top-32 lg:self-start">
-            {/* Mobile toggle for the whole filter panel */}
-            <button
-              type="button"
-              onClick={() => setFiltersOpen((v) => !v)}
-              aria-expanded={filtersOpen}
-              aria-controls="category-filters"
-              className="flex w-full items-center justify-between rounded-md border border-border bg-card px-4 py-3 text-sm font-semibold text-foreground lg:hidden"
+          {/* ---------- Mobile filter trigger (opens bottom sheet) ---------- */}
+          <Sheet open={filtersOpen} onOpenChange={setFiltersOpen}>
+            <SheetTrigger asChild>
+              <button
+                type="button"
+                className="flex w-full items-center justify-between rounded-md border border-border bg-card px-4 py-3 text-sm font-semibold text-foreground lg:hidden"
+              >
+                <span className="inline-flex items-center gap-2">
+                  <SlidersHorizontal className="h-4 w-4" />
+                  Filters
+                  {activeFilterCount > 0 && (
+                    <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-cta px-1.5 text-[11px] font-semibold text-cta-foreground">
+                      {activeFilterCount}
+                    </span>
+                  )}
+                </span>
+                <span className="text-xs font-normal text-muted-foreground">
+                  {sorted.length} products
+                </span>
+              </button>
+            </SheetTrigger>
+            <SheetContent
+              side="bottom"
+              className="flex h-[88vh] flex-col gap-0 rounded-t-xl p-0"
             >
-              <span className="inline-flex items-center gap-2">
-                <SlidersHorizontal className="h-4 w-4" />
-                Filters
-              </span>
-              <ChevronDown
-                className={`h-4 w-4 transition-transform ${filtersOpen ? "rotate-180" : ""}`}
-              />
-            </button>
+              {/* Sticky header */}
+              <div className="flex items-center justify-between border-b border-border px-5 py-4">
+                <div>
+                  <h2 className="text-base font-bold text-foreground">Filters</h2>
+                  {activeFilterCount > 0 && (
+                    <p className="text-xs text-muted-foreground">
+                      {activeFilterCount} active
+                    </p>
+                  )}
+                </div>
+                <div className="flex items-center gap-2">
+                  {activeFilterCount > 0 && (
+                    <button
+                      type="button"
+                      onClick={clearFilters}
+                      className="text-sm font-semibold text-primary hover:underline"
+                    >
+                      Clear all
+                    </button>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => setFiltersOpen(false)}
+                    aria-label="Close filters"
+                    className="grid h-9 w-9 place-items-center rounded-md text-muted-foreground hover:bg-surface hover:text-foreground"
+                  >
+                    <X className="h-5 w-5" />
+                  </button>
+                </div>
+              </div>
 
-            <div id="category-filters" className={`${filtersOpen ? "block" : "hidden"} lg:block`}>
+              {/* Scrollable filter body */}
+              <div className="min-h-0 flex-1 overflow-y-auto px-5">
+                <FilterSection title={filterSet.range.title}>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="number"
+                      value={minPrice}
+                      min={filterSet.range.min}
+                      max={maxPrice}
+                      onChange={(e) => setMinPrice(Number(e.target.value) || filterSet.range.min)}
+                      className="h-10 w-full rounded-md border border-input bg-background px-2 text-sm"
+                      aria-label={`Min ${filterSet.range.title.toLowerCase()}`}
+                    />
+                    <span className="text-muted-foreground">to</span>
+                    <input
+                      type="number"
+                      value={maxPrice}
+                      min={minPrice}
+                      max={filterSet.range.max}
+                      onChange={(e) => setMaxPrice(Number(e.target.value) || filterSet.range.max)}
+                      className="h-10 w-full rounded-md border border-input bg-background px-2 text-sm"
+                      aria-label={`Max ${filterSet.range.title.toLowerCase()}`}
+                    />
+                  </div>
+                </FilterSection>
+
+                {filterSet.checks.map((facet) => (
+                  <FilterSection key={facet.title} title={facet.title}>
+                    {facet.options.map((o) => (
+                      <label key={o.name} className="flex cursor-pointer items-center gap-3 py-1">
+                        <input
+                          type="checkbox"
+                          checked={checkedFacets[facet.title]?.has(o.name) ?? false}
+                          onChange={() => toggleFacet(facet.title, o.name)}
+                          className="h-4 w-4 rounded border-input text-primary"
+                        />
+                        <span>{o.name}</span>
+                        <span className="ml-auto text-xs text-muted-foreground">({o.count})</span>
+                      </label>
+                    ))}
+                  </FilterSection>
+                ))}
+
+                {filterSet.swatches && (
+                  <FilterSection title={filterSet.swatches.title}>
+                    {filterSet.swatches.options.map((c) => (
+                      <label key={c.name} className="flex cursor-pointer items-center gap-3 py-1">
+                        <input
+                          type="checkbox"
+                          checked={checkedSwatches.has(c.name)}
+                          onChange={() => toggleSwatch(c.name)}
+                          className="h-4 w-4 rounded border-input text-primary"
+                        />
+                        <span
+                          className="h-4 w-6 rounded-sm border border-border"
+                          style={{ backgroundColor: c.swatch }}
+                          aria-hidden
+                        />
+                        <span>{c.name}</span>
+                        <span className="ml-auto text-xs text-muted-foreground">({c.count})</span>
+                      </label>
+                    ))}
+                  </FilterSection>
+                )}
+              </div>
+
+              {/* Sticky footer with Clear + Apply (results count) */}
+              <div className="flex items-center gap-3 border-t border-border bg-background px-5 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={clearFilters}
+                  disabled={activeFilterCount === 0}
+                  className="flex-1"
+                >
+                  Clear
+                </Button>
+                <Button
+                  type="button"
+                  onClick={() => setFiltersOpen(false)}
+                  className="flex-[2] bg-cta text-cta-foreground hover:bg-cta-hover"
+                >
+                  Show {sorted.length} {sorted.length === 1 ? "product" : "products"}
+                </Button>
+              </div>
+            </SheetContent>
+          </Sheet>
+
+          {/* ---------- Desktop sidebar ---------- */}
+          <aside className="hidden lg:sticky lg:top-32 lg:block lg:self-start">
             <details open className="border-b border-border py-4">
               <summary className="cursor-pointer text-sm font-semibold">Categories</summary>
               <ul className="mt-3 space-y-3 text-sm">
@@ -858,7 +984,6 @@ const Category = () => {
                 ))}
               </FilterSection>
             )}
-            </div>
           </aside>
 
           {/* Product grid */}
