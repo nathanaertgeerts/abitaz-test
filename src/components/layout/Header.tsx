@@ -356,6 +356,16 @@ export const Header = () => {
 
   return (
     <header className="sticky top-0 z-40 w-full">
+      {/* USP bar (light grey, matches footer) */}
+      <div className="hidden border-b border-border bg-surface text-foreground md:block">
+        <div className="container-abitaz flex h-9 items-center justify-between gap-6 overflow-x-auto text-xs font-medium">
+          <span className="whitespace-nowrap">✓ Free shipping from €50</span>
+          <span className="whitespace-nowrap">✓ 30-day returns</span>
+          <span className="whitespace-nowrap">✓ Professional support</span>
+          <span className="whitespace-nowrap">✓ In stock — ships in 1-2 days</span>
+        </div>
+      </div>
+
       {/* Combined blue bar: logo + nav + search + actions */}
       <div className="bg-primary text-primary-foreground">
         <div className="container-abitaz flex h-16 items-center gap-3 md:gap-6">
@@ -428,13 +438,24 @@ export const Header = () => {
         </div>
       </div>
 
-      {/* USP ribbon (yellow) */}
+      {/* Promo ribbon (yellow) — current campaign */}
       <div className="bg-secondary text-secondary-foreground">
-        <div className="container-abitaz flex h-9 items-center justify-center gap-6 overflow-x-auto text-xs font-medium md:justify-between md:text-sm">
-          <span className="whitespace-nowrap">✓ Free shipping from €50</span>
-          <span className="hidden whitespace-nowrap md:inline">✓ 30-day returns</span>
-          <span className="hidden whitespace-nowrap md:inline">✓ Professional support</span>
-          <span className="whitespace-nowrap">✓ In stock — ships in 1-2 days</span>
+        <div className="container-abitaz flex h-9 items-center justify-center gap-2 overflow-x-auto text-xs font-medium md:text-sm">
+          <span aria-hidden className="hidden md:inline">⚡</span>
+          <span className="whitespace-nowrap font-semibold">Spring Sale —</span>
+          <span className="whitespace-nowrap">up to <strong>−40%</strong> on selected designer brands.</span>
+          <Link to="/sale" className="whitespace-nowrap font-semibold underline underline-offset-2 hover:no-underline">
+            Shop the sale →
+          </Link>
+        </div>
+      </div>
+
+      {/* USP bar on mobile — below header so it doesn't crowd the logo row */}
+      <div className="border-b border-border bg-surface text-foreground md:hidden">
+        <div className="container-abitaz flex h-9 items-center gap-6 overflow-x-auto text-xs font-medium">
+          <span className="whitespace-nowrap">✓ Free shipping €50+</span>
+          <span className="whitespace-nowrap">✓ 30-day returns</span>
+          <span className="whitespace-nowrap">✓ Ships in 1-2 days</span>
         </div>
       </div>
     </header>
