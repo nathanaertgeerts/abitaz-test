@@ -72,7 +72,7 @@ export const Footer = () => {
     <footer className="mt-16 border-t border-border bg-surface text-foreground">
       <div className="container-abitaz grid gap-10 py-12 md:grid-cols-4">
         <div>
-          <Logo />
+          <Logo variant="dark" />
           <p className="mt-4 max-w-xs text-sm text-muted-foreground">
             Abitaz is the smart shop for buyers who already know what they want. Honest prices,
             real stock, expert support.
