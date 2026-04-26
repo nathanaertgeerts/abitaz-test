@@ -36,7 +36,7 @@ const TileCard = ({
   to: string;
   tiles: GridTile[];
 }) => (
-  <section className="flex h-full flex-col rounded-lg bg-card p-4 shadow-sm md:p-5">
+  <section className="flex h-full flex-col rounded-lg border border-border bg-card p-4 shadow-sm md:p-5">
     <h2 className="mb-3 font-display text-xl font-bold leading-tight md:text-2xl">{title}</h2>
     <div className="grid grid-cols-2 gap-2.5">
       {tiles.slice(0, 4).map((t) => (
@@ -80,7 +80,7 @@ const BigCard = ({
   to: string;
   image: string;
 }) => (
-  <section className="flex h-full flex-col rounded-lg bg-card p-4 shadow-sm md:p-5">
+  <section className="flex h-full flex-col rounded-lg border border-border bg-card p-4 shadow-sm md:p-5">
     <h2 className="mb-3 font-display text-xl font-bold leading-tight md:text-2xl">{title}</h2>
     <Link to={to} className="group block flex-1">
       {/*
@@ -127,7 +127,7 @@ const DealsRow = ({ title, deals }: { title: string; deals: Deal[] }) => {
     el.scrollBy({ left: dir * el.clientWidth * 0.9, behavior: "smooth" });
   };
   return (
-    <section className="rounded-lg bg-card p-4 shadow-sm md:p-5">
+    <section className="rounded-lg border border-border bg-card p-4 shadow-sm md:p-5">
       <div className="mb-3 flex items-end justify-between gap-4">
         <div>
           <h2 className="font-display text-xl font-bold leading-tight md:text-2xl">{title}</h2>
@@ -265,7 +265,7 @@ const SaleBrands = () => {
   const items = ["louis-poulsen", "tradition", "nordlux", "flos", "philips", "normann-copenhagen"];
   return (
     <section className="container-abitaz mt-6">
-      <div className="rounded-lg bg-card p-5 shadow-sm">
+      <div className="rounded-lg border border-border bg-card p-5 shadow-sm">
         <div className="mb-4 flex items-end justify-between">
           <h2 className="font-display text-xl font-bold md:text-2xl">Top brands on sale</h2>
           <Link to="/sale" className="text-sm font-semibold text-primary hover:underline">
