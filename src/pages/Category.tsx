@@ -84,19 +84,86 @@ type FilterSet = {
   swatches?: SwatchFacet;
 };
 
+/* Universal facets shared across most verticals — added at the bottom of the rail. */
+const universalChecks: CheckFacet[] = [
+  {
+    title: "Brand",
+    options: [
+      { name: "Louis Poulsen", count: 124 },
+      { name: "Flos", count: 98 },
+      { name: "Artemide", count: 76 },
+      { name: "Nordlux", count: 412 },
+      { name: "Philips", count: 287 },
+      { name: "&tradition", count: 64 },
+    ],
+  },
+  {
+    title: "Availability",
+    options: [
+      { name: "In stock — ships in 1-2 days", count: 2185 },
+      { name: "On sale", count: 412 },
+      { name: "New arrivals", count: 87 },
+    ],
+  },
+];
+
 const lightingFilters: FilterSet = {
   range: { title: "Price", min: 1, max: 865, unit: "€" },
   checks: [
     {
-      title: "Material",
+      title: "Room",
       options: [
-        { name: "Aluminium", count: 185 },
-        { name: "Glass", count: 81 },
-        { name: "Metal", count: 281 },
-        { name: "Plastic", count: 21 },
-        { name: "Wood", count: 31 },
+        { name: "Living room", count: 824 },
+        { name: "Dining room", count: 612 },
+        { name: "Kitchen", count: 318 },
+        { name: "Bedroom", count: 287 },
+        { name: "Bathroom", count: 142 },
+        { name: "Hallway", count: 198 },
+        { name: "Kids room", count: 96 },
+        { name: "Office", count: 124 },
       ],
     },
+    {
+      title: "Style",
+      options: [
+        { name: "Modern", count: 612 },
+        { name: "Designer", count: 318 },
+        { name: "Industrial", count: 184 },
+        { name: "Scandinavian", count: 287 },
+        { name: "Classic", count: 142 },
+        { name: "Rustic", count: 64 },
+      ],
+    },
+    {
+      title: "Light source",
+      options: [
+        { name: "Integrated LED", count: 712 },
+        { name: "Replaceable bulb (E27)", count: 482 },
+        { name: "Replaceable bulb (E14)", count: 281 },
+        { name: "GU10 spot", count: 198 },
+      ],
+    },
+    {
+      title: "Features",
+      options: [
+        { name: "Dimmable", count: 524 },
+        { name: "Smart compatible", count: 187 },
+        { name: "Adjustable / directional", count: 142 },
+        { name: "Tunable white", count: 84 },
+      ],
+    },
+    {
+      title: "Material",
+      options: [
+        { name: "Metal", count: 281 },
+        { name: "Aluminium", count: 185 },
+        { name: "Glass", count: 81 },
+        { name: "Wood", count: 31 },
+        { name: "Fabric", count: 42 },
+        { name: "Plastic", count: 21 },
+      ],
+    },
+    ...universalChecks,
   ],
   swatches: {
     title: "Color",
@@ -104,6 +171,7 @@ const lightingFilters: FilterSet = {
       { name: "White", swatch: "#ffffff", count: 1825 },
       { name: "Black", swatch: "#1f1f1f", count: 1705 },
       { name: "Gold", swatch: "#d4af37", count: 1523 },
+      { name: "Brass", swatch: "#b58a3a", count: 412 },
       { name: "Grey", swatch: "#9ca3af", count: 1054 },
       { name: "Silver", swatch: "#c0c0c0", count: 854 },
     ],
@@ -114,12 +182,41 @@ const outdoorFilters: FilterSet = {
   range: { title: "Price", min: 1, max: 865, unit: "€" },
   checks: [
     {
+      title: "Mounting",
+      options: [
+        { name: "Wall", count: 412 },
+        { name: "Ceiling", count: 184 },
+        { name: "Ground / spike", count: 142 },
+        { name: "Path / bollard", count: 96 },
+        { name: "Pendant", count: 64 },
+        { name: "String light", count: 48 },
+      ],
+    },
+    {
       title: "IP rating",
       options: [
         { name: "IP44 — splash proof", count: 312 },
         { name: "IP54 — dust & splash", count: 198 },
         { name: "IP65 — water jets", count: 145 },
         { name: "IP67 — submersible", count: 47 },
+      ],
+    },
+    {
+      title: "Power source",
+      options: [
+        { name: "Hardwired (230V)", count: 524 },
+        { name: "Low voltage (12V/24V)", count: 142 },
+        { name: "Solar", count: 96 },
+        { name: "Battery / rechargeable", count: 38 },
+      ],
+    },
+    {
+      title: "Smart features",
+      options: [
+        { name: "Motion sensor", count: 184 },
+        { name: "Dusk-to-dawn sensor", count: 96 },
+        { name: "Dimmable", count: 142 },
+        { name: "Smart / app control", count: 64 },
       ],
     },
     {
@@ -131,6 +228,7 @@ const outdoorFilters: FilterSet = {
         { name: "Plastic", count: 51 },
       ],
     },
+    ...universalChecks,
   ],
   swatches: {
     title: "Color",
@@ -176,59 +274,139 @@ const bulbFilters: FilterSet = {
       ],
     },
     {
+      title: "Brightness (lumens)",
+      options: [
+        { name: "≤ 250 lm", count: 84 },
+        { name: "250–500 lm", count: 287 },
+        { name: "500–800 lm", count: 312 },
+        { name: "800–1500 lm", count: 198 },
+        { name: "> 1500 lm", count: 64 },
+      ],
+    },
+    {
       title: "Features",
       options: [
         { name: "Dimmable", count: 312 },
         { name: "Smart / Wi-Fi", count: 84 },
         { name: "Filament look", count: 145 },
+        { name: "Frosted glass", count: 98 },
       ],
     },
+    ...universalChecks,
   ],
 };
 
-const accessoryFilters: FilterSet = {
-  range: { title: "Price", min: 1, max: 250, unit: "€" },
+/* Decoration: candles, vases, lampshades, side tables, mirrors, decor objects.
+   Filters focus on style, room and material — not electrical specs. */
+const decorationFilters: FilterSet = {
+  range: { title: "Price", min: 1, max: 350, unit: "€" },
   checks: [
     {
       title: "Type",
       options: [
-        { name: "Textile cords", count: 142 },
-        { name: "Power cables", count: 98 },
-        { name: "Cable connectors", count: 64 },
         { name: "Lampshades", count: 187 },
-        { name: "Dimmers & switches", count: 124 },
+        { name: "Candles", count: 98 },
+        { name: "Candle holders", count: 76 },
+        { name: "Vases", count: 64 },
+        { name: "Mirrors", count: 42 },
+        { name: "Side tables", count: 58 },
+        { name: "Wall art", count: 31 },
+        { name: "Diffusers", count: 24 },
       ],
     },
     {
-      title: "Compatible socket",
+      title: "Room",
       options: [
-        { name: "E27", count: 215 },
-        { name: "E14", count: 168 },
-        { name: "GU10", count: 92 },
-        { name: "G9", count: 41 },
+        { name: "Living room", count: 312 },
+        { name: "Dining room", count: 142 },
+        { name: "Bedroom", count: 96 },
+        { name: "Bathroom", count: 48 },
+        { name: "Hallway", count: 64 },
+      ],
+    },
+    {
+      title: "Style",
+      options: [
+        { name: "Modern", count: 184 },
+        { name: "Scandinavian", count: 142 },
+        { name: "Designer", count: 98 },
+        { name: "Bohemian", count: 56 },
+        { name: "Industrial", count: 42 },
       ],
     },
     {
       title: "Material",
       options: [
-        { name: "Textile", count: 142 },
-        { name: "Fabric", count: 98 },
-        { name: "Metal", count: 124 },
-        { name: "Glass", count: 56 },
-        { name: "Plastic", count: 38 },
+        { name: "Ceramic", count: 124 },
+        { name: "Glass", count: 96 },
+        { name: "Metal", count: 142 },
+        { name: "Wood", count: 87 },
+        { name: "Fabric", count: 64 },
       ],
     },
+    ...universalChecks,
   ],
   swatches: {
     title: "Color",
     options: [
-      { name: "Black", swatch: "#1f1f1f", count: 198 },
       { name: "White", swatch: "#ffffff", count: 187 },
-      { name: "Red", swatch: "#d8423a", count: 56 },
-      { name: "Mustard", swatch: "#e8a13a", count: 42 },
+      { name: "Black", swatch: "#1f1f1f", count: 198 },
+      { name: "Beige", swatch: "#e5e1d3", count: 112 },
+      { name: "Terracotta", swatch: "#c4622d", count: 64 },
       { name: "Forest", swatch: "#3f5c3a", count: 38 },
+      { name: "Mustard", swatch: "#e8a13a", count: 42 },
     ],
   },
+};
+
+/* Installation: switches, sockets, dimmers, drivers, cables.
+   Filters focus on electrical compatibility and finishes. */
+const installationFilters: FilterSet = {
+  range: { title: "Price", min: 1, max: 250, unit: "€" },
+  checks: [
+    {
+      title: "Type",
+      options: [
+        { name: "Wall switches", count: 142 },
+        { name: "Power sockets", count: 124 },
+        { name: "Dimmers", count: 96 },
+        { name: "Smart switches", count: 84 },
+        { name: "Cover plates", count: 76 },
+        { name: "Cables & cords", count: 168 },
+        { name: "Drivers & transformers", count: 48 },
+      ],
+    },
+    {
+      title: "System / range",
+      options: [
+        { name: "Niko Pure", count: 124 },
+        { name: "Niko Original", count: 98 },
+        { name: "Bticino Living Now", count: 64 },
+        { name: "Legrand", count: 56 },
+        { name: "Universal", count: 184 },
+      ],
+    },
+    {
+      title: "Finish",
+      options: [
+        { name: "White", count: 287 },
+        { name: "Black", count: 142 },
+        { name: "Anthracite", count: 96 },
+        { name: "Brushed steel", count: 64 },
+        { name: "Brass", count: 38 },
+      ],
+    },
+    {
+      title: "Smart compatibility",
+      options: [
+        { name: "Niko Home Control", count: 84 },
+        { name: "Zigbee", count: 64 },
+        { name: "Wi-Fi", count: 48 },
+        { name: "KNX", count: 32 },
+      ],
+    },
+    ...universalChecks,
+  ],
 };
 
 const furnitureFilters: FilterSet = {
@@ -276,6 +454,16 @@ const furnitureFilters: FilterSet = {
         { name: "Charles & Ray Eames", count: 14 },
       ],
     },
+    {
+      title: "Seats (sofas & benches)",
+      options: [
+        { name: "1 seat", count: 96 },
+        { name: "2 seats", count: 84 },
+        { name: "3 seats", count: 56 },
+        { name: "4+ seats", count: 18 },
+      ],
+    },
+    ...universalChecks,
   ],
   swatches: {
     title: "Color",
@@ -289,12 +477,33 @@ const furnitureFilters: FilterSet = {
   },
 };
 
-/** Pick the right filter set for the active top-category. */
-const getFiltersForGroup = (groupSlug: string): FilterSet => {
+/** Pick the right filter set for the active top-category.
+ *  Accessories splits into Decoration vs Installation based on the active sub-slug. */
+const installationSlugs = new Set([
+  "installation",
+  "switches-sockets",
+  "wall-switches",
+  "power-sockets",
+  "smart-switches",
+  "cover-plates",
+  "dimmers-switches",
+  "wall-dimmers",
+  "plug-dimmers",
+  "drivers",
+  "cables",
+  "textile-cords",
+  "power-cables",
+  "cable-connectors",
+  "sockets-fittings",
+]);
+
+const getFiltersForGroup = (groupSlug: string, currentSlug: string): FilterSet => {
   if (groupSlug === "bulbs") return bulbFilters;
   if (groupSlug === "outdoor-lighting") return outdoorFilters;
-  if (groupSlug === "accessories") return accessoryFilters;
   if (groupSlug === "furniture") return furnitureFilters;
+  if (groupSlug === "accessories") {
+    return installationSlugs.has(currentSlug) ? installationFilters : decorationFilters;
+  }
   return lightingFilters;
 };
 
@@ -320,7 +529,10 @@ const Category = () => {
       ) ?? categoryTree[0],
     [slug],
   );
-  const filterSet = useMemo(() => getFiltersForGroup(activeGroup.slug), [activeGroup]);
+  const filterSet = useMemo(
+    () => getFiltersForGroup(activeGroup.slug, slug),
+    [activeGroup, slug],
+  );
   // Base category list — falls back to the full catalogue when the demo
   // dataset has no items for that slug, so every page is populated.
   const baseList = useMemo(() => {
