@@ -1,10 +1,16 @@
-import { ChevronDown, SlidersHorizontal } from "lucide-react";
+import { ChevronDown, SlidersHorizontal, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { SiteLayout } from "@/components/layout/SiteLayout";
 import { ProductCard } from "@/components/product/ProductCard";
 import { categories, products } from "@/data/products";
 import promoDesigner from "@/assets/promo-designer-sale.jpg";
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
 
 /**
  * Sidebar tree: top-level groups, each with their own subcategories.
