@@ -454,6 +454,16 @@ const furnitureFilters: FilterSet = {
         { name: "Charles & Ray Eames", count: 14 },
       ],
     },
+    {
+      title: "Seats (sofas & benches)",
+      options: [
+        { name: "1 seat", count: 96 },
+        { name: "2 seats", count: 84 },
+        { name: "3 seats", count: 56 },
+        { name: "4+ seats", count: 18 },
+      ],
+    },
+    ...universalChecks,
   ],
   swatches: {
     title: "Color",
