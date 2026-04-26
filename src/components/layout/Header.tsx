@@ -156,18 +156,9 @@ const mainNav: MegaMenuItem[] = [
     viewAll: { label: "View all lighting", to: "/category/indoor-lighting" },
   },
   {
-    label: "Accessories",
-    to: "/category/accessories",
+    label: "Decoration",
+    to: "/category/decoration",
     columns: [
-      {
-        title: "Cables & cords",
-        to: "/category/cables",
-        links: [
-          { label: "Textile cords", to: "/category/textile-cords" },
-          { label: "Power cables", to: "/category/power-cables" },
-          { label: "Cable connectors", to: "/category/cable-connectors" },
-        ],
-      },
       {
         title: "Lampshades",
         to: "/category/lampshades",
@@ -178,24 +169,78 @@ const mainNav: MegaMenuItem[] = [
         ],
       },
       {
-        title: "Dimmers & switches",
-        to: "/category/dimmers-switches",
+        title: "Candles & scent",
+        to: "/category/candles",
         links: [
-          { label: "Wall dimmers", to: "/category/wall-dimmers" },
-          { label: "Plug-in dimmers", to: "/category/plug-dimmers" },
-          { label: "Smart switches", to: "/category/smart-switches" },
+          { label: "Candles", to: "/category/candles" },
+          { label: "Candle holders", to: "/category/candle-holders" },
+          { label: "Diffusers", to: "/category/diffusers" },
+        ],
+      },
+      {
+        title: "Decor & objects",
+        to: "/category/decor-objects",
+        links: [
+          { label: "Vases", to: "/category/vases" },
+          { label: "Mirrors", to: "/category/mirrors" },
+          { label: "Side tables", to: "/category/side-tables" },
+          { label: "Wall art", to: "/category/wall-art" },
         ],
       },
     ],
     feature: {
-      eyebrow: "Make it yours",
-      title: "Textile cords & fittings",
+      eyebrow: "Finishing touches",
+      title: "Style your space",
       description:
-        "Personalise any pendant with colourful cords, sockets and matching shades.",
-      cta: { label: "Shop accessories", to: "/category/accessories" },
+        "Candles, vases and decorative objects to complete every room.",
+      cta: { label: "Shop decoration", to: "/category/decoration" },
+      image: promoSummer,
+    },
+    viewAll: { label: "View all decoration", to: "/category/decoration" },
+  },
+  {
+    label: "Installation",
+    to: "/category/installation",
+    columns: [
+      {
+        title: "Switches & sockets",
+        to: "/category/switches-sockets",
+        links: [
+          { label: "Wall switches", to: "/category/wall-switches" },
+          { label: "Power sockets", to: "/category/power-sockets" },
+          { label: "Smart switches", to: "/category/smart-switches" },
+          { label: "Cover plates", to: "/category/cover-plates" },
+        ],
+      },
+      {
+        title: "Dimmers & control",
+        to: "/category/dimmers-switches",
+        links: [
+          { label: "Wall dimmers", to: "/category/wall-dimmers" },
+          { label: "Plug-in dimmers", to: "/category/plug-dimmers" },
+          { label: "Drivers & transformers", to: "/category/drivers" },
+        ],
+      },
+      {
+        title: "Cables & cords",
+        to: "/category/cables",
+        links: [
+          { label: "Textile cords", to: "/category/textile-cords" },
+          { label: "Power cables", to: "/category/power-cables" },
+          { label: "Cable connectors", to: "/category/cable-connectors" },
+          { label: "Sockets & fittings", to: "/category/sockets-fittings" },
+        ],
+      },
+    ],
+    feature: {
+      eyebrow: "Pro grade",
+      title: "Electrical supplies",
+      description:
+        "Switches, sockets, dimmers and cables — everything you need to install with confidence.",
+      cta: { label: "Shop installation", to: "/category/installation" },
       image: heroInstall,
     },
-    viewAll: { label: "View all accessories", to: "/category/accessories" },
+    viewAll: { label: "View all installation", to: "/category/installation" },
   },
   {
     label: "Furniture",
