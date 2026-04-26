@@ -1,4 +1,4 @@
-import { Heart, Search, ShoppingCart, User } from "lucide-react";
+import { Headset, Heart, PackageCheck, RotateCcw, Search, ShoppingCart, Truck, User } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "@/context/CartContext";
