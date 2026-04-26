@@ -1020,40 +1020,62 @@ const Category = () => {
 
             {filterSet.checks.map((facet) => (
               <FilterSection key={facet.title} title={facet.title}>
-                {facet.options.map((o) => (
-                  <label key={o.name} className="flex cursor-pointer items-center gap-2">
-                    <input
-                      type="checkbox"
-                      checked={checkedFacets[facet.title]?.has(o.name) ?? false}
-                      onChange={() => toggleFacet(facet.title, o.name)}
-                      className="h-4 w-4 rounded border-input text-primary"
-                    />
-                    <span>{o.name}</span>
-                    <span className="ml-auto text-xs text-muted-foreground">({o.count})</span>
-                  </label>
-                ))}
+                {facet.options.map((o) => {
+                  const isChecked = checkedFacets[facet.title]?.has(o.name) ?? false;
+                  const liveCount = dependentCounts.checkCounts[facet.title]?.[o.name] ?? 0;
+                  const disabled = liveCount === 0 && !isChecked;
+                  return (
+                    <label
+                      key={o.name}
+                      className={`flex items-center gap-2 ${
+                        disabled ? "cursor-not-allowed opacity-40" : "cursor-pointer"
+                      }`}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={isChecked}
+                        disabled={disabled}
+                        onChange={() => toggleFacet(facet.title, o.name)}
+                        className="h-4 w-4 rounded border-input text-primary disabled:cursor-not-allowed"
+                      />
+                      <span>{o.name}</span>
+                      <span className="ml-auto text-xs text-muted-foreground">({liveCount})</span>
+                    </label>
+                  );
+                })}
               </FilterSection>
             ))}
 
             {filterSet.swatches && (
               <FilterSection title={filterSet.swatches.title}>
-                {filterSet.swatches.options.map((c) => (
-                  <label key={c.name} className="flex cursor-pointer items-center gap-2">
-                    <input
-                      type="checkbox"
-                      checked={checkedSwatches.has(c.name)}
-                      onChange={() => toggleSwatch(c.name)}
-                      className="h-4 w-4 rounded border-input text-primary"
-                    />
-                    <span
-                      className="h-4 w-6 rounded-sm border border-border"
-                      style={{ backgroundColor: c.swatch }}
-                      aria-hidden
-                    />
-                    <span>{c.name}</span>
-                    <span className="ml-auto text-xs text-muted-foreground">({c.count})</span>
-                  </label>
-                ))}
+                {filterSet.swatches.options.map((c) => {
+                  const isChecked = checkedSwatches.has(c.name);
+                  const liveCount = dependentCounts.swatchCounts[c.name] ?? 0;
+                  const disabled = liveCount === 0 && !isChecked;
+                  return (
+                    <label
+                      key={c.name}
+                      className={`flex items-center gap-2 ${
+                        disabled ? "cursor-not-allowed opacity-40" : "cursor-pointer"
+                      }`}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={isChecked}
+                        disabled={disabled}
+                        onChange={() => toggleSwatch(c.name)}
+                        className="h-4 w-4 rounded border-input text-primary disabled:cursor-not-allowed"
+                      />
+                      <span
+                        className="h-4 w-6 rounded-sm border border-border"
+                        style={{ backgroundColor: c.swatch }}
+                        aria-hidden
+                      />
+                      <span>{c.name}</span>
+                      <span className="ml-auto text-xs text-muted-foreground">({liveCount})</span>
+                    </label>
+                  );
+                })}
               </FilterSection>
             )}
           </aside>
