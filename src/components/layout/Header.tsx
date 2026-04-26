@@ -406,24 +406,25 @@ export const Header = () => {
 
   return (
     <header className="sticky top-0 z-40 w-full">
-      {/* USP bar (light grey, matches footer) */}
-      <div className="hidden border-b border-border bg-surface text-foreground md:block">
-        <div className="container-abitaz flex h-10 items-center justify-between gap-6 overflow-x-auto text-xs">
-          <span className="flex items-center gap-2 whitespace-nowrap">
-            <Truck className="h-4 w-4 text-cta" aria-hidden />
-            <span><strong className="font-semibold">Free shipping</strong> from €50</span>
+      {/* USP bar (light grey, matches footer) — visible on all viewports */}
+      <div className="border-b border-border bg-surface text-foreground">
+        <div className="container-abitaz flex h-10 items-center justify-between gap-5 overflow-x-auto text-xs md:gap-6">
+          <span className="flex items-center gap-1.5 whitespace-nowrap md:gap-2">
+            <Truck className="h-3.5 w-3.5 text-cta md:h-4 md:w-4" aria-hidden />
+            <span><strong className="font-semibold">Free shipping</strong> €50+</span>
           </span>
-          <span className="flex items-center gap-2 whitespace-nowrap">
-            <RotateCcw className="h-4 w-4 text-cta" aria-hidden />
+          <span className="flex items-center gap-1.5 whitespace-nowrap md:gap-2">
+            <RotateCcw className="h-3.5 w-3.5 text-cta md:h-4 md:w-4" aria-hidden />
             <span><strong className="font-semibold">30-day</strong> returns</span>
           </span>
-          <span className="flex items-center gap-2 whitespace-nowrap">
+          <span className="hidden items-center gap-2 whitespace-nowrap md:flex">
             <Headset className="h-4 w-4 text-cta" aria-hidden />
             <span><strong className="font-semibold">Expert</strong> support</span>
           </span>
-          <span className="flex items-center gap-2 whitespace-nowrap">
-            <PackageCheck className="h-4 w-4 text-cta" aria-hidden />
-            <span><strong className="font-semibold">In stock</strong> — ships in 1-2 days</span>
+          <span className="flex items-center gap-1.5 whitespace-nowrap md:gap-2">
+            <PackageCheck className="h-3.5 w-3.5 text-cta md:h-4 md:w-4" aria-hidden />
+            <span className="md:hidden">Ships in <strong className="font-semibold">1-2 days</strong></span>
+            <span className="hidden md:inline"><strong className="font-semibold">In stock</strong> — ships in 1-2 days</span>
           </span>
         </div>
       </div>
@@ -517,24 +518,6 @@ export const Header = () => {
             <span className="ml-2 font-semibold underline underline-offset-2">Shop the sale →</span>
           </span>
         </Link>
-      </div>
-
-      {/* USP bar on mobile — below header so it doesn't crowd the logo row */}
-      <div className="border-b border-border bg-surface text-foreground md:hidden">
-        <div className="container-abitaz flex h-10 items-center gap-5 overflow-x-auto text-xs">
-          <span className="flex items-center gap-1.5 whitespace-nowrap">
-            <Truck className="h-3.5 w-3.5 text-cta" aria-hidden />
-            <span><strong className="font-semibold">Free shipping</strong> €50+</span>
-          </span>
-          <span className="flex items-center gap-1.5 whitespace-nowrap">
-            <RotateCcw className="h-3.5 w-3.5 text-cta" aria-hidden />
-            <span><strong className="font-semibold">30-day</strong> returns</span>
-          </span>
-          <span className="flex items-center gap-1.5 whitespace-nowrap">
-            <PackageCheck className="h-3.5 w-3.5 text-cta" aria-hidden />
-            <span>Ships in <strong className="font-semibold">1-2 days</strong></span>
-          </span>
-        </div>
       </div>
     </header>
   );

@@ -48,6 +48,25 @@ export const MegaMenu = ({ items, inline = false }: Props) => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const [activeGroup, setActiveGroup] = useState(0);
   const closeTimer = useRef<number | null>(null);
+  const triggerRef = useRef<HTMLUListElement | null>(null);
+  const [panelTop, setPanelTop] = useState<number>(0);
+
+  useEffect(() => {
+    if (!inline) return;
+    const updateTop = () => {
+      const el = triggerRef.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      setPanelTop(rect.bottom);
+    };
+    updateTop();
+    window.addEventListener("resize", updateTop);
+    window.addEventListener("scroll", updateTop, true);
+    return () => {
+      window.removeEventListener("resize", updateTop);
+      window.removeEventListener("scroll", updateTop, true);
+    };
+  }, [inline, openIndex]);
 
   const open = (i: number) => {
     if (closeTimer.current) window.clearTimeout(closeTimer.current);
@@ -69,6 +88,7 @@ export const MegaMenu = ({ items, inline = false }: Props) => {
   return (
     <div className={inline ? "" : "relative"} onMouseLeave={scheduleClose}>
       <ul
+        ref={triggerRef}
         className={
           inline
             ? "flex items-center gap-5 text-sm font-medium"
@@ -113,9 +133,10 @@ export const MegaMenu = ({ items, inline = false }: Props) => {
         <div
           onMouseEnter={() => open(openIndex)}
           onMouseLeave={scheduleClose}
+          style={inline ? { top: panelTop } : undefined}
           className={
             inline
-              ? "fixed left-0 right-0 top-16 z-50 border-t border-white/10 bg-background text-foreground shadow-lg animate-in fade-in-0 slide-in-from-top-1 duration-150"
+              ? "fixed left-0 right-0 z-50 border-t border-white/10 bg-background text-foreground shadow-lg animate-in fade-in-0 slide-in-from-top-1 duration-150"
               : "absolute left-0 right-0 top-full z-50 border-t border-white/10 bg-background text-foreground shadow-lg animate-in fade-in-0 slide-in-from-top-1 duration-150"
           }
         >
