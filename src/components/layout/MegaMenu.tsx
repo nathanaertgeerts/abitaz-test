@@ -115,7 +115,7 @@ export const MegaMenu = ({ items, inline = false }: Props) => {
           onMouseLeave={scheduleClose}
           className={
             inline
-              ? "fixed left-0 right-0 top-16 z-50 border-t border-white/10 bg-background text-foreground shadow-lg animate-in fade-in-0 slide-in-from-top-1 duration-150"
+              ? "absolute left-0 right-0 top-full z-50 border-t border-white/10 bg-background text-foreground shadow-lg animate-in fade-in-0 slide-in-from-top-1 duration-150"
               : "absolute left-0 right-0 top-full z-50 border-t border-white/10 bg-background text-foreground shadow-lg animate-in fade-in-0 slide-in-from-top-1 duration-150"
           }
         >
