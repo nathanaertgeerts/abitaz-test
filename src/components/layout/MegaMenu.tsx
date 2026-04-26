@@ -133,9 +133,10 @@ export const MegaMenu = ({ items, inline = false }: Props) => {
         <div
           onMouseEnter={() => open(openIndex)}
           onMouseLeave={scheduleClose}
+          style={inline ? { top: panelTop } : undefined}
           className={
             inline
-              ? "absolute left-0 right-0 top-full z-50 border-t border-white/10 bg-background text-foreground shadow-lg animate-in fade-in-0 slide-in-from-top-1 duration-150"
+              ? "fixed left-0 right-0 z-50 border-t border-white/10 bg-background text-foreground shadow-lg animate-in fade-in-0 slide-in-from-top-1 duration-150"
               : "absolute left-0 right-0 top-full z-50 border-t border-white/10 bg-background text-foreground shadow-lg animate-in fade-in-0 slide-in-from-top-1 duration-150"
           }
         >
