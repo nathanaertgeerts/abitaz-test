@@ -8,6 +8,7 @@ import { CartProvider } from "./context/CartContext";
 import Index from "./pages/Index.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import Category from "./pages/Category.tsx";
+import Categories from "./pages/Categories.tsx";
 import ProductDetail from "./pages/ProductDetail.tsx";
 import Sale from "./pages/Sale.tsx";
 import Search from "./pages/Search.tsx";
@@ -30,6 +31,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/category/:slug" element={<Category />} />
+            <Route path="/categories" element={<Categories />} />
             <Route path="/product/:slug" element={<ProductDetail />} />
             <Route path="/sale" element={<Sale />} />
             <Route path="/search" element={<Search />} />
