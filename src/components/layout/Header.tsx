@@ -519,24 +519,6 @@ export const Header = () => {
           </span>
         </Link>
       </div>
-
-      {/* USP bar on mobile — below header so it doesn't crowd the logo row */}
-      <div className="border-b border-border bg-surface text-foreground md:hidden">
-        <div className="container-abitaz flex h-10 items-center gap-5 overflow-x-auto text-xs">
-          <span className="flex items-center gap-1.5 whitespace-nowrap">
-            <Truck className="h-3.5 w-3.5 text-cta" aria-hidden />
-            <span><strong className="font-semibold">Free shipping</strong> €50+</span>
-          </span>
-          <span className="flex items-center gap-1.5 whitespace-nowrap">
-            <RotateCcw className="h-3.5 w-3.5 text-cta" aria-hidden />
-            <span><strong className="font-semibold">30-day</strong> returns</span>
-          </span>
-          <span className="flex items-center gap-1.5 whitespace-nowrap">
-            <PackageCheck className="h-3.5 w-3.5 text-cta" aria-hidden />
-            <span>Ships in <strong className="font-semibold">1-2 days</strong></span>
-          </span>
-        </div>
-      </div>
     </header>
   );
 };
