@@ -1,424 +1,448 @@
-# Abitaz — design.md
-
-This is the canonical design specification for the Abitaz storefront. It
-documents the visual language, component patterns, layout rules and
-behavioural conventions that are currently implemented in the codebase.
-When developing with AI (or by hand), **build new pages and features so
-they match this document exactly**. If a change requires deviating from
-this spec, update this file in the same change.
-
-Inspired by Google's "design.md" pattern: a single source of truth that
-the AI reads before generating UI.
+# Abitaz — Design & Architecture Specification
+**Target stack:** Next.js 15 (App Router, RSC) · Payload CMS 3 · next-intl · Tailwind CSS · shadcn/ui · TypeScript
+**Locales:** `nl` (default) · `en` · `de` · `fr` · `it` · `es`
+**Status:** Canonical spec for the production rebuild. The current Lovable Vite project is the visual reference only — architecture, content modeling, and component boundaries are redefined here.
 
 ---
 
-## 1. Brand & voice
+## 1. Goals & non-goals
 
-- **Name**: Abitaz
-- **Tagline**: "The smart shop for buyers who already know what they want."
-- **Pillars** (used across USP bar, Trust strip, Footer):
-  - Honest prices
-  - Real stock (live inventory, ships in 1–2 days)
-  - Free shipping €50+
-  - 30-day returns
-  - Expert support / online lichtadvies
-- **Tone**: confident, concise, product-led. No hype words, no
-  exclamation marks in marketing copy. Prices and facts before adjectives.
-- **Languages**: copy is primarily English with occasional Dutch
-  ("lichtadvies"). Keep product names in English.
+**Goals**
+- Server-rendered, SEO-first storefront. Every public route is statically generated (SSG) or incrementally regenerated (ISR); no client-only pages.
+- All editorial content (hero slots, category copy, promo banners, brand bios, product enrichment, navigation, footer, USPs) lives in Payload and is **field-level localized**.
+- Six locales as first-class citizens with locale-prefixed URLs: `/nl/...`, `/en/...`, `/de/...`, `/fr/...`, `/it/...`, `/es/...`.
+- Visually identical to the current Lovable build (tokens, layout primitives, ProductCard, HeroGrid, etc.).
+
+**Non-goals**
+- No SPA fallbacks. Client components only where interactivity demands it (cart drawer, mobile menu, search box, swatches).
+- No runtime translation services. All copy is authored in Payload or in `messages/{locale}.json`.
 
 ---
 
-## 2. Tech stack (do not change)
+## 2. Tech stack & versions
 
-- React 18 + Vite 5 + TypeScript 5
-- React Router DOM (SPA, no SSR / no Next.js)
-- Tailwind CSS v3 + `tailwindcss-animate`
-- shadcn/ui components in `src/components/ui/*` (Radix under the hood)
-- `lucide-react` for icons
-- `@tanstack/react-query` for data
-- `vite-imagetools` for responsive WebP `srcset` generation on hero imagery
-- Fonts loaded from Google Fonts in `src/index.css`:
-  - Body: **Inter** (400/500/600/700)
-  - Display / headings: **Manrope** (500/600/700/800)
-
-No backend libraries, no Next.js, no alternative routers.
+| Layer | Choice | Notes |
+|---|---|---|
+| Framework | **Next.js 15**, App Router, React 19, RSC | `app/[locale]/...`, Server Components by default |
+| CMS | **Payload CMS 3** (Postgres adapter) | Same Next app, mounted at `/admin` via `@payloadcms/next` |
+| i18n | **next-intl** v3 | Locale segment, server + client message access |
+| Styling | **Tailwind CSS 3** + shadcn/ui | HSL semantic tokens (see §4) |
+| DB | **Postgres** (Neon/Supabase/RDS) | Payload + app share the same DB |
+| Media | Payload Media collection → **S3** (or R2) | `next/image` loader for delivery |
+| Search | Payload + Postgres FTS for v1; Algolia/Meilisearch optional later | |
+| Auth (admin) | Payload built-in | Customer auth not in v1 scope |
+| Deploy | Vercel (app) + managed Postgres + S3 | ISR via `revalidateTag` from Payload hooks |
+| Testing | Vitest (units) + Playwright (e2e, per locale) | |
 
 ---
 
-## 3. Design tokens
+## 3. Routing & URL structure
 
-All colors are **HSL** and live in `src/index.css` under `:root`. They are
-exposed to Tailwind via `tailwind.config.ts`. **Never hard-code colors in
-components** (no `text-white`, no `bg-[#...]`, no raw hex). Always use
-the semantic token classes below.
+App Router tree under `app/[locale]/`:
 
-### 3.1 Color palette
+```
+app/
+  [locale]/
+    layout.tsx                 # SiteLayout: <Header/> <main/> <Footer/>
+    page.tsx                   # Home
+    categories/page.tsx        # All categories index
+    category/[slug]/page.tsx   # Category PLP
+    product/[slug]/page.tsx    # PDP
+    brands/page.tsx
+    brands/[slug]/page.tsx
+    sale/page.tsx
+    search/page.tsx            # ?q=
+    cart/page.tsx              # client-heavy
+    checkout/page.tsx
+    order-confirmation/page.tsx
+    not-found.tsx
+  api/
+    revalidate/route.ts        # POST from Payload afterChange hooks
+  (payload)/
+    admin/[[...segments]]/page.tsx
+    api/[...slug]/route.ts
+middleware.ts                  # next-intl locale negotiation
+i18n.ts                        # next-intl config
+messages/
+  nl.json en.json de.json fr.json it.json es.json
+```
 
-| Token              | HSL                | Usage                                              |
-|--------------------|--------------------|----------------------------------------------------|
-| `--background`     | `0 0% 100%`        | Page background, inputs                            |
-| `--foreground`     | `0 0% 24%`         | Body text                                          |
-| `--surface`        | `210 20% 98%`      | Section backgrounds, USP bar, footer, image bg    |
-| `--surface-muted`  | `210 16% 96%`      | Subtle alternate surface                           |
-| `--card`           | `0 0% 100%`        | Card surface                                       |
-| `--primary`        | `204 90% 43%`      | DM Lights blue — header, links, CTAs (default)    |
-| `--primary-hover`  | `204 90% 38%`      | Primary hover                                      |
-| `--cta`            | `19 91% 54%`       | Orange — "Add to cart", focus accents in search   |
-| `--cta-hover`      | `19 91% 48%`       | CTA hover                                          |
-| `--secondary`      | `49 87% 73%`       | Yellow accent (sparingly)                          |
-| `--success`        | `142 52% 55%`      | In-stock state, success toasts                     |
-| `--sale`           | `204 90% 43%`      | Sale/discount badges (uses brand blue)             |
-| `--muted`          | `210 16% 96%`      | Muted surfaces                                     |
-| `--muted-foreground` | `0 0% 45%`        | Secondary text, captions, line-through prices     |
-| `--accent`         | `49 87% 73%`       | Accent surfaces                                    |
-| `--destructive`    | `0 84% 55%`        | Errors, destructive actions                        |
-| `--border`         | `220 13% 91%`      | All borders, dividers                              |
-| `--input`          | `220 13% 88%`      | Input borders                                      |
-| `--ring`           | `204 90% 43%`      | Focus ring                                         |
+**Rules**
+- `middleware.ts` uses `createMiddleware` from `next-intl` with `localePrefix: 'always'` and `defaultLocale: 'nl'`. Root `/` redirects to `/nl` (or to negotiated locale via `Accept-Language`).
+- Slugs are localized per locale (Payload field-level localization on `slug`). Example: `/nl/categorie/buitenverlichting` and `/en/category/outdoor-lighting` both resolve the same Category document. The segment label (`category` vs `categorie`) is **fixed in English in the URL** for v1 to keep routing simple — we localize only the slug. (Revisit later with route groups per locale if SEO demands native segment labels.)
+- `generateStaticParams` enumerates `{locale, slug}` pairs for all published documents.
+- Every page exports `generateMetadata` returning localized `title`, `description`, `openGraph`, `alternates.languages` (all six hreflang entries + `x-default` → `nl`), and `canonical`.
 
-Tailwind classes to use: `bg-primary`, `text-primary`, `bg-cta`,
-`text-cta`, `bg-surface`, `text-foreground`, `text-muted-foreground`,
-`border-border`, `bg-sale text-sale-foreground`, etc.
+---
 
-Dark mode tokens exist (`.dark { ... }`) but the site ships in light
-mode only. Do not add a dark-mode toggle unless explicitly requested.
+## 4. Design tokens
 
-### 3.2 Typography
-
-- `--font-sans: 'Inter'` → `font-sans` (body, UI text, prices)
-- `--font-display: 'Manrope'` → `font-display` (h1–h5, hero titles,
-  section headings)
-- All headings use `font-display` automatically via the base layer
-  (`@layer base { h1, h2, h3, h4, h5 { font-family: var(--font-display) } }`)
-  with `letter-spacing: -0.01em`.
-- Never introduce serif fonts.
-
-**Type scale** (Tailwind classes used in the codebase):
-
-| Role                 | Classes                                              |
-|----------------------|------------------------------------------------------|
-| Page H1 (visible)    | `font-display text-3xl md:text-4xl font-bold`       |
-| Section H2           | `font-display text-2xl md:text-3xl font-bold`       |
-| Card / hero title    | `font-display text-2xl` (mobile) / `text-3xl` (desktop) `font-bold leading-tight` |
-| Product card title   | `text-sm font-medium` + `line-clamp-2`              |
-| Price (primary)      | `text-base font-bold text-primary`                  |
-| Strikethrough price  | `text-xs text-muted-foreground line-through`        |
-| Eyebrow / label      | `text-xs font-medium opacity-90` on dark imagery,    |
-|                      | `text-xs font-bold uppercase tracking-wide` on light |
-| Body                 | `text-sm` default; `text-xs` for captions            |
-| USP bar              | `text-[11px] md:text-xs`                             |
-
-### 3.3 Radius, spacing, shadows
-
-- `--radius: 0.5rem` → `rounded-lg` is the default for cards, hero tiles,
-  panels. Buttons/inputs use `rounded-md`. Badges use `rounded-sm`.
-  Avatars / icon chips use `rounded-full`.
-- Shadow language is restrained:
-  - Cards lift on hover with `hover:shadow-md` (or `hover:shadow-sm` for
-    category tiles). Avoid heavy shadows.
-- Spacing: prefer Tailwind's default scale. Common rhythm:
-  - Section vertical: `mt-12` to `mt-14` between homepage sections,
-    `py-12` inside the footer, `pt-4` for the hero.
-  - Card internal padding: `p-3` (product cards), `p-4` (category tiles),
-    `p-5` (hero overlay text), `p-6` (trust strip).
-  - Grid gaps: `gap-3` (mobile carousels, tight grids), `gap-4`–`gap-6`
-    (cards), `gap-10` (footer columns).
-
-### 3.4 Container
-
-Always wrap page content in `.container-abitaz`:
+All colors are **HSL** and live in `src/styles/globals.css` under `:root` and `.dark`. Tokens are consumed exclusively through Tailwind classes. **Never hard-code colors in components** (no `text-white`, no `bg-[#...]`).
 
 ```css
-.container-abitaz { @apply mx-auto w-full max-w-[1400px] px-4 md:px-6; }
+:root {
+  /* Brand */
+  --primary: 214 88% 27%;          /* Abitaz blue */
+  --primary-foreground: 0 0% 100%;
+  --cta: 24 95% 53%;               /* Orange CTA */
+  --cta-foreground: 0 0% 100%;
+
+  /* Surfaces */
+  --background: 0 0% 100%;
+  --foreground: 222 22% 12%;
+  --surface: 210 20% 97%;          /* page section background */
+  --card: 0 0% 100%;
+  --card-foreground: 222 22% 12%;
+  --muted: 210 16% 93%;
+  --muted-foreground: 215 14% 40%;
+  --border: 214 15% 88%;
+  --input: 214 15% 88%;
+  --ring: 214 88% 27%;
+
+  /* Semantics */
+  --destructive: 0 72% 45%;
+  --success: 142 60% 38%;
+  --warning: 38 92% 50%;
+
+  --radius: 0.5rem;
+}
 ```
 
-Do **not** use raw `container` or arbitrary max-widths. Hero, sections,
-header inner, footer inner all use `.container-abitaz`.
+**Typography**
+- `--font-sans`: Inter (body)
+- `--font-display`: Manrope (headings, used via `font-display` utility)
+- Loaded via `next/font/google` in `app/[locale]/layout.tsx` with `display: 'swap'` and `subsets: ['latin', 'latin-ext']` (covers all six locales).
 
-### 3.5 Breakpoints
-
-Tailwind defaults plus a custom `xs: 375px`:
-
-- `xs` 375px — small phones (used in USP bar to reveal/hide bits of copy)
-- `sm` 640px
-- `md` 768px — primary mobile/desktop split (homepage swaps mobile-Sale layout for HeroGrid here)
-- `lg` 1024px — mega menu nav appears
-- `xl` 1280px
-- `2xl` 1400px (container max)
-
-Mobile-first. Always design the small viewport first, then add `md:`/`lg:`
-overrides.
+**Spacing & layout**
+- Container utility `.container-abitaz`: `max-w-[1400px] mx-auto px-4 md:px-6`.
+- Section vertical rhythm: `mt-14` between top-level home sections.
+- Radius scale: `sm 0.25rem`, `md 0.375rem`, `DEFAULT 0.5rem`, `lg 0.75rem`.
 
 ---
 
-## 4. Layout primitives
+## 5. Internationalization (next-intl)
 
-### 4.1 SiteLayout
+**Config (`i18n.ts`)**
+```ts
+export const locales = ['nl','en','de','fr','it','es'] as const;
+export const defaultLocale = 'nl' as const;
+export type Locale = typeof locales[number];
+```
 
-Every page renders inside `<SiteLayout>` from
-`src/components/layout/SiteLayout.tsx`:
+**Message files** — `messages/{locale}.json`. Namespaces:
+- `common` — buttons, generic labels (Add to cart, Loading, Search…)
+- `nav` — header/footer links
+- `home` — section titles ("Popular products", "Shop by brand")
+- `product` — PDP labels (In stock, Free shipping, Specifications)
+- `cart`, `checkout`, `errors`, `seo`
 
+**Server components** use `getTranslations({ locale, namespace })`. **Client components** use `useTranslations()` and receive messages via `<NextIntlClientProvider>` in `app/[locale]/layout.tsx`.
+
+**Locale switcher** (in Header) preserves the current path by mapping the current document's localized slug to the target locale's slug (looked up from Payload). For non-document routes it just swaps the locale prefix.
+
+**Number/date/currency** via `next-intl`'s `useFormatter`. Currency is **EUR** for all locales; only formatting differs (`€ 1.299,00` vs `€1,299.00`).
+
+**SEO**
+- `<html lang={locale}>` set in `[locale]/layout.tsx`.
+- `alternates.languages` includes all six locales + `x-default`.
+- Sitemap (`app/sitemap.ts`) emits one entry per `(locale, document)` with `alternates`.
+- `robots.ts` allows all; disallows `/admin`, `/api`, `/cart`, `/checkout`.
+
+---
+
+## 6. Payload CMS — collections, globals, blocks
+
+### 6.1 Localization config
+```ts
+// payload.config.ts (excerpt)
+localization: {
+  locales: ['nl','en','de','fr','it','es'],
+  defaultLocale: 'nl',
+  fallback: true,
+}
+```
+Every user-facing text or media field is marked `localized: true`. Slugs are localized. SKUs, prices, IDs, and references are **not** localized.
+
+### 6.2 Collections
+
+#### `media`
+- `alt` (text, **localized**, required)
+- `caption` (text, localized)
+- Storage: S3 plugin. Sizes: `thumb 200`, `card 480`, `hero 1200`, `og 1200x630`.
+
+#### `categories`
+| Field | Type | Localized | Notes |
+|---|---|---|---|
+| `name` | text | ✅ | required |
+| `slug` | text (unique per locale) | ✅ | auto from `name`, editable |
+| `icon` | select (lucide name) | ❌ | maps to `CategoryStrip` icon |
+| `parent` | relationship→categories | ❌ | optional, for sub-cats |
+| `description` | richText | ✅ | shown on PLP top |
+| `heroImage` | upload→media | ❌ | |
+| `seo` | group `{ title, description, ogImage }` | ✅ | |
+| `order` | number | ❌ | manual sort |
+
+#### `brands`
+| Field | Type | Localized |
+|---|---|---|
+| `name` | text | ❌ |
+| `slug` | text (unique) | ❌ (brand names are global) |
+| `logo` | upload→media | ❌ |
+| `bio` | richText | ✅ |
+| `featured` | checkbox | ❌ |
+| `seo` | group | ✅ |
+
+#### `products`
+| Field | Type | Localized | Notes |
+|---|---|---|---|
+| `sku` | text (unique) | ❌ | |
+| `name` | text | ✅ | |
+| `slug` | text (unique per locale) | ✅ | |
+| `brand` | relationship→brands | ❌ | |
+| `categories` | relationship→categories (hasMany) | ❌ | |
+| `shortDescription` | textarea | ✅ | card + meta description |
+| `description` | blocks (see §6.4) | ✅ | rich PDP body |
+| `specs` | array `{ key, value }` | ✅ | rendered as table |
+| `price` | number | ❌ | cents, EUR |
+| `compareAtPrice` | number | ❌ | for sale badge |
+| `currency` | select (EUR) | ❌ | |
+| `stock` | number | ❌ | |
+| `images` | array `{ image: media, alt(loc) }` | partial | image is global, alt is localized |
+| `swatches` | array `{ label(loc), color }` | partial | drives ProductCard 5-swatch row |
+| `badges` | select multi: `new`, `sale`, `bestseller` | ❌ | |
+| `seo` | group | ✅ | |
+| `_status` | draft/publish | — | Payload built-in |
+
+Indexes: `slug` per locale, `sku`, `brand`, `categories`.
+
+#### `pages`
+Generic editorial pages built from blocks. Used for `/sale`, `/about`, legal, etc.
+- `title` (loc), `slug` (loc, unique), `layout` (blocks, loc), `seo` (loc).
+
+### 6.3 Globals
+
+- **`navigation`** (localized): array of `{ label, href | categoryRef | pageRef, children[] }`. Drives Header MegaMenu and MobileMenu.
+- **`footer`** (localized): columns + payment methods + legal links.
+- **`uspBar`** (localized): array of `{ icon, text }` rendered in the top header strip. Must truncate cleanly on mobile (see §8.1).
+- **`siteSettings`**: default SEO, social handles, default OG image, contact info.
+
+### 6.4 Blocks (for `pages.layout` and `products.description`)
+
+All blocks are localized as a whole (each block lives inside a localized field). They map 1:1 to React Server Components in `src/components/blocks/`.
+
+| Block slug | Fields | Renders |
+|---|---|---|
+| `heroGrid` | `slides[] { title, subtitle, image, cta { label, href } }`, `layoutVariant` | `<HeroGrid>` — mobile snap carousel, desktop 8-col grid |
+| `categoryStrip` | `categories: relationship[]` (or auto = top N) | `<CategoryStrip>` |
+| `promoBanners` | `banners[] { image, headline, subline, href, theme }` | `<PromoBanners>` |
+| `brandsBar` | `brands: relationship[]` (or `auto`) | `<BrandsBar>` |
+| `productGrid` | `title`, `source: manual|category|sale`, `products?`, `category?`, `limit` | `<ProductGrid>` of `<ProductCard>` |
+| `trustStrip` | `items[] { icon, title, text, href? }` | `<TrustStrip>` |
+| `richText` | `content` (Lexical) | Prose |
+| `mediaText` | `image`, `body`, `align` | 2-col |
+
+### 6.5 Hooks → ISR
+Every collection has `afterChange` and `afterDelete` hooks that POST to `/api/revalidate` with a tag list:
+- `products` → `product:{slug}:{locale}`, `category:{catSlug}:{locale}`, `home:{locale}`
+- `categories` → `category:{slug}:{locale}`, `home:{locale}`, `nav:{locale}`
+- `pages` → `page:{slug}:{locale}`
+- `globals` (nav/footer/usp) → `nav:{locale}` for every locale
+
+Pages call `unstable_cache` / `fetch(..., { next: { tags: [...] } })` accordingly.
+
+---
+
+## 7. Data access layer
+
+`src/lib/payload.ts` exports a server-only Payload client (`getPayload({ config })`). All page components fetch through small typed query helpers in `src/server/queries/`:
+
+```ts
+// src/server/queries/products.ts
+export async function getProductBySlug(slug: string, locale: Locale) { … }
+export async function listProducts(opts: { locale: Locale; category?: string; limit?: number; sort?: 'new'|'price-asc'|'price-desc' }) { … }
+```
+
+Rules:
+- Query helpers are **server-only** (`import 'server-only'`).
+- They always pass `locale` and `fallbackLocale: 'nl'`.
+- They wrap the Payload call in `unstable_cache` with the matching revalidation tag.
+- Never call Payload from a client component. Pass serialized data down as props.
+
+---
+
+## 8. Layout primitives & components
+
+### 8.1 `<SiteLayout>` (in `[locale]/layout.tsx`)
 ```
 <div class="flex min-h-screen flex-col bg-background">
-  <Header />
+  <Header />               // server, localized via getTranslations + nav global
   <main class="flex-1">{children}</main>
-  <Footer />
+  <Footer />               // server, from footer global
 </div>
 ```
 
-Never render a page without `SiteLayout` (except 404 if intentionally
-chromeless).
+**Header (two-tier, sticky)**
+- Tier 1 — **USP bar**: horizontal list from `uspBar` global. On `<sm` it must truncate per-item with `truncate min-w-0` and the row uses `overflow-hidden`; never wraps to a second line. The whole bar is `hidden md:flex` for items 2+; only item 1 is shown on mobile, fully truncated.
+- Tier 2 — **Primary bar**: Logo · MegaMenu (desktop) / MobileMenu (mobile) · Search · LocaleSwitcher · Cart.
 
-### 4.2 Header (`src/components/layout/Header.tsx`)
+**Footer**: 4 columns on desktop, accordion on mobile, payment methods strip, legal row.
 
-`sticky top-0 z-40 w-full`. Two stacked bars:
+### 8.2 `<ProductCard>` (server component; interactive parts in a small client child)
+- Fixed `aspect-[4/5]` image area; `next/image` with `sizes="(min-width:1024px) 25vw, (min-width:768px) 33vw, 50vw"`.
+- Badges (top-left): `New`, `-XX%`, `Bestseller` — mapped from `badges` and `compareAtPrice`.
+- Title clamps to 2 lines (`line-clamp-2`).
+- Price row: current price; if `compareAtPrice`, show strikethrough + computed `-XX%`.
+- **Mandatory 5-swatch placeholder row** under the price for layout consistency: render real swatches if present, otherwise render 5 invisible placeholders (`opacity-0 pointer-events-none`) so all cards in a grid align.
+- "Add to cart" is a client child component subscribing to the cart store.
 
-1. **USP bar** — `bg-surface text-foreground border-b border-border`,
-   `h-10`, `text-[11px] md:text-xs`. Items use `text-cta` icons (`h-3.5
-   w-3.5 md:h-4 md:w-4`). On mobile the bar is **non-scrollable**: items
-   `min-w-0` + `truncate`, container has no `overflow-x-auto` below `md`.
-   The "Expert support" pillar is `hidden md:flex`. Use `xs:` to gate
-   secondary words ("€50+", "returns"). Never let the USP bar overflow.
-2. **Primary blue bar** — `bg-primary text-primary-foreground`, `h-16`.
-   Contains: `MobileMenu` (hamburger, `<lg`), `Logo`, `MegaMenu` inline
-   (`hidden lg:block`), search input (`hidden md:block`, fills remaining
-   space), and the action cluster (account / wishlist / cart with badge).
-   Search input has white background and orange focus ring
-   (`focus-visible:ring-cta`).
+### 8.3 `<HeroGrid>`
+- Mobile: horizontal snap carousel (`snap-x snap-mandatory`, `overflow-x-auto`, hidden scrollbar), one slide per viewport, `role="region" aria-roledescription="carousel"`, dot indicators.
+- Desktop (`md+`): 8-column grid; main slide spans 5 cols × 2 rows, secondary slides fill remainder.
+- Images use `next/image` with `priority` on the first slide only (LCP).
 
-### 4.3 Footer (`src/components/layout/Footer.tsx`)
+### 8.4 `<CategoryStrip>`
+- Scrollable row of category chips with lucide icons (mapped via `icon` field).
+- Hover: `bg-surface` → `bg-primary/10`, icon color → `text-primary`.
+- Each chip is a `<Link>` to `/{locale}/category/{localizedSlug}`.
 
-`mt-16 border-t border-border bg-surface text-foreground`.
-- Top: 4-column grid (`md:grid-cols-4`, `gap-10`, `py-12`): brand block
-  (Logo dark, tagline, social icons in `rounded-full` outlined chips) +
-  three link columns ("Shop", "Service", "Company") with
-  `text-sm font-bold uppercase tracking-wide` headings and
-  `text-muted-foreground hover:text-primary` links.
-- Middle: payment methods row.
-- Bottom: copyright + "Prices include VAT.", `text-xs text-muted-foreground`.
+### 8.5 `<BrandsBar>`
+- Single-row horizontal scroller (never wraps), snap, hidden scrollbar.
+- Renders SVG component logos from `src/components/brand-logos/` keyed by `brand.slug`; falls back to brand name in display font.
 
----
+### 8.6 `<TrustStrip>`
+- 2 cols on mobile, 4 on `md+`. Icon (`text-cta`) + title + subtext. Items optionally linkable.
 
-## 5. Core components
-
-### 5.1 Button (`src/components/ui/button.tsx`)
-
-`cva` variants — use `<Button>`, do not roll your own button styles.
-
-- `variant`: `default` (primary blue), `destructive`, `outline`,
-  `secondary`, `ghost`, `link`
-- `size`: `default` (h-10), `sm` (h-9), `lg` (h-11), `icon` (h-10 w-10)
-- For the orange "Add to cart" CTA, use `className="bg-cta text-cta-foreground hover:bg-cta-hover"` on a `<Button>` (there is no dedicated `cta` variant yet — apply tokens, never raw color).
-- Buttons always use `rounded-md`, `text-sm font-medium`, focus ring
-  (`focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2`).
-
-### 5.2 ProductCard (`src/components/product/ProductCard.tsx`)
-
-Canonical product tile used everywhere products are listed.
-
-- Wrapper: `<Link>` to `/product/{slug}`, `flex h-full flex-col rounded-lg bg-card p-3 transition hover:shadow-md`.
-- Image well: `aspect-square overflow-hidden rounded-md bg-surface`. Image is `object-contain` (never `cover` for products), `loading="lazy"`, `width={400} height={400}`, with a subtle `group-hover:scale-105` zoom.
-- Discount badge (when `originalPrice > price`): top-left,
-  `bg-sale text-sale-foreground rounded-sm px-2 py-1 text-xs font-bold`,
-  text `-{pct}%`.
-- Body: category eyebrow (`text-xs text-muted-foreground`), title
-  (`text-sm font-medium line-clamp-2`, hover → `text-primary`), price
-  row (`text-base font-bold text-primary` + optional `line-through`
-  original).
-- **Always reserve a 5-swatch row** (`mt-2 flex h-5 items-center gap-1`)
-  even if the product has no colors — keeps card heights consistent.
-
-### 5.3 Category tile (CategoryStrip)
-
-- Grid: `grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3`.
-- Tile: `rounded-lg border border-transparent bg-surface p-4` with hover
-  lift (`hover:-translate-y-0.5 hover:border-border hover:bg-card hover:shadow-sm`).
-- Icon chip: `h-12 w-12 rounded-full bg-background text-primary`,
-  hover swaps to `bg-cta/10 text-cta`. Icon uses `lucide-react` at
-  `h-6 w-6 strokeWidth={1.75}`.
-- Label: `text-sm font-medium`, sub-label: `text-xs text-muted-foreground` showing product count.
-
-### 5.4 HeroGrid (`src/components/home/HeroGrid.tsx`)
-
-- Mobile (`<md`): horizontally swipeable, snap carousel with dot
-  indicators. Each slide is `w-[88%] h-56 rounded-lg` with a
-  `bg-gradient-to-t from-black/60 via-black/15 to-transparent` overlay
-  and white text bottom-left (`font-display text-2xl font-bold`).
-- Desktop (`md+`): 8-column grid, `auto-rows-[220px]`, `gap-px` over a
-  `bg-border` parent so the grid lines act as a single hairline divider.
-  Featured tile spans `md:col-span-4 md:row-span-2`; outer-corner tiles
-  use `roundClass` (`md:rounded-l-lg`, `md:rounded-tr-lg`,
-  `md:rounded-br-lg`) so only the outside of the grid is rounded.
-- Images: `vite-imagetools` `?w=480;768;1200;1600&format=webp&as=srcset`
-  with explicit `sizes`. The first slide is `loading="eager"
-  fetchPriority="high"`, others are lazy.
-- Respect `prefers-reduced-motion` (no smooth scroll, no transforms).
-
-### 5.5 TrustStrip
-
-- Card panel: `rounded-lg border border-border bg-card p-6 grid grid-cols-2 md:grid-cols-4 gap-4`.
-- Each item: `lucide-react` icon in `text-cta`, title `text-sm font-semibold`, body `text-xs text-muted-foreground`.
-
-### 5.6 Toasts, dialogs, popovers, etc.
-
-Use the shadcn primitives in `src/components/ui/*` as-is. Do not restyle
-them inline; if a tweak is needed, change the variant/class composition
-within the primitive so it stays consistent globally.
+### 8.7 Cart
+- `CartProvider` is a client component using Zustand, persisted to `localStorage` per locale-agnostic key (`abitaz.cart.v1`).
+- Cart drawer is the only globally mounted client overlay.
 
 ---
 
-## 6. Page architecture & routes
+## 9. Page specs
 
-Routes are declared in `src/App.tsx`:
+### 9.1 Home `/[locale]`
+Composition (server):
+1. `<h1 class="sr-only">` from `home.h1` message.
+2. **Mobile (`<md`)**: render `<SaleContent />` (Amazon-style sale layout, sourced from `pages` doc with slug `sale`).
+3. **Desktop (`md+`)**: `HeroGrid`, `TrustStrip`, `CategoryStrip`, `ProductGrid` (popular, limit 8), `PromoBanners`, `BrandsBar`.
+   All powered by the `pages` doc with slug `home` and its `layout` blocks. The split above is achieved with a `homeMobile` and `homeDesktop` variant or by tagging blocks with `showOn: mobile|desktop|both`.
+4. `generateMetadata` from the page's `seo` group; falls back to `siteSettings`.
 
-| Path                       | Page                              |
-|----------------------------|-----------------------------------|
-| `/`                        | `Index` (homepage)                |
-| `/category/:slug`          | `Category`                        |
-| `/categories`              | `Categories` (Amazon-style hub)   |
-| `/product/:slug`           | `ProductDetail`                   |
-| `/sale`                    | `Sale`                            |
-| `/search`                  | `Search`                          |
-| `/brands`                  | `Brands`                          |
-| `/brands/:slug`            | `Brand`                           |
-| `/cart`                    | `Cart`                            |
-| `/checkout`                | `Checkout`                        |
-| `/order-confirmation`      | `OrderConfirmation`               |
-| `*`                        | `NotFound`                        |
+### 9.2 Category `/[locale]/category/[slug]`
+- Resolve category by localized slug. 404 if missing.
+- Top: localized name, rich description, optional hero image.
+- Filter/sort bar (client island): brand multi-select, price range, sort.
+- Grid of `<ProductCard>` with pagination (URL `?page=`).
+- ISR tag: `category:{slug}:{locale}`.
 
-New pages must be added **above** the catch-all `*` route.
+### 9.3 Product `/[locale]/product/[slug]`
+- Gallery (client island, keyboard accessible), title, brand link, price block, swatches, stock indicator, **Add to cart**.
+- Tabs: Description (blocks), Specifications (table from `specs`), Shipping & returns (from a global).
+- JSON-LD `Product` with `offers.priceCurrency: EUR`, `availability` from `stock`.
+- Related products (same category, exclude self, limit 4).
 
-### 6.1 Homepage (`src/pages/Index.tsx`)
+### 9.4 Brands / Brand
+- `/brands`: grid of brand logos.
+- `/brands/[slug]`: bio + product grid filtered by brand.
 
-- Mobile (`<md`): renders `<SaleContent />` (Amazon-style sale layout).
-- Desktop (`md+`): renders, in order — `HeroGrid`, `TrustStrip`,
-  `CategoryStrip`, `PopularProducts`, `PromoBanners`, `BrandsBar`.
-- Always sets `<title>` and `<meta name="description">` in a `useEffect`
-  (one-page SEO pattern). A visually-hidden `<h1 class="sr-only">` is
-  always present for SEO.
-
-### 6.2 SEO conventions (per page)
-
-- Set `document.title` (< 60 chars, includes the primary keyword).
-- Set `<meta name="description">` (< 160 chars).
-- Exactly one `<h1>` per route (use `sr-only` if the visible hero
-  doubles as a marketing tile).
-- Use semantic landmarks: `<header>`, `<main>`, `<footer>`, `<section>`
-  with `aria-label` for unnamed sections.
-- All `<img>` need real `alt` text (decorative imagery uses `alt=""`).
-- Lazy-load below-the-fold images; eager + `fetchPriority="high"` only
-  for the LCP hero.
+### 9.5 Sale, Search, Cart, Checkout, Order Confirmation
+- `/sale`: `pages` doc with slug `sale`.
+- `/search?q=`: server-rendered using Postgres FTS over `products.name` + `shortDescription` per locale.
+- `/cart`, `/checkout`, `/order-confirmation`: client-heavy; not indexed (`robots: noindex`).
 
 ---
 
-## 7. Interaction & motion
+## 10. SEO
 
-- Default transition: `transition` / `transition-colors` / `transition-transform`,
-  duration 150–300ms. Hero zoom uses `duration-500`.
-- Always pair non-essential motion with `motion-safe:` and check
-  `prefers-reduced-motion` for JS-driven animation (HeroGrid does this).
-- Hover states:
-  - Cards: `hover:shadow-md` (or `-translate-y-0.5` for category tiles).
-  - Links in nav/footer: color shift to `text-primary`.
-  - Product image: `group-hover:scale-105`.
-- Focus: every interactive element has a visible ring
-  (`focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2`).
-  The header search uses `focus-visible:ring-cta` for orange contrast on
-  blue.
-
----
-
-## 8. Iconography & imagery
-
-- Icons: `lucide-react` only. Default size `h-4 w-4` inline,
-  `h-5 w-5` in nav, `h-6 w-6` in feature chips. `strokeWidth={1.75}`
-  on category icons. Inline brand SVGs (Instagram/Facebook/etc.) live in
-  `Footer.tsx` and use `currentColor`.
-- Product images: square, white/neutral background, `object-contain`.
-- Hero / category imagery: photographic, `object-cover`, always paired
-  with a dark gradient overlay so white text is readable.
-- Use `vite-imagetools` `srcset` for any image larger than ~480px wide.
+- One `<h1>` per page.
+- Semantic landmarks: `<header>`, `<nav>`, `<main>`, `<footer>`, `<section aria-label>`.
+- `generateMetadata` per route returns:
+  - `title` (≤60 chars, includes brand "Abitaz")
+  - `description` (≤160 chars)
+  - `alternates.canonical` = current localized URL
+  - `alternates.languages` = map of all 6 locales + `x-default`
+  - `openGraph` with localized `images`
+- `app/sitemap.ts` lists every published doc × every locale with `<xhtml:link rel="alternate">` equivalents via `alternates`.
+- JSON-LD: `Organization` (root layout), `BreadcrumbList` (category/product), `Product` (PDP), `ItemList` (PLP).
+- All `<img>`/`next/image` require localized `alt` (from media's localized `alt`).
 
 ---
 
-## 9. Accessibility checklist
+## 11. Accessibility
 
-- All form controls have associated `<label>` (use `sr-only` if visually
-  hidden, e.g. site search).
-- Carousels use `role="region"` + `aria-roledescription="carousel"`,
-  slides use `role="group"` + `aria-roledescription="slide"` and
-  `aria-label="N of M: Title"`. Dot buttons announce "Go to slide N"
-  and reflect `aria-current`.
-- Keyboard: arrow-key navigation in carousels; Tab order follows DOM.
-- Color contrast: white-on-primary, white-on-cta, foreground-on-surface
-  all meet WCAG AA. Never rely on color alone (badges include text).
-- Decorative icons get `aria-hidden`.
+- WCAG 2.1 AA color contrast verified for all token pairs.
+- All interactive elements reachable by keyboard; visible focus ring uses `--ring`.
+- Carousels: `role="region" aria-roledescription="carousel"`, slide `aria-label="Slide X of Y"`, prev/next buttons with `aria-controls`.
+- MobileMenu uses Radix `<Sheet>`; focus trap + restore.
+- Skip-to-content link at top of `<body>`.
 
 ---
 
-## 10. Data & state
+## 12. Conventions for new code
 
-- Product data is currently static in `src/data/products.ts`. Use the
-  exported `Product` type and `categories` array — do not duplicate
-  product shapes in components.
-- Cart state is global via `CartContext` (`src/context/CartContext.tsx`).
-  Read with `useCart()`; do not store cart state in component state or
-  `localStorage` directly outside the context.
-- For any future async data, use `@tanstack/react-query` (already
-  provisioned in `App.tsx`).
-- If persistent data is required, enable Lovable Cloud and use it
-  instead of `localStorage`. Never store roles, prices, or any
-  trust-sensitive data on the client.
-
----
-
-## 11. Conventions for new code
-
-Follow these rules when adding components or pages:
-
-1. **Tokens only** — no hex, no `text-white`/`bg-black`, no arbitrary
-   `bg-[#...]`. If a token is missing, add it to `index.css` and
-   `tailwind.config.ts` first.
-2. **Container** — wrap top-level page sections in `.container-abitaz`.
-3. **Mobile-first** — design the `<md` layout, then layer on `md:`/`lg:`.
-4. **Use the primitives** — `<SiteLayout>`, `<Button>`, `<ProductCard>`,
-   shadcn/ui components. Don't recreate them.
-5. **Headings** — use `font-display` (automatic on `h1`–`h5`); section
-   titles are `text-2xl md:text-3xl font-bold`.
-6. **Icons** — `lucide-react`, sized per §8.
-7. **Images** — `alt` text mandatory; `loading="lazy"` by default;
-   responsive `srcset` via `vite-imagetools` for hero/section imagery.
-8. **SEO** — set `document.title` + meta description; exactly one `<h1>`.
-9. **Accessibility** — labels, focus rings, ARIA roles for carousels and
-   landmarks.
-10. **No framework swap** — do not migrate to Next.js, Remix, Vue, etc.
-    The project is React 18 + Vite + React Router by design.
-11. **Routes** — register new pages in `src/App.tsx` above the `*` route.
-12. **Refactor when needed** — keep components small and focused; extract
-    shared UI to `src/components/...` rather than copy-pasting.
+1. **Tokens only.** Never `text-white`, never `bg-[#hex]`. Use semantic Tailwind classes (`text-foreground`, `bg-primary`, `text-cta`).
+2. **Container.** Wrap top-level sections in `.container-abitaz`. Never set `max-w` ad hoc.
+3. **Mobile-first.** Author the `<md` styles first, then layer `md:` / `lg:`.
+4. **Server by default.** Add `'use client'` only when you need state, effects, or browser APIs. Push the `'use client'` boundary as deep as possible.
+5. **No data fetching in client components.** Fetch in the server parent, pass props.
+6. **Localization is mandatory.** Any user-visible string is either in `messages/{locale}.json` (UI chrome) or in a Payload `localized: true` field (content). No hard-coded English in JSX.
+7. **Slugs are localized.** Always resolve documents by `(slug, locale)`.
+8. **Use the primitives.** `SiteLayout`, `Button` (shadcn variants), `ProductCard`, `Container`. Don't re-roll.
+9. **Images:** always `next/image`, always `alt` from data, set `sizes`, mark only the LCP image `priority`.
+10. **Links:** always `next/link`. Locale-prefixed via a `localeHref(path, locale)` helper.
+11. **ISR:** every server fetch sets a `next.tags` array; every Payload `afterChange` hook revalidates those tags.
+12. **Type safety:** generate Payload TS types (`payload generate:types`) and import from `@/payload-types`. No `any`.
 
 ---
 
-## 12. Reference: file map
+## 13. File/folder layout
 
-- `src/index.css` — tokens, fonts, base layer, `.container-abitaz`
-- `tailwind.config.ts` — token → Tailwind color mapping, `xs` breakpoint
-- `src/components/layout/SiteLayout.tsx` — page chrome
-- `src/components/layout/Header.tsx` — USP bar + blue bar + nav data
-- `src/components/layout/Footer.tsx` — footer columns + payment + legal
-- `src/components/layout/MegaMenu.tsx` / `MobileMenu.tsx` — navigation
-- `src/components/home/HeroGrid.tsx` — hero (mobile carousel + desktop grid)
-- `src/components/home/CategoryStrip.tsx` — category tile grid
-- `src/components/home/TrustStrip.tsx` — pillars panel
-- `src/components/home/PopularProducts.tsx`, `PromoBanners.tsx`, `BrandsBar.tsx`
-- `src/components/product/ProductCard.tsx` — product tile
-- `src/components/ui/*` — shadcn primitives
-- `src/pages/*` — one file per route, all wrapped in `<SiteLayout>`
-- `src/data/products.ts` — static product + category data
-- `src/context/CartContext.tsx` — cart state
+```
+src/
+  app/
+    [locale]/
+      layout.tsx
+      page.tsx
+      (routes…)
+    api/revalidate/route.ts
+    sitemap.ts
+    robots.ts
+  components/
+    layout/         # Header, Footer, MegaMenu, MobileMenu, LocaleSwitcher, Logo, PaymentMethods
+    blocks/         # HeroGrid, CategoryStrip, PromoBanners, BrandsBar, ProductGrid, TrustStrip, RichText, MediaText
+    product/        # ProductCard, Gallery, AddToCartButton (client), SwatchRow
+    ui/             # shadcn primitives
+    brand-logos/    # SVG components keyed by brand slug
+  server/
+    queries/        # products.ts, categories.ts, brands.ts, pages.ts, globals.ts
+    payload.ts
+  lib/
+    i18n.ts         # locales, defaultLocale, helpers
+    locale-href.ts
+    cn.ts
+  styles/
+    globals.css     # tokens + Tailwind layers
+  payload/
+    payload.config.ts
+    collections/    # Media, Categories, Brands, Products, Pages, Users
+    globals/        # Navigation, Footer, UspBar, SiteSettings
+    blocks/         # block configs matching §6.4
+    hooks/revalidate.ts
+messages/
+  nl.json en.json de.json fr.json it.json es.json
+middleware.ts
+i18n.ts
+```
 
 ---
 
-_Last updated: keep this file in sync with the codebase. If a PR changes
-visual language, update the relevant section here in the same change._
+## 14. Definition of done (per feature)
+
+- [ ] Renders identically on mobile and desktop to the Lovable reference.
+- [ ] All copy comes from Payload (localized) or `messages/*.json`.
+- [ ] Works in all six locales; `nl` is the fallback.
+- [ ] Server-rendered, cacheable, and tagged for ISR.
+- [ ] `generateMetadata` complete with `alternates.languages` for all 6 locales + `x-default`.
+- [ ] Lighthouse ≥ 95 Perf / 100 SEO / 100 A11y on the route.
+- [ ] No hard-coded colors, no hard-coded English.
+- [ ] Playwright e2e covers the route in `nl` and `en` at minimum.
