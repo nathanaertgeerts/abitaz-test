@@ -6,6 +6,8 @@ export type MegaColumn = {
   title: string;
   to?: string;
   links: { label: string; to: string }[];
+  /** Optional "+N more" link rendered after the link list. */
+  moreLink?: { label: string; to: string };
 };
 
 export type MegaFeature = {
