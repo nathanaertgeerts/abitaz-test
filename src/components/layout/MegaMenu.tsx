@@ -277,6 +277,17 @@ const MegaPanel = ({
                       </Link>
                     </li>
                   ))}
+                  {col.moreLink && (
+                    <li key={`${col.title}-more`}>
+                      <Link
+                        to={col.moreLink.to}
+                        onClick={onClose}
+                        className="block text-sm font-semibold text-primary hover:underline"
+                      >
+                        {col.moreLink.label}
+                      </Link>
+                    </li>
+                  )}
                 </ul>
               </div>
             ))}
