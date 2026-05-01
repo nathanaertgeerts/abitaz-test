@@ -236,11 +236,11 @@ const mainNav: MegaMenuItem[] = [
     to: "/brands",
     groups: [
       {
-        label: "Designer brands",
-        to: "/brands?tier=premium",
+        label: "Lighting brands",
+        to: "/brands?category=lighting",
         columns: [
           {
-            title: "Top designers",
+            title: "Designer",
             to: "/brands?tier=premium",
             links: [
               { label: "Louis Poulsen", to: "/brands/louis-poulsen" },
@@ -249,6 +249,27 @@ const mainNav: MegaMenuItem[] = [
               { label: "Martinelli Luce", to: "/brands/martinelli-luce" },
               { label: "&tradition", to: "/brands/tradition" },
               { label: "Normann Copenhagen", to: "/brands/normann-copenhagen" },
+            ],
+          },
+          {
+            title: "Everyday",
+            to: "/brands?tier=everyday",
+            links: [
+              { label: "Nordlux", to: "/brands/nordlux" },
+              { label: "Philips", to: "/brands/philips" },
+              { label: "Eglo", to: "/brands/eglo" },
+              { label: "Brilliant", to: "/brands/brilliant" },
+            ],
+          },
+          {
+            title: "Technical",
+            to: "/brands?tier=technical",
+            links: [
+              { label: "Absinthe Lights", to: "/brands/absinthe" },
+              { label: "VYSN", to: "/brands/vysn" },
+              { label: "SLV", to: "/brands/slv" },
+              { label: "Delta Light", to: "/brands/delta-light" },
+              { label: "Modular Lighting", to: "/brands/modular-lighting" },
             ],
           },
         ],
@@ -262,48 +283,99 @@ const mainNav: MegaMenuItem[] = [
         },
       },
       {
-        label: "Everyday brands",
-        to: "/brands?tier=everyday",
+        label: "Furniture brands",
+        to: "/brands?category=furniture",
         columns: [
           {
-            title: "Popular brands",
-            to: "/brands?tier=everyday",
+            title: "Scandinavian",
+            to: "/brands?category=furniture&region=nordic",
             links: [
-              { label: "Nordlux", to: "/brands/nordlux" },
-              { label: "Philips", to: "/brands/philips" },
+              { label: "Hay", to: "/brands/hay" },
+              { label: "Muuto", to: "/brands/muuto" },
+              { label: "Fritz Hansen", to: "/brands/fritz-hansen" },
+              { label: "Carl Hansen & Søn", to: "/brands/carl-hansen" },
+              { label: "String Furniture", to: "/brands/string-furniture" },
+              { label: "Gubi", to: "/brands/gubi" },
+            ],
+          },
+          {
+            title: "Italian & European",
+            to: "/brands?category=furniture&region=eu",
+            links: [
+              { label: "Kartell", to: "/brands/kartell" },
+              { label: "Magis", to: "/brands/magis" },
+              { label: "Cassina", to: "/brands/cassina" },
+              { label: "Vitra", to: "/brands/vitra" },
+              { label: "Ethnicraft", to: "/brands/ethnicraft" },
+            ],
+          },
+          {
+            title: "Outdoor & garden",
+            to: "/brands?category=furniture&use=outdoor",
+            links: [
+              { label: "Fermob", to: "/brands/fermob" },
+              { label: "Cane-line", to: "/brands/cane-line" },
+              { label: "Fatboy", to: "/brands/fatboy" },
+              { label: "Houe", to: "/brands/houe" },
             ],
           },
         ],
         feature: {
-          eyebrow: "Best value",
-          title: "Nordlux essentials",
+          eyebrow: "Designer picks",
+          title: "Hay essentials",
           description:
-            "Scandinavian design at honest prices — perfect for every room.",
-          cta: { label: "Shop Nordlux", to: "/brands/nordlux" },
+            "Playful, functional Danish design — chairs, tables and storage for every room.",
+          cta: { label: "Shop Hay", to: "/brands/hay" },
           image: productPendantWhite,
         },
       },
       {
-        label: "Technical lighting",
-        to: "/brands?tier=technical",
+        label: "Accessories brands",
+        to: "/brands?category=accessories",
         columns: [
           {
-            title: "Architectural & professional",
-            to: "/brands?tier=technical",
+            title: "Decoration & objects",
+            to: "/brands?category=accessories&type=decor",
             links: [
-              { label: "Absinthe Lights", to: "/brands/absinthe" },
-              { label: "VYSN", to: "/brands/vysn" },
-              { label: "SLV", to: "/brands/slv" },
+              { label: "Ferm Living", to: "/brands/ferm-living" },
+              { label: "Hübsch", to: "/brands/hubsch" },
+              { label: "Bloomingville", to: "/brands/bloomingville" },
+              { label: "Broste Copenhagen", to: "/brands/broste" },
+              { label: "House Doctor", to: "/brands/house-doctor" },
+              { label: "Serax", to: "/brands/serax" },
+            ],
+          },
+          {
+            title: "Kitchen & table",
+            to: "/brands?category=accessories&type=kitchen",
+            links: [
+              { label: "Iittala", to: "/brands/iittala" },
+              { label: "Stelton", to: "/brands/stelton" },
+              { label: "Eva Solo", to: "/brands/eva-solo" },
+              { label: "Alessi", to: "/brands/alessi" },
+              { label: "Le Creuset", to: "/brands/le-creuset" },
+              { label: "Marimekko", to: "/brands/marimekko" },
+            ],
+          },
+          {
+            title: "Textiles & scent",
+            to: "/brands?category=accessories&type=textiles",
+            links: [
+              { label: "Lexington", to: "/brands/lexington" },
+              { label: "HKliving", to: "/brands/hkliving" },
+              { label: "Skagerak", to: "/brands/skagerak" },
+              { label: "Rituals", to: "/brands/rituals" },
+              { label: "Tine K Home", to: "/brands/tine-k-home" },
             ],
           },
         ],
         feature: {
-          eyebrow: "Pro grade",
-          title: "Spots, tracks & downlights",
+          eyebrow: "New in",
+          title: "Ferm Living spring",
           description:
-            "Belgian and German technical brands for recessed spots, track systems and workspace lighting.",
-          cta: { label: "Shop technical", to: "/brands?tier=technical" },
-          image: productPendantWhite,
+            "Fresh ceramics, cushions and decorative objects from the Copenhagen studio.",
+          cta: { label: "Shop Ferm Living", to: "/brands/ferm-living" },
+          image: promoSummer,
         },
       },
       {
