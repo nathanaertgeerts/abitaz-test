@@ -8,7 +8,6 @@ import { MobileMenu } from "./MobileMenu";
 import heroIndoor from "@/assets/hero-indoor.jpg";
 import heroOutdoor from "@/assets/hero-outdoor.jpg";
 import heroDesigner from "@/assets/hero-designer.jpg";
-import heroInstall from "@/assets/hero-installation.jpg";
 import promoDesigner from "@/assets/promo-designer-sale.jpg";
 import promoSummer from "@/assets/promo-summer-gift.jpg";
 import productPendantOrange from "@/assets/product-pendant-orange.jpg";
@@ -16,278 +15,222 @@ import productPendantWhite from "@/assets/product-pendant-white.jpg";
 
 const mainNav: MegaMenuItem[] = [
   {
-    label: "Lighting",
-    to: "/category/indoor-lighting",
+    label: "Products",
+    to: "/category/lighting",
     groups: [
+      /* ---------- LIGHTING ---------- */
       {
-        label: "Indoor lighting",
-        to: "/category/indoor-lighting",
+        label: "Lighting",
+        to: "/category/lighting",
         columns: [
           {
-            title: "Pendants & ceiling",
-            to: "/category/pendant-lamps",
+            title: "Indoor lighting",
+            to: "/category/indoor-lighting",
             links: [
-              { label: "Pendant lamps", to: "/category/pendant-lamps" },
-              { label: "Ceiling lamps", to: "/category/ceiling-lamps" },
-              { label: "Recessed spots", to: "/category/recessed-spots" },
-              { label: "Track lighting", to: "/category/track-lighting" },
-            ],
-          },
-          {
-            title: "Wall & floor",
-            to: "/category/wall-lamps",
-            links: [
-              { label: "Wall lamps", to: "/category/wall-lamps" },
+              { label: "Pendant lights", to: "/category/pendant-lights" },
+              { label: "Ceiling lights", to: "/category/ceiling-lights" },
+              { label: "Recessed lights", to: "/category/recessed-lights" },
+              { label: "Spotlights", to: "/category/spotlights" },
+              { label: "Wall lights", to: "/category/wall-lights" },
               { label: "Floor lamps", to: "/category/floor-lamps" },
               { label: "Table lamps", to: "/category/table-lamps" },
-              { label: "Reading lights", to: "/category/reading-lights" },
+              { label: "Track lighting", to: "/category/track-lighting" },
+            ],
+            moreLink: { label: "+ 2 more", to: "/category/indoor-lighting" },
+          },
+          {
+            title: "Outdoor lighting",
+            to: "/category/outdoor-lighting",
+            links: [
+              { label: "Bollards", to: "/category/bollards" },
+              { label: "Lamp posts", to: "/category/lamp-posts" },
+              { label: "Spike lights", to: "/category/spike-lights" },
+              { label: "Underwater lights", to: "/category/underwater-lights" },
+              { label: "Pendant lights outdoor", to: "/category/pendant-lights-outdoor" },
+              { label: "Ceiling lights outdoor", to: "/category/ceiling-lights-outdoor" },
+              { label: "Recessed lights outdoor", to: "/category/recessed-lights-outdoor" },
+              { label: "Spotlights outdoor", to: "/category/spotlights-outdoor" },
+            ],
+            moreLink: { label: "+ 4 more", to: "/category/outdoor-lighting" },
+          },
+          {
+            title: "Light sources",
+            to: "/category/light-sources",
+            links: [
+              { label: "LED bulbs", to: "/category/led-bulbs" },
+              { label: "LED light strips", to: "/category/led-light-strips" },
+              { label: "Smart bulbs", to: "/category/smart-bulbs" },
+              { label: "Filament bulbs", to: "/category/filament-bulbs" },
+              { label: "LED modules", to: "/category/led-modules" },
+            ],
+          },
+          {
+            title: "Lighting accessories",
+            to: "/category/lighting-accessories",
+            links: [
+              { label: "Power supplies", to: "/category/power-supplies" },
+              { label: "Canopies", to: "/category/canopies" },
+              { label: "LED profiles and covers", to: "/category/led-profiles-and-covers" },
             ],
           },
         ],
         feature: {
-          eyebrow: "Featured",
-          title: "Philips Hue",
+          eyebrow: "New collection",
+          title: "Architectural lighting, sourced.",
           description:
-            "Smart lighting at your fingertips. Full control in one app.",
-          cta: { label: "Discover Hue", to: "/brands/philips" },
+            "Over 4,800 fixtures from Artemide, Martinelli Luce, SLV and more — trusted by lighting designers across Europe.",
+          cta: { label: "Explore Lighting", to: "/category/lighting" },
           image: heroIndoor,
         },
       },
+
+      /* ---------- ACCESSORIES ---------- */
       {
-        label: "Outdoor lighting",
-        to: "/category/outdoor-lighting",
+        label: "Accessories",
+        to: "/category/accessories",
         columns: [
           {
-            title: "Wall & ceiling",
-            to: "/category/outdoor-wall-lamps",
-            links: [
-              { label: "Outdoor wall lamps", to: "/category/outdoor-wall-lamps" },
-              { label: "Outdoor ceiling", to: "/category/outdoor-ceiling" },
-              { label: "Porch lights", to: "/category/porch-lights" },
-            ],
-          },
-          {
-            title: "Garden & path",
-            to: "/category/ground-spots",
-            links: [
-              { label: "Ground spots", to: "/category/ground-spots" },
-              { label: "Path lighting", to: "/category/path-lighting" },
-              { label: "String lights", to: "/category/string-lights" },
-              { label: "Solar lighting", to: "/category/solar-lighting" },
-            ],
-          },
-        ],
-        feature: {
-          eyebrow: "Outdoor season",
-          title: "Garden ready —25%",
-          description:
-            "Light up your terrace and garden with weatherproof favourites.",
-          cta: { label: "Shop outdoor", to: "/category/outdoor-lighting" },
-          image: heroOutdoor,
-        },
-      },
-      {
-        label: "LED & bulbs",
-        to: "/category/bulbs",
-        columns: [
-          {
-            title: "By socket",
-            to: "/category/bulbs",
-            links: [
-              { label: "E27 bulbs", to: "/category/bulbs?socket=e27" },
-              { label: "E14 bulbs", to: "/category/bulbs?socket=e14" },
-              { label: "GU10 spots", to: "/category/bulbs?socket=gu10" },
-              { label: "G9 capsules", to: "/category/bulbs?socket=g9" },
-            ],
-          },
-          {
-            title: "By type",
-            to: "/category/bulbs",
-            links: [
-              { label: "Filament bulbs", to: "/category/bulbs?type=filament" },
-              { label: "Smart bulbs", to: "/category/bulbs?type=smart" },
-              { label: "Dimmable LED", to: "/category/bulbs?type=dimmable" },
-              { label: "Colour LED", to: "/category/bulbs?type=color" },
-            ],
-          },
-        ],
-        feature: {
-          eyebrow: "Save energy",
-          title: "Switch to LED",
-          description:
-            "Up to 80% less energy with the same warm, comfortable light.",
-          cta: { label: "Shop LED", to: "/category/bulbs" },
-          image: heroDesigner,
-        },
-      },
-      {
-        label: "Smart lighting",
-        to: "/category/smart-lighting",
-        columns: [
-          {
-            title: "Systems",
-            to: "/category/smart-lighting",
-            links: [
-              { label: "Philips Hue", to: "/brands/philips" },
-              { label: "Nordlux Smart", to: "/brands/nordlux" },
-              { label: "Smart switches", to: "/category/smart-switches" },
-            ],
-          },
-          {
-            title: "Accessories",
-            to: "/category/smart-accessories",
-            links: [
-              { label: "Remotes", to: "/category/smart-remotes" },
-              { label: "Sensors", to: "/category/smart-sensors" },
-              { label: "Bridges", to: "/category/smart-bridges" },
-            ],
-          },
-        ],
-        feature: {
-          eyebrow: "New",
-          title: "Smart starter sets",
-          description:
-            "Everything you need to make your home smart, in one box.",
-          cta: { label: "View sets", to: "/category/smart-lighting" },
-          image: heroIndoor,
-        },
-      },
-    ],
-    viewAll: { label: "View all lighting", to: "/category/indoor-lighting" },
-  },
-  {
-    label: "Accessories",
-    to: "/category/accessories",
-    groups: [
-      {
-        label: "Decoration",
-        to: "/category/decoration",
-        columns: [
-          {
-            title: "Lampshades",
-            to: "/category/lampshades",
-            links: [
-              { label: "Fabric shades", to: "/category/fabric-shades" },
-              { label: "Metal shades", to: "/category/metal-shades" },
-              { label: "Glass shades", to: "/category/glass-shades" },
-            ],
-          },
-          {
-            title: "Candles & scent",
-            to: "/category/candles",
-            links: [
-              { label: "Candles", to: "/category/candles" },
-              { label: "Candle holders", to: "/category/candle-holders" },
-              { label: "Diffusers", to: "/category/diffusers" },
-            ],
-          },
-          {
-            title: "Decor & objects",
-            to: "/category/decor-objects",
+            title: "Decoration",
+            to: "/category/decoration",
             links: [
               { label: "Vases", to: "/category/vases" },
               { label: "Mirrors", to: "/category/mirrors" },
-              { label: "Side tables", to: "/category/side-tables" },
-              { label: "Wall art", to: "/category/wall-art" },
+              { label: "Candles", to: "/category/candles" },
+              { label: "Candle holders", to: "/category/candle-holders" },
+              { label: "Picture frames", to: "/category/picture-frames" },
+              { label: "Clocks", to: "/category/clocks" },
+              { label: "Home fragrances", to: "/category/home-fragrances" },
+              { label: "Wall decorations", to: "/category/wall-decorations" },
             ],
+            moreLink: { label: "+ 4 more", to: "/category/decoration" },
+          },
+          {
+            title: "Kitchen & table",
+            to: "/category/kitchen-accessories",
+            links: [
+              { label: "Knives", to: "/category/knives" },
+              { label: "Cutting boards", to: "/category/cutting-boards" },
+              { label: "Pots & Pans", to: "/category/pots-and-pans" },
+              { label: "Glassware", to: "/category/glassware" },
+              { label: "Cutlery", to: "/category/cutlery" },
+              { label: "Mugs & Cups", to: "/category/mugs-and-cups" },
+              { label: "Trays", to: "/category/trays" },
+              { label: "Carafes", to: "/category/carafes" },
+            ],
+            moreLink: { label: "+ 6 more", to: "/category/table-accessories" },
+          },
+          {
+            title: "Storage & racks",
+            to: "/category/storage",
+            links: [
+              { label: "Baskets", to: "/category/baskets" },
+              { label: "Shelves", to: "/category/shelves" },
+              { label: "Coat stands & hooks", to: "/category/coat-stands-racks-and-hooks" },
+              { label: "Organizers", to: "/category/organizers" },
+              { label: "Magazine racks", to: "/category/magazine-racks" },
+              { label: "Wine racks", to: "/category/wine-racks" },
+              { label: "Umbrella stands", to: "/category/umbrella-stands" },
+              { label: "Garbage bins", to: "/category/garbage-bins" },
+            ],
+            moreLink: { label: "+ 5 more", to: "/category/storage" },
+          },
+          {
+            title: "Textiles & garden",
+            to: "/category/home-textiles",
+            links: [
+              { label: "Cushions", to: "/category/cushions" },
+              { label: "Rugs", to: "/category/rugs" },
+              { label: "Plaids", to: "/category/plaids" },
+              { label: "Bed linen", to: "/category/bed-linen" },
+              { label: "Bath towels", to: "/category/bath-towels" },
+              { label: "Doormats", to: "/category/doormats" },
+              { label: "Planters", to: "/category/planters" },
+              { label: "Artificial plants", to: "/category/artificial-plants" },
+            ],
+            moreLink: { label: "+ 8 more", to: "/category/home-textiles" },
           },
         ],
         feature: {
           eyebrow: "Finishing touches",
           title: "Style your space",
           description:
-            "Candles, vases and decorative objects to complete every room.",
+            "Vases, candles and decorative objects to complete every room — handpicked from European studios.",
           cta: { label: "Shop decoration", to: "/category/decoration" },
           image: promoSummer,
         },
       },
+
+      /* ---------- FURNITURE ---------- */
       {
-        label: "Installation materials",
-        to: "/category/installation",
+        label: "Furniture",
+        to: "/category/furniture",
         columns: [
           {
-            title: "Switches & sockets",
-            to: "/category/switches-sockets",
+            title: "Seating",
+            to: "/category/seating",
             links: [
-              { label: "Wall switches", to: "/category/wall-switches" },
-              { label: "Power sockets", to: "/category/power-sockets" },
-              { label: "Smart switches", to: "/category/smart-switches" },
-              { label: "Cover plates", to: "/category/cover-plates" },
+              { label: "Chairs", to: "/category/chairs" },
+              { label: "Armchairs", to: "/category/armchairs" },
+              { label: "Sofas", to: "/category/sofas" },
+              { label: "Stools", to: "/category/stools" },
+              { label: "Bar stools", to: "/category/bar-stools" },
+              { label: "Office chairs", to: "/category/office-chairs" },
+              { label: "Poufs & Hockers", to: "/category/poufs-and-hockers" },
+              { label: "Sun loungers & Daybeds", to: "/category/sun-loungers-and-daybeds" },
+            ],
+            moreLink: { label: "+ 3 more", to: "/category/seating" },
+          },
+          {
+            title: "Tables",
+            to: "/category/tables",
+            links: [
+              { label: "Dining tables", to: "/category/dining-tables" },
+              { label: "Coffee tables", to: "/category/coffee-tables" },
+              { label: "Side tables", to: "/category/side-tables" },
+              { label: "Bar tables", to: "/category/bar-tables" },
+              { label: "Garden tables", to: "/category/garden-tables" },
+              { label: "Trolleys", to: "/category/trolleys" },
             ],
           },
           {
-            title: "Dimmers & control",
-            to: "/category/dimmers-switches",
+            title: "Cabinets & storage",
+            to: "/category/cabinets",
             links: [
-              { label: "Wall dimmers", to: "/category/wall-dimmers" },
-              { label: "Plug-in dimmers", to: "/category/plug-dimmers" },
-              { label: "Drivers & transformers", to: "/category/drivers" },
+              { label: "Display cabinets", to: "/category/display-cabinets" },
+              { label: "Drawer cabinets", to: "/category/drawer-cabinets" },
+              { label: "Dressers", to: "/category/dressers" },
+              { label: "Hanging cabinets", to: "/category/hanging-cabinets" },
+              { label: "Nightstands", to: "/category/nightstands" },
+              { label: "Shelving cabinets", to: "/category/shelving-cabinets" },
+              { label: "TV stands", to: "/category/tv-stands" },
             ],
           },
           {
-            title: "Cables & cords",
-            to: "/category/cables",
+            title: "Workspace & more",
+            to: "/category/furniture",
             links: [
-              { label: "Textile cords", to: "/category/textile-cords" },
-              { label: "Power cables", to: "/category/power-cables" },
-              { label: "Cable connectors", to: "/category/cable-connectors" },
-              { label: "Sockets & fittings", to: "/category/sockets-fittings" },
+              { label: "Desks", to: "/category/desks" },
+              { label: "Benches", to: "/category/benches" },
+              { label: "Garden chairs", to: "/category/garden-chairs" },
+              { label: "Hanging chairs", to: "/category/hanging-chairs" },
+              { label: "Rocking chairs", to: "/category/rocking-chairs" },
             ],
           },
         ],
         feature: {
-          eyebrow: "Pro grade",
-          title: "Electrical supplies",
+          eyebrow: "Designer picks",
+          title: "Scandinavian classics",
           description:
-            "Switches, sockets, dimmers and cables — install with confidence.",
-          cta: { label: "Shop installation", to: "/category/installation" },
-          image: heroInstall,
+            "Iconic chairs and tables that pair beautifully with our designer lighting.",
+          cta: { label: "Shop furniture", to: "/category/furniture" },
+          image: heroDesigner,
         },
       },
     ],
-    viewAll: { label: "View all accessories", to: "/category/accessories" },
+    viewAll: { label: "View all products", to: "/category/lighting" },
   },
-  {
-    label: "Furniture",
-    to: "/category/furniture",
-    columns: [
-      {
-        title: "Seating",
-        to: "/category/seating",
-        links: [
-          { label: "Chairs", to: "/category/chairs" },
-          { label: "Lounge chairs", to: "/category/lounge-chairs" },
-          { label: "Sofas", to: "/category/sofas" },
-        ],
-      },
-      {
-        title: "Tables",
-        to: "/category/tables",
-        links: [
-          { label: "Dining tables", to: "/category/dining-tables" },
-          { label: "Coffee tables", to: "/category/coffee-tables" },
-          { label: "Side tables", to: "/category/side-tables" },
-        ],
-      },
-      {
-        title: "Storage",
-        to: "/category/storage",
-        links: [
-          { label: "Shelving", to: "/category/shelving" },
-          { label: "Cabinets", to: "/category/cabinets" },
-        ],
-      },
-    ],
-    feature: {
-      eyebrow: "Designer picks",
-      title: "Scandinavian classics",
-      description:
-        "Iconic chairs and tables that pair beautifully with our designer lighting.",
-      cta: { label: "Shop furniture", to: "/category/furniture" },
-      image: promoSummer,
-    },
-    viewAll: { label: "View all furniture", to: "/category/furniture" },
-  },
+
+  /* ---------- BRANDS ---------- */
   {
     label: "Brands",
     to: "/brands",
@@ -389,7 +332,117 @@ const mainNav: MegaMenuItem[] = [
     ],
     viewAll: { label: "All brands A–Z", to: "/brands" },
   },
+
+  /* ---------- ROOMS ---------- */
+  {
+    label: "Rooms",
+    to: "/rooms",
+    columns: [
+      {
+        title: "Living spaces",
+        to: "/rooms",
+        links: [
+          { label: "Living room", to: "/rooms/living-room" },
+          { label: "Dining room", to: "/rooms/dining-room" },
+          { label: "Hallway", to: "/rooms/hallway" },
+          { label: "Home office", to: "/rooms/home-office" },
+        ],
+      },
+      {
+        title: "Private spaces",
+        to: "/rooms",
+        links: [
+          { label: "Bedroom", to: "/rooms/bedroom" },
+          { label: "Children's room", to: "/rooms/childrens-room" },
+          { label: "Bathroom", to: "/rooms/bathroom" },
+        ],
+      },
+      {
+        title: "Cooking & utility",
+        to: "/rooms",
+        links: [
+          { label: "Kitchen", to: "/rooms/kitchen" },
+          { label: "Pantry", to: "/rooms/pantry" },
+          { label: "Laundry room", to: "/rooms/laundry" },
+        ],
+      },
+      {
+        title: "Outside",
+        to: "/rooms",
+        links: [
+          { label: "Garden", to: "/rooms/garden" },
+          { label: "Terrace & balcony", to: "/rooms/terrace" },
+          { label: "Entrance & façade", to: "/rooms/entrance" },
+        ],
+      },
+    ],
+    feature: {
+      eyebrow: "Inspiration",
+      title: "Shop by room",
+      description:
+        "Curated lighting, furniture and accessories for every space in your home.",
+      cta: { label: "Browse all rooms", to: "/rooms" },
+      image: heroOutdoor,
+    },
+    viewAll: { label: "View all rooms", to: "/rooms" },
+  },
+
   { label: "Sale", to: "/sale" },
+
+  /* ---------- INSPIRATION ---------- */
+  {
+    label: "Inspiration",
+    to: "/inspiration",
+    columns: [
+      {
+        title: "Stories",
+        to: "/inspiration",
+        links: [
+          { label: "Latest articles", to: "/inspiration/articles" },
+          { label: "Designer interviews", to: "/inspiration/interviews" },
+          { label: "Behind the brand", to: "/inspiration/brands" },
+        ],
+      },
+      {
+        title: "Guides",
+        to: "/inspiration/guides",
+        links: [
+          { label: "Lighting guide", to: "/inspiration/guides/lighting" },
+          { label: "Choosing a bulb", to: "/inspiration/guides/bulbs" },
+          { label: "Outdoor lighting tips", to: "/inspiration/guides/outdoor" },
+          { label: "Smart home setup", to: "/inspiration/guides/smart-home" },
+        ],
+      },
+      {
+        title: "Lookbook",
+        to: "/inspiration/lookbook",
+        links: [
+          { label: "Scandinavian", to: "/inspiration/lookbook/scandinavian" },
+          { label: "Industrial", to: "/inspiration/lookbook/industrial" },
+          { label: "Mid-century", to: "/inspiration/lookbook/mid-century" },
+          { label: "Minimalist", to: "/inspiration/lookbook/minimalist" },
+        ],
+      },
+      {
+        title: "Pro & trade",
+        to: "/inspiration/pro",
+        links: [
+          { label: "For architects", to: "/inspiration/pro/architects" },
+          { label: "For interior designers", to: "/inspiration/pro/designers" },
+          { label: "Project references", to: "/inspiration/pro/projects" },
+        ],
+      },
+    ],
+    feature: {
+      eyebrow: "Editorial",
+      title: "Spring lookbook 2026",
+      description:
+        "Our favourite pairings of architectural lighting and Scandinavian furniture.",
+      cta: { label: "Read the lookbook", to: "/inspiration/lookbook" },
+      image: promoDesigner,
+    },
+    viewAll: { label: "All inspiration", to: "/inspiration" },
+  },
 ];
 
 export const Header = () => {

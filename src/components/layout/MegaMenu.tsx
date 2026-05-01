@@ -6,6 +6,8 @@ export type MegaColumn = {
   title: string;
   to?: string;
   links: { label: string; to: string }[];
+  /** Optional "+N more" link rendered after the link list. */
+  moreLink?: { label: string; to: string };
 };
 
 export type MegaFeature = {
@@ -275,6 +277,17 @@ const MegaPanel = ({
                       </Link>
                     </li>
                   ))}
+                  {col.moreLink && (
+                    <li key={`${col.title}-more`}>
+                      <Link
+                        to={col.moreLink.to}
+                        onClick={onClose}
+                        className="block text-sm font-semibold text-primary hover:underline"
+                      >
+                        {col.moreLink.label}
+                      </Link>
+                    </li>
+                  )}
                 </ul>
               </div>
             ))}
