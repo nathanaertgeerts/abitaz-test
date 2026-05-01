@@ -249,9 +249,9 @@ const MegaPanel = ({
             showRail ? "md:col-span-9" : "md:col-span-12"
           }`}
         >
-          <div className="grid grid-cols-12 gap-8">
+          <div className="flex flex-col gap-8 md:flex-row md:items-start">
             {current.columns.map((col) => (
-              <div key={col.title} className="col-span-12 md:col-span-3">
+              <div key={col.title} className="min-w-0 flex-1">
                 <h3 className="mb-3 text-xs font-bold uppercase tracking-wide md:whitespace-nowrap">
                   {col.to ? (
                     <Link
@@ -293,7 +293,7 @@ const MegaPanel = ({
             ))}
 
             {current.feature && (
-              <div className="col-span-12 md:col-span-3">
+              <div className="w-full md:w-64 md:flex-none">
                 <div className="overflow-hidden rounded-lg bg-surface">
                   {current.feature.image && (
                     <img
