@@ -214,6 +214,17 @@ export const MobileMenu = ({ items }: Props) => {
                           </Link>
                         </li>
                       ))}
+                      {col.moreLink && (
+                        <li key={`${col.title}-more`}>
+                          <Link
+                            to={col.moreLink.to}
+                            onClick={close}
+                            className="block py-1.5 text-sm font-semibold text-primary hover:underline"
+                          >
+                            {col.moreLink.label}
+                          </Link>
+                        </li>
+                      )}
                     </ul>
                   </div>
                 ))}
