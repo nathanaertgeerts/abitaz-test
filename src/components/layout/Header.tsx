@@ -8,18 +8,10 @@ import { MobileMenu } from "./MobileMenu";
 import heroIndoor from "@/assets/hero-indoor.jpg";
 import heroOutdoor from "@/assets/hero-outdoor.jpg";
 import heroDesigner from "@/assets/hero-designer.jpg";
-import heroInstall from "@/assets/hero-installation.jpg";
 import promoDesigner from "@/assets/promo-designer-sale.jpg";
 import promoSummer from "@/assets/promo-summer-gift.jpg";
 import productPendantOrange from "@/assets/product-pendant-orange.jpg";
 import productPendantWhite from "@/assets/product-pendant-white.jpg";
-
-const slug = (s: string) =>
-  s
-    .toLowerCase()
-    .replace(/&/g, "and")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
 
 const mainNav: MegaMenuItem[] = [
   {
