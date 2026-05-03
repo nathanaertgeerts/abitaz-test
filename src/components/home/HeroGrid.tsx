@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 // Static fallback (full-size original)
-import heroWinter from "@/assets/hero-winter-sale.jpg";
+import heroWinter from "@/assets/hero-spring-sale.jpg";
 import heroIndoor from "@/assets/hero-indoor.jpg";
 import heroOutdoor from "@/assets/hero-outdoor.jpg";
 import heroInstall from "@/assets/hero-installation.jpg";
 import heroDesigner from "@/assets/hero-designer.jpg";
 // Responsive WebP srcsets generated at build time by vite-imagetools
-import heroWinterSet from "@/assets/hero-winter-sale.jpg?w=480;768;1200;1600&format=webp&as=srcset";
+import heroWinterSet from "@/assets/hero-spring-sale.jpg?w=480;768;1200;1600&format=webp&as=srcset";
 import heroIndoorSet from "@/assets/hero-indoor.jpg?w=480;768;1200;1600&format=webp&as=srcset";
 import heroOutdoorSet from "@/assets/hero-outdoor.jpg?w=480;768;1200;1600&format=webp&as=srcset";
 import heroInstallSet from "@/assets/hero-installation.jpg?w=480;768;1200;1600&format=webp&as=srcset";
@@ -33,7 +33,7 @@ const tiles: Tile[] = [
     image: heroWinter,
     srcSet: heroWinterSet,
     eyebrow: "Up to -45%",
-    title: "Winter Sale",
+    title: "Spring Sale",
     className: "md:col-span-4 md:row-span-2",
     priority: true,
     // Spans both rows on the left → rounds top-left + bottom-left
@@ -74,8 +74,8 @@ const tiles: Tile[] = [
     to: "/brands/flos",
     image: heroDesigner,
     srcSet: heroDesignerSet,
-    eyebrow: "New collection",
-    title: "Flos",
+    eyebrow: "Flos",
+    title: "Absinthe",
     className: "md:col-span-2 md:row-span-1",
     // Bottom-right corner
     roundClass: "md:rounded-br-lg",
