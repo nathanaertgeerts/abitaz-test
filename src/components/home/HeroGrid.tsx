@@ -25,6 +25,8 @@ type Tile = {
   roundClass?: string;
   /** Sizes attribute hinting layout width per breakpoint */
   sizes: string;
+  /** Optional stronger overlay for tiles where text needs extra contrast */
+  strongOverlay?: boolean;
 };
 
 const tiles: Tile[] = [
@@ -69,6 +71,7 @@ const tiles: Tile[] = [
     title: "Installation materials",
     className: "md:col-span-2 md:row-span-1",
     sizes: "(min-width: 1280px) 320px, (min-width: 768px) 25vw, 88vw",
+    strongOverlay: true,
   },
   {
     to: "/brands/flos",
@@ -266,6 +269,9 @@ export const HeroGrid = () => {
                 className="absolute inset-0 h-full w-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/15 to-transparent" />
+              {tile.strongOverlay && (
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />
+              )}
               <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
                 {tile.eyebrow && (
                   <span className="block text-xs font-medium opacity-90">{tile.eyebrow}</span>
@@ -312,6 +318,9 @@ export const HeroGrid = () => {
               className="absolute inset-0 h-full w-full object-cover motion-safe:transition-transform motion-safe:duration-500 motion-safe:group-hover:scale-[1.03]"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
+            {tile.strongOverlay && (
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />
+            )}
             <div className="absolute bottom-0 left-0 right-0 p-5 text-white">
               {tile.eyebrow && (
                 <span className="block text-sm font-medium opacity-90">{tile.eyebrow}</span>
