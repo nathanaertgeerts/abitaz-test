@@ -74,7 +74,7 @@ const tiles: Tile[] = [
     to: "/brands/flos",
     image: heroDesigner,
     srcSet: heroDesignerSet,
-    eyebrow: "Flos",
+    eyebrow: "New collection",
     title: "Absinthe",
     className: "md:col-span-2 md:row-span-1",
     // Bottom-right corner
