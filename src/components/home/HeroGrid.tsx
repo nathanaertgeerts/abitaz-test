@@ -25,6 +25,8 @@ type Tile = {
   roundClass?: string;
   /** Sizes attribute hinting layout width per breakpoint */
   sizes: string;
+  /** Optional stronger overlay for tiles where text needs extra contrast */
+  strongOverlay?: boolean;
 };
 
 const tiles: Tile[] = [
@@ -69,6 +71,7 @@ const tiles: Tile[] = [
     title: "Installation materials",
     className: "md:col-span-2 md:row-span-1",
     sizes: "(min-width: 1280px) 320px, (min-width: 768px) 25vw, 88vw",
+    strongOverlay: true,
   },
   {
     to: "/brands/flos",
