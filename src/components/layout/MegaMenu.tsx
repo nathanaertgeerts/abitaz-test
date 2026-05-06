@@ -252,9 +252,9 @@ const MegaPanel = ({
             showRail ? "md:col-span-9" : "md:col-span-12"
           }`}
         >
-          <div className="flex flex-col gap-8 md:flex-row md:items-start">
+          <div className="flex flex-col gap-8 md:flex-row md:items-stretch">
             {current.columns.map((col) => (
-              <div key={col.title} className="min-w-0 flex-1">
+              <div key={col.title} className="flex min-w-0 flex-1 flex-col">
                 <h3 className="mb-3 text-xs font-bold uppercase tracking-wide md:whitespace-nowrap">
                   {col.to ? (
                     <Link
@@ -268,7 +268,7 @@ const MegaPanel = ({
                     <span className="text-muted-foreground">{col.title}</span>
                   )}
                 </h3>
-                <ul className="space-y-2">
+                <ul className="flex flex-1 flex-col space-y-2">
                   {(() => {
                     // If every link in this column points to a /brands/<slug>
                     // we render them as black/white logo tiles for instant recognition.
@@ -316,7 +316,7 @@ const MegaPanel = ({
                     ));
                   })()}
                   {col.moreLink && (
-                    <li key={`${col.title}-more`}>
+                    <li key={`${col.title}-more`} className="mt-auto pt-3">
                       <Link
                         to={col.moreLink.to}
                         onClick={onClose}
