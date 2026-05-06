@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ChevronDown, ChevronRight } from "lucide-react";
+import { brandLogos } from "@/components/home/BrandLogos";
 
 export type MegaColumn = {
   title: string;
@@ -8,6 +9,8 @@ export type MegaColumn = {
   links: { label: string; to: string }[];
   /** Optional "+N more" link rendered after the link list. */
   moreLink?: { label: string; to: string };
+  /** When true, render links as black/white logo tiles instead of text. */
+  useLogos?: boolean;
 };
 
 export type MegaFeature = {
@@ -266,17 +269,52 @@ const MegaPanel = ({
                   )}
                 </h3>
                 <ul className="space-y-2">
-                  {col.links.map((link) => (
-                    <li key={link.to + link.label}>
-                      <Link
-                        to={link.to}
-                        onClick={onClose}
-                        className="block text-sm text-foreground transition-colors hover:text-primary"
-                      >
-                        {link.label}
-                      </Link>
-                    </li>
-                  ))}
+                  {(() => {
+                    // If every link in this column points to a /brands/<slug>
+                    // we render them as black/white logo tiles for instant recognition.
+                    const allBrand =
+                      col.links.length > 0 &&
+                      col.links.every((l) => l.to.startsWith("/brands/"));
+                    if (allBrand) {
+                      return (
+                        <li className="grid grid-cols-2 gap-2">
+                          {col.links.map((link) => {
+                            const slug = link.to.replace("/brands/", "");
+                            const Logo = brandLogos[slug];
+                            return (
+                              <Link
+                                key={link.to + link.label}
+                                to={link.to}
+                                onClick={onClose}
+                                aria-label={link.label}
+                                title={link.label}
+                                className="flex h-12 items-center justify-center rounded-md border border-border bg-background px-2 text-foreground transition-colors hover:border-foreground hover:bg-foreground hover:text-background"
+                              >
+                                {Logo ? (
+                                  <Logo className="h-5 w-auto max-w-full" />
+                                ) : (
+                                  <span className="truncate text-xs font-semibold uppercase tracking-wide">
+                                    {link.label}
+                                  </span>
+                                )}
+                              </Link>
+                            );
+                          })}
+                        </li>
+                      );
+                    }
+                    return col.links.map((link) => (
+                      <li key={link.to + link.label}>
+                        <Link
+                          to={link.to}
+                          onClick={onClose}
+                          className="block text-sm text-foreground transition-colors hover:text-primary"
+                        >
+                          {link.label}
+                        </Link>
+                      </li>
+                    ));
+                  })()}
                   {col.moreLink && (
                     <li key={`${col.title}-more`}>
                       <Link
