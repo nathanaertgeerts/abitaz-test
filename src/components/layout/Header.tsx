@@ -250,6 +250,7 @@ const mainNav: MegaMenuItem[] = [
               { label: "&tradition", to: "/brands/tradition" },
               { label: "Normann Copenhagen", to: "/brands/normann-copenhagen" },
             ],
+            moreLink: { label: "All designer brands →", to: "/brands?tier=premium" },
           },
           {
             title: "Everyday",
@@ -260,6 +261,7 @@ const mainNav: MegaMenuItem[] = [
               { label: "Eglo", to: "/brands/eglo" },
               { label: "Brilliant", to: "/brands/brilliant" },
             ],
+            moreLink: { label: "All everyday brands →", to: "/brands?tier=everyday" },
           },
           {
             title: "Technical",
@@ -271,6 +273,7 @@ const mainNav: MegaMenuItem[] = [
               { label: "Delta Light", to: "/brands/delta-light" },
               { label: "Modular Lighting", to: "/brands/modular-lighting" },
             ],
+            moreLink: { label: "All technical brands →", to: "/brands?tier=technical" },
           },
         ],
         feature: {
