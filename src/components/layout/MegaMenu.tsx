@@ -277,7 +277,7 @@ const MegaPanel = ({
                       col.links.every((l) => l.to.startsWith("/brands/"));
                     if (allBrand) {
                       return (
-                        <li className="grid grid-cols-2 gap-2">
+                        <li className="grid grid-cols-1 gap-2">
                           {col.links.map((link) => {
                             const slug = link.to.replace("/brands/", "");
                             const Logo = brandLogos[slug];
@@ -288,12 +288,12 @@ const MegaPanel = ({
                                 onClick={onClose}
                                 aria-label={link.label}
                                 title={link.label}
-                                className="flex h-12 items-center justify-center rounded-md border border-border bg-background px-2 text-foreground transition-colors hover:border-foreground hover:bg-foreground hover:text-background"
+                                className="flex h-16 items-center justify-center rounded-md border border-border bg-background px-3 text-foreground transition-colors hover:border-foreground hover:bg-foreground hover:text-background"
                               >
                                 {Logo ? (
-                                  <Logo className="h-5 w-auto max-w-full" />
+                                  <Logo className="h-8 w-auto max-w-full" />
                                 ) : (
-                                  <span className="truncate text-xs font-semibold uppercase tracking-wide">
+                                  <span className="truncate text-sm font-semibold uppercase tracking-wide">
                                     {link.label}
                                   </span>
                                 )}
@@ -331,7 +331,7 @@ const MegaPanel = ({
             ))}
 
             {current.feature && (
-              <div className="w-full md:w-64 md:flex-none">
+              <div className="w-full md:w-52 md:flex-none">
                 <div className="overflow-hidden rounded-lg bg-surface">
                   {current.feature.image && (
                     <img
