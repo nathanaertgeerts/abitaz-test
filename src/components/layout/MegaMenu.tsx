@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ChevronDown, ChevronRight } from "lucide-react";
+import { brandLogos } from "@/components/home/BrandLogos";
 
 export type MegaColumn = {
   title: string;
@@ -8,6 +9,8 @@ export type MegaColumn = {
   links: { label: string; to: string }[];
   /** Optional "+N more" link rendered after the link list. */
   moreLink?: { label: string; to: string };
+  /** When true, render links as black/white logo tiles instead of text. */
+  useLogos?: boolean;
 };
 
 export type MegaFeature = {
