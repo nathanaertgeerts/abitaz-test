@@ -264,6 +264,17 @@ const mainNav: MegaMenuItem[] = [
             moreLink: { label: "All everyday brands →", to: "/brands?tier=everyday" },
           },
           {
+            title: "Architectural",
+            to: "/brands?tier=architectural",
+            links: [
+              { label: "Vibia", to: "/brands/vibia" },
+              { label: "Wever & Ducré", to: "/brands/wever-ducre" },
+              { label: "Foscarini", to: "/brands/foscarini" },
+              { label: "Marset", to: "/brands/marset" },
+            ],
+            moreLink: { label: "All architectural brands →", to: "/brands?tier=architectural" },
+          },
+          {
             title: "Technical",
             to: "/brands?tier=technical",
             links: [
@@ -300,6 +311,7 @@ const mainNav: MegaMenuItem[] = [
               { label: "String Furniture", to: "/brands/string-furniture" },
               { label: "Gubi", to: "/brands/gubi" },
             ],
+            moreLink: { label: "All Scandinavian brands →", to: "/brands?category=furniture&region=nordic" },
           },
           {
             title: "Italian & European",
@@ -311,6 +323,7 @@ const mainNav: MegaMenuItem[] = [
               { label: "Vitra", to: "/brands/vitra" },
               { label: "Ethnicraft", to: "/brands/ethnicraft" },
             ],
+            moreLink: { label: "All Italian & EU brands →", to: "/brands?category=furniture&region=eu" },
           },
           {
             title: "Outdoor & garden",
@@ -321,6 +334,7 @@ const mainNav: MegaMenuItem[] = [
               { label: "Fatboy", to: "/brands/fatboy" },
               { label: "Houe", to: "/brands/houe" },
             ],
+            moreLink: { label: "All outdoor brands →", to: "/brands?category=furniture&use=outdoor" },
           },
         ],
         feature: {
@@ -347,6 +361,7 @@ const mainNav: MegaMenuItem[] = [
               { label: "House Doctor", to: "/brands/house-doctor" },
               { label: "Serax", to: "/brands/serax" },
             ],
+            moreLink: { label: "All decoration brands →", to: "/brands?category=accessories&type=decor" },
           },
           {
             title: "Kitchen & table",
@@ -359,6 +374,7 @@ const mainNav: MegaMenuItem[] = [
               { label: "Le Creuset", to: "/brands/le-creuset" },
               { label: "Marimekko", to: "/brands/marimekko" },
             ],
+            moreLink: { label: "All kitchen brands →", to: "/brands?category=accessories&type=kitchen" },
           },
           {
             title: "Textiles & scent",
@@ -370,6 +386,7 @@ const mainNav: MegaMenuItem[] = [
               { label: "Rituals", to: "/brands/rituals" },
               { label: "Tine K Home", to: "/brands/tine-k-home" },
             ],
+            moreLink: { label: "All textile brands →", to: "/brands?category=accessories&type=textiles" },
           },
         ],
         feature: {
@@ -391,8 +408,26 @@ const mainNav: MegaMenuItem[] = [
             links: [
               { label: "Louis Poulsen sale", to: "/brands/louis-poulsen?sale=1" },
               { label: "Flos sale", to: "/brands/flos?sale=1" },
-              { label: "Nordlux sale", to: "/brands/nordlux?sale=1" },
             ],
+            moreLink: { label: "All designer sale →", to: "/sale?tier=premium" },
+          },
+          {
+            title: "Everyday on sale",
+            to: "/sale?tier=everyday",
+            links: [
+              { label: "Nordlux sale", to: "/brands/nordlux?sale=1" },
+              { label: "Philips sale", to: "/brands/philips?sale=1" },
+            ],
+            moreLink: { label: "All everyday sale →", to: "/sale?tier=everyday" },
+          },
+          {
+            title: "Technical on sale",
+            to: "/sale?tier=technical",
+            links: [
+              { label: "SLV sale", to: "/brands/slv?sale=1" },
+              { label: "VYSN sale", to: "/brands/vysn?sale=1" },
+            ],
+            moreLink: { label: "All technical sale →", to: "/sale?tier=technical" },
           },
         ],
         feature: {
