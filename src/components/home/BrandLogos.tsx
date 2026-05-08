@@ -232,6 +232,210 @@ export const SlvLogo = ({ className }: LogoProps) => (
   </svg>
 );
 
+export const EgloLogo = ({ className }: LogoProps) => (
+  <svg viewBox="0 0 200 32" className={className} role="img" aria-label="Eglo">
+    <text
+      x="100"
+      y="24"
+      textAnchor="middle"
+      fontFamily="'Helvetica Neue', Arial, sans-serif"
+      fontStyle="italic"
+      fontWeight="800"
+      fontSize="24"
+      letterSpacing="0"
+      fill="currentColor"
+    >
+      EGLO
+    </text>
+  </svg>
+);
+
+export const BrilliantLogo = ({ className }: LogoProps) => (
+  <svg viewBox="0 0 220 32" className={className} role="img" aria-label="Brilliant">
+    <text
+      x="110"
+      y="23"
+      textAnchor="middle"
+      fontFamily="Georgia, 'Times New Roman', serif"
+      fontWeight="400"
+      fontSize="20"
+      letterSpacing="1"
+      fill="currentColor"
+    >
+      Brilliant
+    </text>
+  </svg>
+);
+
+export const PaulmannLogo = ({ className }: LogoProps) => (
+  <svg viewBox="0 0 220 32" className={className} role="img" aria-label="Paulmann">
+    <g transform="translate(28, 8)" fill="currentColor">
+      <circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" strokeWidth="1.5" />
+      <circle cx="8" cy="8" r="2.5" />
+    </g>
+    <text
+      x="56"
+      y="22"
+      fontFamily="'Helvetica Neue', Arial, sans-serif"
+      fontWeight="500"
+      fontSize="18"
+      letterSpacing="2"
+      fill="currentColor"
+    >
+      PAULMANN
+    </text>
+  </svg>
+);
+
+export const VibiaLogo = ({ className }: LogoProps) => (
+  <svg viewBox="0 0 200 32" className={className} role="img" aria-label="Vibia">
+    <text
+      x="100"
+      y="24"
+      textAnchor="middle"
+      fontFamily="Georgia, 'Times New Roman', serif"
+      fontWeight="400"
+      fontSize="24"
+      letterSpacing="3"
+      fill="currentColor"
+    >
+      vibia
+    </text>
+  </svg>
+);
+
+export const WeverDucreLogo = ({ className }: LogoProps) => (
+  <svg viewBox="0 0 240 32" className={className} role="img" aria-label="Wever & Ducré">
+    <text
+      x="120"
+      y="14"
+      textAnchor="middle"
+      fontFamily="'Helvetica Neue', Arial, sans-serif"
+      fontWeight="700"
+      fontSize="13"
+      letterSpacing="3"
+      fill="currentColor"
+    >
+      WEVER &amp; DUCRÉ
+    </text>
+    <line x1="80" y1="22" x2="160" y2="22" stroke="currentColor" strokeWidth="0.6" />
+    <text
+      x="120"
+      y="30"
+      textAnchor="middle"
+      fontFamily="'Helvetica Neue', Arial, sans-serif"
+      fontWeight="300"
+      fontSize="8"
+      letterSpacing="3"
+      fill="currentColor"
+    >
+      LIGHTING
+    </text>
+  </svg>
+);
+
+export const FoscariniLogo = ({ className }: LogoProps) => (
+  <svg viewBox="0 0 220 32" className={className} role="img" aria-label="Foscarini">
+    <text
+      x="110"
+      y="22"
+      textAnchor="middle"
+      fontFamily="Georgia, 'Times New Roman', serif"
+      fontStyle="italic"
+      fontWeight="400"
+      fontSize="22"
+      fill="currentColor"
+    >
+      Foscarini
+    </text>
+  </svg>
+);
+
+export const MarsetLogo = ({ className }: LogoProps) => (
+  <svg viewBox="0 0 200 32" className={className} role="img" aria-label="Marset">
+    <text
+      x="100"
+      y="24"
+      textAnchor="middle"
+      fontFamily="'Helvetica Neue', Arial, sans-serif"
+      fontWeight="900"
+      fontSize="22"
+      letterSpacing="0"
+      fill="currentColor"
+    >
+      marset
+    </text>
+  </svg>
+);
+
+export const OcchioLogo = ({ className }: LogoProps) => (
+  <svg viewBox="0 0 220 32" className={className} role="img" aria-label="Occhio">
+    <g transform="translate(30, 8)" fill="none" stroke="currentColor" strokeWidth="1.5">
+      <circle cx="8" cy="8" r="7" />
+      <circle cx="8" cy="8" r="2" fill="currentColor" stroke="none" />
+    </g>
+    <text
+      x="56"
+      y="22"
+      fontFamily="'Helvetica Neue', Arial, sans-serif"
+      fontWeight="300"
+      fontSize="20"
+      letterSpacing="4"
+      fill="currentColor"
+    >
+      OCCHIO
+    </text>
+  </svg>
+);
+
+export const DeltaLightLogo = ({ className }: LogoProps) => (
+  <svg viewBox="0 0 240 32" className={className} role="img" aria-label="Delta Light">
+    <g transform="translate(20, 6)" fill="currentColor">
+      <polygon points="0,18 9,0 18,18" />
+    </g>
+    <text
+      x="50"
+      y="22"
+      fontFamily="'Helvetica Neue', Arial, sans-serif"
+      fontWeight="600"
+      fontSize="18"
+      letterSpacing="2"
+      fill="currentColor"
+    >
+      DELTA LIGHT
+    </text>
+  </svg>
+);
+
+export const ModularLogo = ({ className }: LogoProps) => (
+  <svg viewBox="0 0 240 32" className={className} role="img" aria-label="Modular Lighting">
+    <text
+      x="120"
+      y="14"
+      textAnchor="middle"
+      fontFamily="'Courier New', monospace"
+      fontWeight="700"
+      fontSize="12"
+      letterSpacing="3"
+      fill="currentColor"
+    >
+      MODULAR
+    </text>
+    <text
+      x="120"
+      y="27"
+      textAnchor="middle"
+      fontFamily="'Courier New', monospace"
+      fontWeight="400"
+      fontSize="9"
+      letterSpacing="4"
+      fill="currentColor"
+    >
+      LIGHTING INSTRUMENTS
+    </text>
+  </svg>
+);
+
 export const brandLogos: Record<string, (p: LogoProps) => JSX.Element> = {
   "louis-poulsen": LouisPoulsenLogo,
   tradition: TraditionLogo,
@@ -244,4 +448,14 @@ export const brandLogos: Record<string, (p: LogoProps) => JSX.Element> = {
   artemide: ArtemideLogo,
   "martinelli-luce": MartinelliLuceLogo,
   slv: SlvLogo,
+  eglo: EgloLogo,
+  brilliant: BrilliantLogo,
+  paulmann: PaulmannLogo,
+  vibia: VibiaLogo,
+  "wever-ducre": WeverDucreLogo,
+  foscarini: FoscariniLogo,
+  marset: MarsetLogo,
+  occhio: OcchioLogo,
+  "delta-light": DeltaLightLogo,
+  "modular-lighting": ModularLogo,
 };
