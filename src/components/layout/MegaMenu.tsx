@@ -320,7 +320,7 @@ const MegaPanel = ({
                       <Link
                         to={col.moreLink.to}
                         onClick={onClose}
-                        className="block text-sm font-semibold text-primary hover:underline"
+                        className="block whitespace-nowrap text-xs font-semibold text-primary hover:underline"
                       >
                         {col.moreLink.label}
                       </Link>
