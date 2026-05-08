@@ -41,15 +41,15 @@ export const NordluxLogo = ({ className }: LogoProps) => (
   <svg viewBox="0 0 200 32" className={className} role="img" aria-label="Nordlux">
     <text
       x="100"
-      y="23"
+      y="22"
       textAnchor="middle"
       fontFamily="'Helvetica Neue', Arial, sans-serif"
-      fontWeight="700"
-      fontSize="22"
-      letterSpacing="1"
+      fontWeight="300"
+      fontSize="20"
+      letterSpacing="6"
       fill="currentColor"
     >
-      NORDLUX
+      nordlux
     </text>
   </svg>
 );
@@ -58,12 +58,12 @@ export const FlosLogo = ({ className }: LogoProps) => (
   <svg viewBox="0 0 200 32" className={className} role="img" aria-label="Flos">
     <text
       x="100"
-      y="25"
+      y="26"
       textAnchor="middle"
-      fontFamily="'Helvetica Neue', Arial, sans-serif"
-      fontWeight="800"
-      fontSize="26"
-      letterSpacing="2"
+      fontFamily="Georgia, 'Times New Roman', serif"
+      fontWeight="400"
+      fontSize="28"
+      letterSpacing="1"
       fill="currentColor"
     >
       FLOS
