@@ -33,8 +33,8 @@ const Index = () => {
       <div className="hidden md:block">
         <HeroGrid />
         <BrandsBar />
-        <CategoryStrip />
         <PopularProducts />
+        <CategoryStrip />
         <PromoBanners />
         <TrustStrip />
       </div>
