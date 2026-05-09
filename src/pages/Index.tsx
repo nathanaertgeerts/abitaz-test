@@ -32,11 +32,11 @@ const Index = () => {
       {/* Desktop: original homepage */}
       <div className="hidden md:block">
         <HeroGrid />
-        <TrustStrip />
+        <BrandsBar />
         <CategoryStrip />
         <PopularProducts />
         <PromoBanners />
-        <BrandsBar />
+        <TrustStrip />
       </div>
     </SiteLayout>
   );
