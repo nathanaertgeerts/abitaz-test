@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { Check, ChevronRight, Copy, ExternalLink, FileCode2, Layers, Library } from "lucide-react";
 import { SiteLayout } from "@/components/layout/SiteLayout";
+import { OdooArchitecture } from "@/components/sitemap/OdooArchitecture";
 import {
   countByStatus,
   sitemap,
@@ -231,6 +232,9 @@ const Sitemap = () => {
             </li>
           </ul>
         </section>
+
+        {/* Backend architecture */}
+        <OdooArchitecture />
       </div>
     </SiteLayout>
   );
