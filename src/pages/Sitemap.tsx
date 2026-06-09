@@ -7,6 +7,8 @@ import {
   countByStatus,
   sitemap,
   statusMeta,
+  conventions,
+  changelog,
   type PageStatus,
   type SitemapNode,
 } from "@/lib/sitemap";
@@ -28,7 +30,14 @@ const StatusPill = ({ status }: { status: PageStatus }) => (
 );
 
 const NodeRow = ({ node, depth = 0 }: { node: SitemapNode; depth?: number }) => {
-  const isInternal = node.path && !node.path.includes(":") && !node.path.includes("*") && !node.path.endsWith(".xml") && !node.path.endsWith(".txt");
+  // Open-link only for real, currently-mounted Vite routes (no locale prefix, no dynamic segs).
+  const isInternal =
+    node.path &&
+    !node.path.includes("[") &&
+    !node.path.includes(":") &&
+    !node.path.includes("*") &&
+    !node.path.endsWith(".xml") &&
+    !node.path.endsWith(".txt");
   return (
     <li>
       <div
@@ -157,28 +166,73 @@ const Sitemap = () => {
             <Library className="mb-3 h-5 w-5 text-primary" />
             <h3 className="text-base font-semibold text-foreground">Category template (PLP)</h3>
             <p className="mt-1 text-sm text-muted-foreground">
-              Drives <code>/category/:slug</code>, <code>/rooms/:slug</code>, <code>/new</code>,{" "}
-              <code>/best-sellers</code>, <code>/sale</code>. Hero banner, breadcrumb, facets,
-              SEO copy block. CMS picks: hero image, intro, banner CTA.
+              Drives <code>/[locale]/categories/[slug]</code>, <code>/[locale]/rooms/[slug]</code>,{" "}
+              <code>/[locale]/new</code>, <code>/[locale]/best-sellers</code>,{" "}
+              <code>/[locale]/sale</code>. Hero banner, breadcrumb, facets, SEO copy block. CMS
+              picks: hero image, intro, banner CTA.
             </p>
           </div>
           <div className="rounded-lg border border-border bg-card p-5">
             <Layers className="mb-3 h-5 w-5 text-primary" />
             <h3 className="text-base font-semibold text-foreground">Brand template</h3>
             <p className="mt-1 text-sm text-muted-foreground">
-              Drives <code>/brands/:slug</code>. Brand story + logo bar + featured collection +
-              full PLP. Designers can ship banner art for any new brand without code.
+              Drives <code>/[locale]/brands/[slug]</code>. Brand story + logo bar + featured
+              collection + full PLP. Designers can ship banner art for any new brand without code.
             </p>
           </div>
           <div className="rounded-lg border border-border bg-card p-5">
             <FileCode2 className="mb-3 h-5 w-5 text-primary" />
             <h3 className="text-base font-semibold text-foreground">Editorial template</h3>
             <p className="mt-1 text-sm text-muted-foreground">
-              Drives <code>/inspiration/:slug</code> and <code>/blog/:slug</code>. Rich text +
-              hero + shoppable hotspots + related products.
+              Drives <code>/[locale]/inspiration/[slug]</code> and{" "}
+              <code>/[locale]/blog/[slug]</code>. Rich text + hero + shoppable hotspots + related
+              products.
             </p>
           </div>
         </div>
+
+        {/* Conventions */}
+        <section className="mb-10 rounded-lg border border-primary/30 bg-primary/5 p-6">
+          <h2 className="text-lg font-bold text-foreground">Routing conventions (v2)</h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            These rules apply to every route in the tree below — read them first.
+          </p>
+          <ul className="mt-4 grid gap-3 text-sm text-muted-foreground md:grid-cols-2">
+            <li>
+              <strong className="text-foreground">Locale prefix.</strong> Every user-facing route is{" "}
+              <code>/[locale]/…</code> where <code>[locale]</code> ∈{" "}
+              <code>{conventions.locales.join(" · ")}</code>. Resolved by middleware (cookie →
+              Accept-Language → fallback). Omitted only for language-neutral system files.
+            </li>
+            <li>
+              <strong className="text-foreground">Dynamic segments.</strong> Next.js App Router
+              bracket syntax — <code>[slug]</code>, <code>[id]</code> — matching the file-system
+              routes and the XL HUB deck.
+            </li>
+            <li>
+              <strong className="text-foreground">Plural-nest.</strong> Every collection's detail
+              nests under its plural index: <code>/categories/[slug]</code>,{" "}
+              <code>/brands/[slug]</code>, <code>/rooms/[slug]</code>,{" "}
+              <code>/products/[slug]</code>. Fixes the old singular/plural split and aligns PDP
+              with <code>/api/products/[slug]</code>.
+            </li>
+            <li>
+              <strong className="text-foreground">Language-neutral roots.</strong>{" "}
+              <code>/sitemap.xml</code> and <code>/robots.txt</code> live at the domain root with
+              no locale prefix.
+            </li>
+          </ul>
+          <details className="mt-5 rounded-md border border-border bg-card p-4 text-sm">
+            <summary className="cursor-pointer font-semibold text-foreground">
+              Changes from v1
+            </summary>
+            <ul className="mt-3 list-disc space-y-1.5 pl-5 text-muted-foreground">
+              {changelog.map((c, i) => (
+                <li key={i} dangerouslySetInnerHTML={{ __html: c.replace(/`([^`]+)`/g, "<code>$1</code>") }} />
+              ))}
+            </ul>
+          </details>
+        </section>
 
         {/* Sections */}
         <div className="space-y-10">
