@@ -28,26 +28,102 @@ export type SitemapSection = {
 };
 
 /**
- * v2 conventions (locale-normalized):
+ * v3.1 conventions (locale-normalized + locked decisions):
  *  - All user-facing routes are prefixed `/[locale]/…` where
  *    [locale] ∈ { nl, fr, en, de, it, es }. Resolved by middleware
- *    (cookie → Accept-Language → fallback).
+ *    (cookie `NEXT_LOCALE` → Accept-Language → DEFAULT_LOCALE).
+ *  - DEFAULT_LOCALE = nl. Root `/` → 307 to resolved locale, NOT indexed.
+ *  - `x-default` hreflang → `/nl/` until a neutral locale switcher exists.
  *  - Language-neutral system files (`/sitemap.xml`, `/robots.txt`)
  *    live at the domain root, no locale prefix.
  *  - Dynamic segments use Next.js bracket syntax (`[slug]`, `[id]`).
  *  - Plural-nest: every collection's detail nests under its plural
  *    index — `/categories/[slug]`, `/brands/[slug]`, `/rooms/[slug]`,
- *    `/products/[slug]`.
+ *    `/collections/[slug]`, `/products/[slug]`.
+ *  - Per-locale slugs (D2): CMS authors a slug per locale per record;
+ *    resolver maps (locale, localizedSlug) → id; hreflang pairs the
+ *    localized URLs. Slug change emits a 301 from the old localized slug.
+ *  - Faceted-PLP policy (D4): clean PLP is canonical & indexable;
+ *    `?filter/?sort` variants → canonical to clean PLP + noindex,follow.
+ *    Pagination `?page=N` keeps self-canonicals and stays indexable.
+ *  - Template governance (D5): Category = taxonomy (PIM), Collection =
+ *    curated merchandising (Payload), Room = spatial intent. One
+ *    indexable page per search intent; would-be duplicates become a
+ *    filter/collection, never a new page.
  */
 export const conventions = {
   locales: ["nl", "fr", "en", "de", "it", "es"] as const,
+  defaultLocale: "nl" as const,
   localePrefix: "/[locale]",
   dynamicSegmentSyntax: "[slug] / [id]" as const,
   pluralNest: true,
+  rootRedirect: "307 → DEFAULT_LOCALE (cookie → Accept-Language → nl), not indexed",
+  xDefault: "/nl/",
+  localizedSlugs: true,
+  facetedPLP: "clean PLP canonical+indexable; ?filter/?sort → canonical to clean + noindex,follow",
 };
 
+/**
+ * Decisions log — v3.1 (each item closes an open question from v2).
+ */
+export type Decision = {
+  id: string;
+  topic: string;
+  status: "decided" | "open-deferred";
+  summary: string;
+};
+
+export const decisions: Decision[] = [
+  {
+    id: "D1",
+    topic: "Payment provider",
+    status: "decided",
+    summary:
+      "Stripe, integrated *through Odoo*. Odoo owns payment.transaction and is the payment authority. FE never calls Stripe directly for state — creates payment via Odoo and polls Odoo order/payment status. 3DS/SCA via Stripe-via-Odoo. GATING: a Stripe-via-Odoo POC must validate the full round-trip (create-payment → payment.transaction → Stripe redirect + 3DS → webhook → status poll → SO confirmed) in staging before P0 build is committed.",
+  },
+  {
+    id: "D2",
+    topic: "Localized slugs",
+    status: "decided",
+    summary:
+      "Per-locale slugs, authored in the CMS (e.g. /nl/products/tafellamp-x vs /fr/products/lampe-de-table-x). Requires slug-per-locale map + hreflang pairing of the localized URLs. Changed slug → 301 from old localized slug.",
+  },
+  {
+    id: "D3",
+    topic: "Search backend",
+    status: "open-deferred",
+    summary:
+      "Engine choice (Typesense / Meilisearch / Algolia) deferred. Minimum buildable behavior: keyword/prefix match over Postgres-synced PIM (name, SKU, category, brand) + header typeahead + product/category/brand suggestions + no-results recovery. Pricing from Odoo pricelists. NOT yet: relevance tuning, synonyms, typo-tolerance, faceted ranking. Revisit before catalog scale.",
+  },
+  {
+    id: "D4",
+    topic: "Faceted-PLP URL policy",
+    status: "decided",
+    summary:
+      "Clean PLP is canonical and indexable. Filtered/sorted variants (?color=&sort=) carry <link rel=canonical> → clean PLP and noindex,follow. Pagination (?page=N) keeps self-canonicals.",
+  },
+  {
+    id: "D5",
+    topic: "Template governance",
+    status: "decided",
+    summary:
+      "Category vs Collection vs Room intent locked. Category = catalog taxonomy (PIM + Odoo). Collection = curated merchandising (Payload selection over PIM/Odoo products), can be temporary. Room = spatial/use-case intent. One primary indexable page per search intent; new top-level listing requires editorial sign-off.",
+  },
+];
+
 export const changelog = [
-  "Added `/[locale]` prefix to every user-facing route; kept `/sitemap.xml` & `/robots.txt` language-neutral at root.",
+  "v3.1 — Added Decisions log (D1–D5) and Build priority (P0–P3) to the doc.",
+  "v3.1 — Locked DEFAULT_LOCALE=nl; root `/` → 307 to resolved locale, not indexed; x-default → /nl/.",
+  "v3.1 — Faceted PLP policy: clean PLP canonical+indexable; `?filter/?sort` → canonical to clean + noindex,follow.",
+  "v3.1 — Added `/[locale]/collections` + `/collections/[slug]` template (Payload-curated, distinct from Category and Room).",
+  "v3.1 — Checkout substates: `/checkout/shipping`, `/checkout/payment`, `/checkout/pending`, `/checkout/failed`; retry-pay at `/account/orders/[id]/pay`.",
+  "v3.1 — Account: added `/account/orders/[id]/tracking`, `/account/orders/[id]/return`, `/account/invoices`, `/account/invoices/[id]`, `/account/delete-account`.",
+  "v3.1 — Pro: added `/pro/apply`, `/pro/bulk-order`, `/pro/spec-sheets`, `/pro/faq`.",
+  "v3.1 — Legal: added `/right-of-withdrawal`, `/shipping-policy`, `/accessibility`; renamed info page to `/payment-options` (301 from old `/payment-methods`); account feature stays `/account/payment-methods` (no clash).",
+  "v3.1 — System split: `/api/health` (public liveness, no dep detail) vs `/api/internal/health` (protected deep check). Added `/maintenance`, `/500`, `/api/preview/*`.",
+  "v3.1 — Localized slugs (D2): per-locale slug authored in CMS; hreflang pairs the localized URLs.",
+  "v3.1 — Search (D3) deferred; minimum behavior documented (Postgres-synced PIM keyword).",
+  "v2 — Added `/[locale]` prefix to every user-facing route; kept `/sitemap.xml` & `/robots.txt` language-neutral at root.",
   "`/category/[slug]` → `/categories/[slug]` (plural-nest convention).",
   "`/product/[slug]` → `/products/[slug]` to match `/api/products/[slug]`.",
   "`/order-confirmation` → `/checkout/return` (XL HUB redirect + polling). Pending Stripe-vs-Mollie decision.",
@@ -58,6 +134,132 @@ export const changelog = [
   "Reworded XML-sitemap note: dynamic slug enumeration + per-locale hreflang required.",
 ];
 
+/**
+ * Build priority — P0 happy-path MVP, then P1 launch surface, then growth/scale.
+ */
+export type Priority = {
+  id: "P0" | "P1" | "P2" | "P3";
+  title: string;
+  description: string;
+  items: string[];
+  prework?: string[];
+};
+
+export const priorities: Priority[] = [
+  {
+    id: "P0",
+    title: "Happy-path MVP — one customer buys one product, one locale",
+    description:
+      "Gated on the D1 Stripe-via-Odoo POC. Build and harden this surface before anything else.",
+    prework: [
+      "D1 Stripe-via-Odoo POC: create-payment → payment.transaction → Stripe redirect + 3DS → webhook → status poll → SO confirmed, end-to-end in staging.",
+      "Cart-merge + pricelist-recompute spike: Redis anon cart → Odoo draft on login, with price-shift banner.",
+    ],
+    items: [
+      "Root locale redirect (307) + `/[locale]` home",
+      "`/[locale]/categories/[slug]` (PLP) + `/[locale]/products/[slug]` (PDP)",
+      "`/[locale]/cart` + `/[locale]/checkout`",
+      "`/[locale]/checkout/return` + `/checkout/pending` + `/checkout/failed`",
+      "`/[locale]/order-confirmation`",
+      "`/[locale]/login` + `/login/otp`",
+      "`/[locale]/terms` + `/privacy` + `/cookies` + cookie-consent CMP banner",
+      "`/robots.txt` + `/sitemap.xml` + public `/api/health` liveness",
+      "API: auth/otp/*, cart/*, checkout/* (create-payment + status poll), webhooks/odoo + /stripe",
+    ],
+  },
+  {
+    id: "P1",
+    title: "Complete the launch surface",
+    description:
+      "Returns are promoted to P1 because EU 14-day right of withdrawal requires a return path at launch.",
+    items: [
+      "`/[locale]/categories`, `/brands`, `/brands/[slug]`, `/search` (D3 minimum behavior)",
+      "`/[locale]/signup/particulier`, `/signup/b2b`",
+      "`/[locale]/account`, `/account/orders`, `/account/orders/[id]`, `/account/addresses`, `/account/invoices`",
+      "`/[locale]/contact`, `/delivery`, `/returns`, `/warranty`, `/track-order`",
+      "Returns at launch: `/account/returns` (Odoo portal deep-link), `/account/orders/[id]/return` (handoff), `/right-of-withdrawal`",
+      "`/[locale]/payment-options`, `/shipping-policy`, `/imprint`",
+      "`/[locale]/orders/[id]` guest lookup (HMAC), `/[locale]/maintenance`",
+      "Protected `/api/internal/health` for monitoring",
+      "Newsletter double-opt-in + consent-gated analytics layer",
+    ],
+  },
+  {
+    id: "P2",
+    title: "Commercial growth",
+    description: "Editorial, discovery, B2B funnel basics.",
+    items: [
+      "`/[locale]/rooms` (+[slug] + 9 room pages), `/collections` (+[slug])",
+      "`/[locale]/inspiration` (+[slug]), `/new`, `/best-sellers`, `/wishlist`",
+      "`/[locale]/guides/*`, `/blog` (+[slug])",
+      "`/[locale]/pro`, `/pro/apply`, `/pro/quote`",
+      "`/[locale]/account/preferences`, `/account/orders/[id]/tracking`",
+    ],
+  },
+  {
+    id: "P3",
+    title: "B2B, retention, scale",
+    description: "Long-tail features and the search engine decision.",
+    items: [
+      "`/[locale]/compare`, `/gift-cards`",
+      "`/[locale]/pro/projects`, `/pro/bulk-order`, `/pro/spec-sheets`, `/pro/faq`",
+      "`/[locale]/account/delete-account`, `/account/orders/[id]/pay`",
+      "Own RMA UI (replaces P1 Odoo portal handoff)",
+      "`/[locale]/accessibility`",
+      "Search engine decision + implementation (D3)",
+      "Reviews, back-in-stock alerts, price-drop alerts, loyalty/referral",
+    ],
+  },
+];
+
+/**
+ * Cross-cutting concerns — components/flows, not single pages, but launch-relevant.
+ */
+export const crossCutting = [
+  {
+    id: "cmp",
+    title: "Cookie consent / CMP",
+    severity: "launch-blocker",
+    body:
+      "Banner gates non-essential cookies BEFORE they fire. Categories: essential / analytics / marketing — granular accept/reject. Persistent 'cookie settings' entry, re-prompt on policy change. Analytics and marketing pixels only load post-consent. BE/EU requirement.",
+  },
+  {
+    id: "analytics",
+    title: "Analytics / event layer (consent-gated)",
+    severity: "launch",
+    body:
+      "Single event taxonomy: view_item, add_to_cart, begin_checkout, purchase, … Fires only after consent. Server-side `purchase` reads the Odoo-confirmed order, not optimistic client state — avoids over-counting on retries / polling.",
+  },
+  {
+    id: "newsletter",
+    title: "Newsletter — double opt-in",
+    severity: "launch",
+    body:
+      "POST /api/newsletter/subscribe creates a pending subscription + confirmation mail. GET /api/newsletter/confirm?token=… activates. Required for compliant EU marketing consent; tie the flag to res.partner / preferences.",
+  },
+  {
+    id: "pool",
+    title: "Postgres connection pooling",
+    severity: "infra",
+    body:
+      "PgBouncer sidecar + a connection budget. Next.js serverless + price-sync cron + Payload + Odoo RPC all hit Postgres — guard against exhaustion and concurrent-write contention.",
+  },
+  {
+    id: "health",
+    title: "Health endpoint split",
+    severity: "infra",
+    body:
+      "Public `/api/health` returns liveness only (is the app up?) with NO dependency detail — exposing Odoo/Stripe/DB health publicly is an information leak. Deep dependency checks live behind protected `/api/internal/health` for uptime monitoring.",
+  },
+  {
+    id: "guest-boundaries",
+    title: "Guest order-lookup boundaries",
+    severity: "security",
+    body:
+      "Single-order HMAC token (?token=…, 1-year TTL, multi-use). Visible: this order only (status, lines, totals, tracking, address on the order). NOT visible: any other order, account data, saved cards, PII beyond this order. No mutations from the token alone — sensitive actions (start a return, change address) require OTP step-up to elevate guest → authenticated. Token scope = exactly one orderId (no enumeration). Rate-limit lookups per token/IP. Odoo record rule still enforces ownership server-side.",
+  },
+];
+
 export const sitemap: SitemapSection[] = [
   {
     id: "shop",
@@ -65,7 +267,7 @@ export const sitemap: SitemapSection[] = [
     description:
       "The commercial heart of the site. Every category, brand, room and curated edit lives here and reuses the same listing template so CMS-driven additions need zero new dev.",
     nodes: [
-      { label: "Home", path: "/[locale]/", status: "done" },
+      { label: "Home", path: "/[locale]/", status: "done", note: "Hybrid: Payload homepage blocks/hero + PIM/Odoo featured product modules." },
       {
         label: "Categories",
         path: "/[locale]/categories",
@@ -76,7 +278,7 @@ export const sitemap: SitemapSection[] = [
             path: "/[locale]/categories/[slug]",
             status: "cms",
             note:
-              "Shared CategoryTemplate — facets, breadcrumb, hero banner, SEO copy. Any new CMS category fits this shell.",
+              "D5 Category = catalog taxonomy. Owners: Payload (hero/SEO copy) + PIM (taxonomy/products/slugs) + Odoo (price/stock). D4 faceted-PLP policy applies: clean PLP canonical+indexable; ?filter/?sort → canonical + noindex,follow.",
           },
         ],
       },
@@ -95,12 +297,26 @@ export const sitemap: SitemapSection[] = [
         ],
       },
       {
+        label: "Collections",
+        path: "/[locale]/collections",
+        status: "planned",
+        note: "NEW in v3.1. D5 Collection = curated merchandising edit (Payload selection over PIM/Odoo products). Distinct from Category (taxonomy) and Room (spatial).",
+        children: [
+          {
+            label: "Collection template",
+            path: "/[locale]/collections/[slug]",
+            status: "cms",
+            note: "Payload manual or rule-based selection. Can be temporary (campaigns/themes). Reuses CategoryTemplate.",
+          },
+        ],
+      },
+      {
         label: "Shop by room",
         path: "/[locale]/rooms",
         status: "skeleton",
         note: "Top e-commerce best practice — convert browsers who think in spaces, not categories.",
         children: [
-          { label: "Room template", path: "/[locale]/rooms/[slug]", status: "cms", note: "Reuses CategoryTemplate." },
+          { label: "Room template", path: "/[locale]/rooms/[slug]", status: "cms", note: "D5 Room = spatial/use-case intent. Reuses CategoryTemplate over a room-scoped product set." },
           { label: "Living room", path: "/[locale]/rooms/living-room", status: "cms" },
           { label: "Dining room", path: "/[locale]/rooms/dining-room", status: "cms" },
           { label: "Kitchen", path: "/[locale]/rooms/kitchen", status: "cms" },
@@ -130,25 +346,30 @@ export const sitemap: SitemapSection[] = [
         label: "Search results",
         path: "/[locale]/search",
         status: "done",
-        note: "Typeahead lives in Header; this is the full results page.",
+        note: "D3 minimum: keyword/prefix match over Postgres-synced PIM (name, SKU, category, brand). Typeahead in Header → product + category/brand suggestions. No-results recovery. Engine choice (Typesense/Meilisearch/Algolia) deferred.",
       },
     ],
   },
   {
     id: "product",
     title: "Product & purchase flow",
-    description: "The buying funnel — already built and battle-tested.",
+    description: "The buying funnel. Must support success, failure, pending and retry states — payment is Stripe-via-Odoo (D1), FE polls Odoo for state.",
     nodes: [
       { label: "Product detail (PDP)", path: "/[locale]/products/[slug]", status: "done", note: "Renamed from `/product/[slug]` — now matches the `/api/products/[slug]` endpoint." },
       { label: "Cart", path: "/[locale]/cart", status: "done" },
       { label: "Checkout", path: "/[locale]/checkout", status: "done" },
+      { label: "Checkout — shipping step", path: "/[locale]/checkout/shipping", status: "planned", note: "Validate address, Odoo carrier calc." },
+      { label: "Checkout — payment step", path: "/[locale]/checkout/payment", status: "planned", note: "Stripe-via-Odoo (D1). 3DS handled by Stripe via Odoo." },
       {
-        label: "Checkout return / confirmation",
+        label: "Checkout — return (Stripe handoff)",
         path: "/[locale]/checkout/return",
-        status: "done",
+        status: "planned",
         note:
-          "Replaces `/order-confirmation`. XL HUB redirect `/[locale]/checkout/return?orderId=…` with payment-status polling. DECISION NEEDED: Stripe (client-secret confirm + poll) vs Mollie (redirect + webhook) — finalize provider before locking. May redirect to a clean `/[locale]/order-confirmation` on success.",
+          "Stripe return target. Polls Odoo via /api/checkout/status/[orderId] → routes to success / pending / failed. D1 decided: Stripe-via-Odoo.",
       },
+      { label: "Checkout — pending", path: "/[locale]/checkout/pending", status: "planned", note: "Webhook still processing; keep polling; safe fallback page." },
+      { label: "Checkout — failed", path: "/[locale]/checkout/failed", status: "planned", note: "Retry CTA → /account/orders/[id]/pay; back-to-cart link; Odoo quotation stays alive." },
+      { label: "Order confirmation", path: "/[locale]/order-confirmation", status: "done", note: "Order #, payment status, delivery, guest→account claim, track CTA, recommendations." },
       {
         label: "Wishlist",
         path: "/[locale]/wishlist",
@@ -176,10 +397,16 @@ export const sitemap: SitemapSection[] = [
       { label: "Account overview", path: "/[locale]/account", status: "skeleton" },
       { label: "Orders", path: "/[locale]/account/orders", status: "skeleton" },
       { label: "Order detail", path: "/[locale]/account/orders/[id]", status: "planned" },
+      { label: "Order tracking", path: "/[locale]/account/orders/[id]/tracking", status: "planned", note: "Owns → Odoo picking/carrier/tracking." },
+      { label: "Retry payment", path: "/[locale]/account/orders/[id]/pay", status: "planned", note: "Revalidate stock/price; create new Odoo payment.transaction; back into checkout/return polling." },
+      { label: "Return request (order)", path: "/[locale]/account/orders/[id]/return", status: "planned", note: "MVP: Odoo portal handoff. Own RMA UI is P3." },
+      { label: "Invoices", path: "/[locale]/account/invoices", status: "planned", note: "Owns → Odoo account.move list." },
+      { label: "Invoice detail", path: "/[locale]/account/invoices/[id]", status: "planned" },
       { label: "Addresses", path: "/[locale]/account/addresses", status: "skeleton" },
-      { label: "Payment methods", path: "/[locale]/account/payment-methods", status: "planned", note: "Depends on saved cards — XL HUB v3 marks out-of-scope. Gated on that decision." },
+      { label: "Payment methods (account feature)", path: "/[locale]/account/payment-methods", status: "planned", note: "Saved Stripe-in-Odoo cards + B2B terms display. NOT to be confused with the public info page `/payment-options`." },
       { label: "Returns (link to Odoo portal)", path: "/[locale]/account/returns", status: "skeleton", note: "MVP: deep-link to Odoo portal. Own RMA UI is follow-up." },
-      { label: "Preferences", path: "/[locale]/account/preferences", status: "planned" },
+      { label: "Preferences", path: "/[locale]/account/preferences", status: "planned", note: "Email prefs, language, marketing consent, comms." },
+      { label: "Delete account", path: "/[locale]/account/delete-account", status: "planned", note: "GDPR. Step-up OTP required. Explain retained legal data." },
       { label: "Guest order lookup", path: "/[locale]/orders/[id]", status: "planned", note: "Public, HMAC-token in query (?token=…), 1y TTL. No login required. `/track-order` resolves into this route." },
     ],
   },
@@ -207,8 +434,12 @@ export const sitemap: SitemapSection[] = [
       "Lighting designers, electricians, architects. Distinct funnel — bulk pricing, projects, quotes.",
     nodes: [
       { label: "Pro program", path: "/[locale]/pro", status: "skeleton", note: "Primary CTA → `/[locale]/signup/b2b`, connecting the trade funnel to the B2B auth path." },
+      { label: "Apply for trade account", path: "/[locale]/pro/apply", status: "planned" },
       { label: "Request a quote", path: "/[locale]/pro/quote", status: "planned" },
       { label: "Project orders", path: "/[locale]/pro/projects", status: "planned" },
+      { label: "Bulk order upload", path: "/[locale]/pro/bulk-order", status: "planned", note: "CSV/Excel SKU upload → quote or draft sale.order." },
+      { label: "Spec sheets", path: "/[locale]/pro/spec-sheets", status: "planned" },
+      { label: "Trade FAQ", path: "/[locale]/pro/faq", status: "planned" },
     ],
   },
   {
@@ -234,6 +465,10 @@ export const sitemap: SitemapSection[] = [
       { label: "Privacy policy", path: "/[locale]/privacy", status: "skeleton" },
       { label: "Cookie policy", path: "/[locale]/cookies", status: "skeleton" },
       { label: "Imprint", path: "/[locale]/imprint", status: "planned" },
+      { label: "Right of withdrawal", path: "/[locale]/right-of-withdrawal", status: "planned", note: "EU 14-day legal page. P1 launch surface." },
+      { label: "Payment options (info)", path: "/[locale]/payment-options", status: "planned", note: "Accepted methods + trust. RENAMED from `/payment-methods` (301 redirect from old path). Distinct from the account feature `/account/payment-methods`." },
+      { label: "Shipping policy", path: "/[locale]/shipping-policy", status: "planned" },
+      { label: "Accessibility", path: "/[locale]/accessibility", status: "planned" },
     ],
   },
   {
@@ -248,9 +483,14 @@ export const sitemap: SitemapSection[] = [
         path: "/sitemap.xml",
         status: "planned",
         note:
-          "Root-level, language-neutral. Not purely derivable from this tree: static routes come from the tree, but every dynamic `[slug]` (categories, brands, rooms, inspiration, blog, products) must be enumerated from Payload/PIM at build/request time. Each URL also needs hreflang alternates for all six locales (+ x-default).",
+          "Root-level, language-neutral. Static routes from this tree; every dynamic `[slug]` (categories, brands, rooms, collections, inspiration, blog, products) enumerated from Payload/PIM at build/request time. Each URL needs hreflang alternates using the LOCALIZED slugs (D2) + x-default → /nl/. Faceted-PLP variants (?filter/?sort) EXCLUDED (D4); clean PLP only.",
       },
       { label: "robots.txt", path: "/robots.txt", status: "done" },
+      { label: "Maintenance page", path: "/[locale]/maintenance", status: "planned" },
+      { label: "Server error (500)", path: "/[locale]/500", status: "planned" },
+      { label: "Health — public liveness", path: "/api/health", status: "planned", note: "Shallow 200/ok; NO dependency detail (don't leak infra)." },
+      { label: "Health — internal deep", path: "/api/internal/health", status: "planned", note: "Protected; checks Payload/Postgres/Odoo/Stripe; for monitoring only." },
+      { label: "Preview routes (Payload draft)", path: "/api/preview/*", status: "planned", note: "Protected." },
     ],
   },
 ];
