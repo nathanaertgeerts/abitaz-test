@@ -280,12 +280,12 @@ export const InspirationDetail = () => {
    ============================================================ */
 
 const plpToolbar = (count: number) => (
-  <div className="mt-8 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border bg-card px-4 py-3">
-    <button className="inline-flex items-center gap-2 rounded-md border border-input px-3 py-1.5 text-sm font-medium hover:bg-muted">
+  <div className="mt-8 flex flex-wrap items-center gap-3 rounded-lg border border-border bg-card px-4 py-3 sm:justify-between">
+    <button className="inline-flex shrink-0 items-center gap-2 rounded-md border border-input px-3 py-1.5 text-sm font-medium hover:bg-muted">
       <Filter className="h-4 w-4" /> Filters
     </button>
-    <span className="text-sm text-muted-foreground">{count} products</span>
-    <select className="input h-9 max-w-[200px] text-sm">
+    <span className="text-sm text-muted-foreground sm:order-none order-3 basis-full sm:basis-auto">{count} products</span>
+    <select className="input h-9 w-full max-w-none text-sm sm:ml-auto sm:w-auto sm:max-w-[220px]">
       <option>Sort: Newest</option>
       <option>Sort: Price low → high</option>
       <option>Sort: Price high → low</option>

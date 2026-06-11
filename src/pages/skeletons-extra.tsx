@@ -1002,10 +1002,10 @@ export const ProSpecSheets = () => (
   <Page crumbs={[{ label: "Pro", to: "/pro" }, { label: "Spec sheets" }]}>
     <PageHero eyebrow="Abitaz Pro" title="Spec sheets" description="Technical PDFs for every product we sell." />
     <Card className="mt-10">
-      <div className="grid gap-3 sm:grid-cols-[1fr_auto_auto]">
+      <div className="grid gap-3 sm:grid-cols-[1fr_auto_auto] sm:gap-3">
         <TextInput placeholder="Search by SKU, brand or product name…" />
-        <select className="input"><option>All brands</option><option>Louis Poulsen</option><option>Artemide</option><option>SLV</option></select>
-        <select className="input"><option>All categories</option><option>Pendants</option><option>Wall</option><option>Bulbs</option></select>
+        <select className="input sm:w-auto"><option>All brands</option><option>Louis Poulsen</option><option>Artemide</option><option>SLV</option></select>
+        <select className="input sm:w-auto"><option>All categories</option><option>Pendants</option><option>Wall</option><option>Bulbs</option></select>
       </div>
     </Card>
     <Card className="mt-6">
