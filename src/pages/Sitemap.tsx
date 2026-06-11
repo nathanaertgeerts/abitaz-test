@@ -12,6 +12,7 @@ import {
   decisions,
   priorities,
   crossCutting,
+  resolveInternalHref,
   type PageStatus,
   type SitemapNode,
 } from "@/lib/sitemap";
@@ -33,40 +34,46 @@ const StatusPill = ({ status }: { status: PageStatus }) => (
 );
 
 const NodeRow = ({ node, depth = 0 }: { node: SitemapNode; depth?: number }) => {
-  // Open-link only for real, currently-mounted Vite routes (no locale prefix, no dynamic segs).
-  const isInternal =
-    node.path &&
-    !node.path.includes("[") &&
-    !node.path.includes(":") &&
-    !node.path.includes("*") &&
-    !node.path.endsWith(".xml") &&
-    !node.path.endsWith(".txt");
+  // Resolve sitemap path → real Vite URL (strips /[locale], fills [slug]/[id]).
+  const href = resolveInternalHref(node.path);
+  const Row = (
+    <>
+      <ChevronRight className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+      <span className="font-medium text-foreground">{node.label}</span>
+      {node.path && (
+        <code className="break-all rounded bg-surface-muted px-1.5 py-0.5 font-mono text-[11px] text-muted-foreground sm:text-xs">
+          {node.path}
+        </code>
+      )}
+      <StatusPill status={node.status} />
+      {href && (
+        <span className="ml-auto inline-flex items-center gap-1 text-xs text-primary opacity-70 transition group-hover:opacity-100">
+          open <ExternalLink className="h-3 w-3" />
+        </span>
+      )}
+      {node.note && (
+        <p className="basis-full pl-6 text-xs text-muted-foreground">{node.note}</p>
+      )}
+    </>
+  );
   return (
     <li>
-      <div
-        className="group flex flex-wrap items-center gap-2 rounded-md px-2 py-1.5 hover:bg-surface"
-        style={{ paddingLeft: `${depth * 16 + 8}px` }}
-      >
-        <ChevronRight className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
-        <span className="font-medium text-foreground">{node.label}</span>
-        {node.path && (
-          <code className="rounded bg-surface-muted px-1.5 py-0.5 font-mono text-xs text-muted-foreground">
-            {node.path}
-          </code>
-        )}
-        <StatusPill status={node.status} />
-        {isInternal && (
-          <Link
-            to={node.path!}
-            className="inline-flex items-center gap-1 text-xs text-primary opacity-0 transition group-hover:opacity-100 hover:underline"
-          >
-            open <ExternalLink className="h-3 w-3" />
-          </Link>
-        )}
-        {node.note && (
-          <p className="basis-full pl-6 text-xs text-muted-foreground">{node.note}</p>
-        )}
-      </div>
+      {href ? (
+        <Link
+          to={href}
+          className="group flex flex-wrap items-center gap-2 rounded-md px-2 py-1.5 transition hover:bg-surface focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          style={{ paddingLeft: `${depth * 16 + 8}px` }}
+        >
+          {Row}
+        </Link>
+      ) : (
+        <div
+          className="group flex flex-wrap items-center gap-2 rounded-md px-2 py-1.5 hover:bg-surface"
+          style={{ paddingLeft: `${depth * 16 + 8}px` }}
+        >
+          {Row}
+        </div>
+      )}
       {node.children && (
         <ul className="border-l border-dashed border-border ml-3">
           {node.children.map((c, i) => (
