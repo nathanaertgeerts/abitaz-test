@@ -280,12 +280,12 @@ export const InspirationDetail = () => {
    ============================================================ */
 
 const plpToolbar = (count: number) => (
-  <div className="mt-8 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border bg-card px-4 py-3">
-    <button className="inline-flex items-center gap-2 rounded-md border border-input px-3 py-1.5 text-sm font-medium hover:bg-muted">
+  <div className="mt-8 flex flex-wrap items-center gap-3 rounded-lg border border-border bg-card px-4 py-3 sm:justify-between">
+    <button className="inline-flex shrink-0 items-center gap-2 rounded-md border border-input px-3 py-1.5 text-sm font-medium hover:bg-muted">
       <Filter className="h-4 w-4" /> Filters
     </button>
-    <span className="text-sm text-muted-foreground">{count} products</span>
-    <select className="input h-9 max-w-[200px] text-sm">
+    <span className="text-sm text-muted-foreground sm:order-none order-3 basis-full sm:basis-auto">{count} products</span>
+    <select className="input h-9 w-full max-w-none text-sm sm:ml-auto sm:w-auto sm:max-w-[220px]">
       <option>Sort: Newest</option>
       <option>Sort: Price low → high</option>
       <option>Sort: Price high → low</option>
@@ -549,25 +549,25 @@ export const AccountOverview = () => (
 export const AccountOrders = () => (
   <AccountLayout active="/account/orders" title="Orders" description="Every order you've placed with Abitaz.">
     <Card>
-      <div className="flex flex-wrap items-center gap-3">
-        <div className="relative flex-1 min-w-[200px]">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+        <div className="relative w-full flex-1 sm:min-w-[200px]">
           <SearchIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <input className="input pl-9" placeholder="Search by order #, product, SKU…" />
         </div>
-        <select className="input h-10 w-auto"><option>All statuses</option><option>Delivered</option><option>In transit</option><option>Returned</option></select>
+        <select className="input h-10 w-full sm:w-auto"><option>All statuses</option><option>Delivered</option><option>In transit</option><option>Returned</option></select>
       </div>
     </Card>
     <Card>
       <ul className="divide-y divide-border">
         {sampleOrders.map((o) => (
-          <li key={o.id} className="grid grid-cols-2 gap-3 py-4 md:grid-cols-[1.2fr_1fr_1fr_auto] md:items-center">
-            <div>
+          <li key={o.id} className="flex flex-wrap items-center gap-3 py-4 md:grid md:grid-cols-[1.2fr_1fr_1fr_auto] md:items-center md:gap-4">
+            <div className="min-w-0 flex-1 md:flex-none">
               <Link to={`/account/orders/${o.id}`} className="font-semibold hover:text-primary">{o.id}</Link>
               <p className="text-xs text-muted-foreground">{o.date}</p>
             </div>
-            <div className="text-sm text-muted-foreground">{o.items} item{o.items > 1 ? "s" : ""}</div>
-            <div><StatusPill tone={o.state}>{o.status}</StatusPill></div>
-            <div className="flex items-center justify-end gap-2">
+            <div className="text-sm text-muted-foreground md:order-none order-3 basis-full md:basis-auto">{o.items} item{o.items > 1 ? "s" : ""}</div>
+            <div className="order-2 md:order-none"><StatusPill tone={o.state}>{o.status}</StatusPill></div>
+            <div className="ml-auto flex items-center justify-end gap-2 md:ml-0">
               <span className="font-display font-bold tabular-nums">€{o.total.toFixed(2)}</span>
               <Btn to={`/account/orders/${o.id}`} variant="outline" size="sm">View</Btn>
             </div>
@@ -651,7 +651,7 @@ export const Help = () => (
         </div>
       </div>
     </section>
-    <div className="mt-10 grid gap-3 sm:grid-cols-3 lg:grid-cols-6">
+    <div className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
       {helpTopics.map((t) => {
         const Icon = t.icon;
         return (
