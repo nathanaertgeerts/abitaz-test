@@ -8,6 +8,10 @@ import {
   Server,
   ShieldCheck,
   UserCog,
+  AlertTriangle,
+  Cookie,
+  Activity,
+  Mail,
 } from "lucide-react";
 
 const Block = ({
@@ -42,7 +46,7 @@ export const OdooArchitecture = () => {
     <section className="mt-12 rounded-lg border border-border bg-surface p-6">
       <div className="mb-6 max-w-3xl">
         <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-primary">
-          Backend architecture · Odoo + PIM + Stripe · v3
+          Backend architecture · Odoo + PIM + Stripe · v3.1
         </p>
         <h2 className="text-2xl font-bold tracking-tight text-foreground">
           OTP-only auth · Cart as Odoo draft · B2B pricelists via 15-min sync
@@ -57,8 +61,26 @@ export const OdooArchitecture = () => {
           us auto reconciliation in the accounting module.
         </p>
         <p className="mt-2 text-xs text-muted-foreground">
-          Source: <em>IPD · Customer auth, cart &amp; pricelists v3</em> · ADR 0005 (Accepted).
+          Source: <em>IPD · Customer auth, cart &amp; pricelists v3.1</em> · ADR 0005 (Accepted) ·
+          Decisions log D1–D5 in <code>src/lib/sitemap.ts</code>.
         </p>
+      </div>
+
+      {/* D1 POC banner — the single biggest unknown */}
+      <div className="mb-6 flex items-start gap-3 rounded-md border border-cta/40 bg-cta/5 p-4">
+        <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-cta" />
+        <div className="text-sm">
+          <p className="font-semibold text-foreground">
+            P0 gating prework — Stripe-via-Odoo POC (D1)
+          </p>
+          <p className="mt-1 text-muted-foreground">
+            Validate the full round-trip in staging <strong className="text-foreground">before</strong>{" "}
+            committing the P0 build: <code>create-payment</code> → Odoo{" "}
+            <code>payment.transaction</code> → Stripe redirect + 3DS → webhook → status poll →{" "}
+            <code>sale.order</code> confirmed. This is the biggest single unknown — de-risk it first.
+            The frontend stays provider-agnostic: it never calls Stripe for state, only polls Odoo.
+          </p>
+        </div>
       </div>
 
       {/* Topology */}
@@ -306,6 +328,91 @@ export const OdooArchitecture = () => {
             with <code>@@unique([tenantId, sku, pricelistCode])</code>.
           </p>
         </Block>
+
+        <Block icon={Cookie} title="Cookie consent / CMP (launch blocker · BE/EU)">
+          <p>
+            Banner gates <strong className="text-foreground">non-essential cookies before they fire</strong>.
+            Categories: essential / analytics / marketing — granular accept/reject. Persistent
+            "cookie settings" entry, links to <code>/[locale]/cookies</code>. Consent stored and
+            respected server- and client-side; re-prompt on policy change.
+          </p>
+          <p className="text-xs">
+            Analytics (next block) and any pixels sit behind this gate. Nothing tracking-related
+            loads pre-consent.
+          </p>
+        </Block>
+
+        <Block icon={Activity} title="Analytics / event layer (consent-gated)">
+          <p>
+            Single event taxonomy — <code>view_item</code>, <code>add_to_cart</code>,{" "}
+            <code>begin_checkout</code>, <code>purchase</code>, etc. Fires <strong className="text-foreground">only</strong>{" "}
+            after consent.
+          </p>
+          <p>
+            Server-side <code>purchase</code> reads the Odoo-confirmed order, not optimistic
+            client state — avoids over-counting on retries / polling. Source of truth is Odoo, not
+            the browser.
+          </p>
+        </Block>
+
+        <Block icon={Mail} title="Newsletter — double opt-in">
+          <p>
+            <code>POST /api/newsletter/subscribe</code> creates a <strong className="text-foreground">pending</strong>{" "}
+            subscription + confirmation mail.{" "}
+            <code>GET /api/newsletter/confirm?token=…</code> activates and ties the flag to{" "}
+            <code>res.partner</code> / preferences.
+          </p>
+          <p className="text-xs">
+            Double opt-in is required for compliant EU marketing consent. Entry points: footer,
+            account preferences, post-purchase (all consent-gated).
+          </p>
+        </Block>
+
+        <Block icon={ShieldCheck} title="Guest order-lookup boundaries">
+          <p>
+            Token = single-order HMAC, 1-year TTL, multi-use within TTL.
+          </p>
+          <ul className="list-disc space-y-1 pl-4 text-xs">
+            <li>
+              <strong className="text-foreground">VISIBLE</strong> (read-only): this order's #/status,
+              lines, totals, tracking, address as captured on the order.
+            </li>
+            <li>
+              <strong className="text-foreground">NOT visible</strong>: any other order, saved cards,
+              PII beyond this order, account preferences/address book/invoices list.
+            </li>
+            <li>
+              <strong className="text-foreground">No mutations</strong> from token alone — sensitive
+              actions (start return, change address) require <strong>OTP step-up</strong> to elevate
+              guest → authenticated.
+            </li>
+            <li>
+              Token scope = exactly one orderId (no enumeration to neighbours). Rate-limit per
+              token/IP. Odoo record rule still enforces ownership server-side.
+            </li>
+          </ul>
+        </Block>
+
+        <Block icon={Server} title="Health endpoints — public vs internal">
+          <p>
+            <code>GET /api/health</code> — <strong className="text-foreground">public liveness only</strong>,
+            shallow 200/ok. No dependency detail. Exposing Odoo/Stripe/Postgres health publicly
+            is an information leak.
+          </p>
+          <p>
+            <code>GET /api/internal/health</code> — protected deep check of Payload, Postgres,
+            Odoo, Stripe. For uptime monitoring only.
+          </p>
+        </Block>
+
+        <Block icon={Database} title="Postgres connection pooling">
+          <p>
+            <strong className="text-foreground">PgBouncer sidecar + a connection budget.</strong>{" "}
+            Next.js serverless route handlers + the price-sync cron + Payload + Odoo RPC all hit
+            Postgres — guard against connection exhaustion and concurrent-write contention before
+            traffic scales.
+          </p>
+        </Block>
       </div>
 
       {/* Checkout sequence */}
@@ -341,9 +448,13 @@ export const OdooArchitecture = () => {
       {/* Build order */}
       <div className="mt-8 rounded-md border border-border bg-card p-5">
         <h3 className="text-sm font-semibold uppercase tracking-wide text-foreground">
-          Implementation order (per v3 IPD)
+          Implementation order (per v3.1 IPD · see also Build priority P0–P3 below)
         </h3>
         <ol className="mt-3 list-decimal space-y-1.5 pl-5 text-sm text-muted-foreground">
+          <li>
+            <strong className="text-foreground">P0 prework — Stripe-via-Odoo POC (D1)</strong>: end-to-end
+            staging round-trip before committing the P0 build. Single biggest unknown.
+          </li>
           <li>
             <strong className="text-foreground">Jef (Odoo):</strong> create "B2B Pending"
             pricelist + admin-filter per tenant; extend <code>xl_otp</code> verify response
