@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { Check, ChevronRight, Copy, ExternalLink, FileCode2, Layers, Library } from "lucide-react";
+import { Check, ChevronRight, Copy, ExternalLink, FileCode2, Layers, Library, AlertTriangle, Flag, Sparkles } from "lucide-react";
 import { SiteLayout } from "@/components/layout/SiteLayout";
 import { OdooArchitecture } from "@/components/sitemap/OdooArchitecture";
 import {
@@ -9,6 +9,9 @@ import {
   statusMeta,
   conventions,
   changelog,
+  decisions,
+  priorities,
+  crossCutting,
   type PageStatus,
   type SitemapNode,
 } from "@/lib/sitemap";
@@ -193,7 +196,7 @@ const Sitemap = () => {
 
         {/* Conventions */}
         <section className="mb-10 rounded-lg border border-primary/30 bg-primary/5 p-6">
-          <h2 className="text-lg font-bold text-foreground">Routing conventions (v2)</h2>
+          <h2 className="text-lg font-bold text-foreground">Routing conventions (v3.1)</h2>
           <p className="mt-1 text-sm text-muted-foreground">
             These rules apply to every route in the tree below — read them first.
           </p>
@@ -201,20 +204,35 @@ const Sitemap = () => {
             <li>
               <strong className="text-foreground">Locale prefix.</strong> Every user-facing route is{" "}
               <code>/[locale]/…</code> where <code>[locale]</code> ∈{" "}
-              <code>{conventions.locales.join(" · ")}</code>. Resolved by middleware (cookie →
-              Accept-Language → fallback). Omitted only for language-neutral system files.
+              <code>{conventions.locales.join(" · ")}</code>. Resolved by middleware (cookie{" "}
+              <code>NEXT_LOCALE</code> → Accept-Language → <code>DEFAULT_LOCALE = {conventions.defaultLocale}</code>).
+              Root <code>/</code> → 307 to resolved locale, NOT indexed. <code>x-default</code> →{" "}
+              <code>{conventions.xDefault}</code>.
             </li>
             <li>
               <strong className="text-foreground">Dynamic segments.</strong> Next.js App Router
-              bracket syntax — <code>[slug]</code>, <code>[id]</code> — matching the file-system
-              routes and the XL HUB deck.
+              bracket syntax — <code>[slug]</code>, <code>[id]</code>. Slugs are{" "}
+              <strong className="text-foreground">per-locale</strong> (D2), authored in CMS.
+              Resolver maps <code>(locale, localizedSlug) → id</code>. Slug change → 301 from
+              the old localized slug.
             </li>
             <li>
               <strong className="text-foreground">Plural-nest.</strong> Every collection's detail
               nests under its plural index: <code>/categories/[slug]</code>,{" "}
               <code>/brands/[slug]</code>, <code>/rooms/[slug]</code>,{" "}
-              <code>/products/[slug]</code>. Fixes the old singular/plural split and aligns PDP
-              with <code>/api/products/[slug]</code>.
+              <code>/collections/[slug]</code>, <code>/products/[slug]</code>.
+            </li>
+            <li>
+              <strong className="text-foreground">Faceted PLP (D4).</strong> Clean PLP is canonical
+              and indexable. Filtered/sorted variants (<code>?color=&amp;sort=</code>) →{" "}
+              <code>&lt;link rel="canonical"&gt;</code> to clean PLP + <code>noindex,follow</code>.
+              Pagination <code>?page=N</code> keeps self-canonicals.
+            </li>
+            <li>
+              <strong className="text-foreground">Template governance (D5).</strong> Category =
+              catalog taxonomy (PIM). Collection = curated merchandising (Payload selection).
+              Room = spatial/use-case intent. One indexable page per search intent — would-be
+              duplicates become a filter or collection, never a new page.
             </li>
             <li>
               <strong className="text-foreground">Language-neutral roots.</strong>{" "}
@@ -224,7 +242,7 @@ const Sitemap = () => {
           </ul>
           <details className="mt-5 rounded-md border border-border bg-card p-4 text-sm">
             <summary className="cursor-pointer font-semibold text-foreground">
-              Changes from v1
+              Changelog (v3.1 ← v2 ← v1)
             </summary>
             <ul className="mt-3 list-disc space-y-1.5 pl-5 text-muted-foreground">
               {changelog.map((c, i) => (
@@ -232,6 +250,46 @@ const Sitemap = () => {
               ))}
             </ul>
           </details>
+        </section>
+
+        {/* Decisions log */}
+        <section className="mb-10 rounded-lg border border-border bg-card p-6">
+          <div className="mb-3 flex items-center gap-2">
+            <Flag className="h-5 w-5 text-primary" />
+            <h2 className="text-lg font-bold text-foreground">Decisions log (v3.1)</h2>
+          </div>
+          <p className="mb-4 text-sm text-muted-foreground">
+            The five questions that were open in v2. Each one is now closed (or explicitly
+            deferred) so implementation is unblocked.
+          </p>
+          <div className="grid gap-3 md:grid-cols-2">
+            {decisions.map((d) => (
+              <div
+                key={d.id}
+                className={`rounded-md border p-4 ${
+                  d.status === "decided"
+                    ? "border-success/40 bg-success/5"
+                    : "border-cta/40 bg-cta/5"
+                }`}
+              >
+                <div className="mb-2 flex items-center justify-between gap-2">
+                  <p className="font-mono text-xs font-bold text-muted-foreground">
+                    {d.id} · {d.topic}
+                  </p>
+                  <span
+                    className={`rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${
+                      d.status === "decided"
+                        ? "bg-success/15 text-success"
+                        : "bg-cta/15 text-cta"
+                    }`}
+                  >
+                    {d.status === "decided" ? "Decided" : "Open · deferred"}
+                  </span>
+                </div>
+                <p className="text-sm text-foreground">{d.summary}</p>
+              </div>
+            ))}
+          </div>
         </section>
 
         {/* Sections */}
@@ -255,6 +313,85 @@ const Sitemap = () => {
             </section>
           ))}
         </div>
+
+        {/* Cross-cutting */}
+        <section className="mt-12 rounded-lg border border-border bg-surface p-6">
+          <div className="mb-3 flex items-center gap-2">
+            <Sparkles className="h-5 w-5 text-primary" />
+            <h2 className="text-lg font-bold text-foreground">Cross-cutting concerns</h2>
+          </div>
+          <p className="mb-4 text-sm text-muted-foreground">
+            Components and flows, not individual pages — but launch-relevant.
+          </p>
+          <div className="grid gap-3 md:grid-cols-2">
+            {crossCutting.map((c) => (
+              <div key={c.id} className="rounded-md border border-border bg-card p-4">
+                <div className="mb-2 flex items-center justify-between gap-2">
+                  <h3 className="text-sm font-semibold text-foreground">{c.title}</h3>
+                  <span
+                    className={`rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${
+                      c.severity === "launch-blocker"
+                        ? "bg-destructive/15 text-destructive"
+                        : c.severity === "security"
+                          ? "bg-cta/15 text-cta"
+                          : "bg-primary/15 text-primary"
+                    }`}
+                  >
+                    {c.severity}
+                  </span>
+                </div>
+                <p className="text-sm text-muted-foreground">{c.body}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Build priority */}
+        <section className="mt-12 rounded-lg border border-primary/30 bg-primary/5 p-6">
+          <div className="mb-3 flex items-center gap-2">
+            <AlertTriangle className="h-5 w-5 text-primary" />
+            <h2 className="text-lg font-bold text-foreground">Build priority (P0 → P3)</h2>
+          </div>
+          <p className="mb-5 text-sm text-muted-foreground">
+            The order we propose to build in. P0 is the true happy-path MVP and is{" "}
+            <strong className="text-foreground">gated on the D1 Stripe-via-Odoo POC</strong>.
+          </p>
+          <div className="space-y-5">
+            {priorities.map((p) => (
+              <div key={p.id} className="rounded-md border border-border bg-card p-5">
+                <div className="mb-2 flex flex-wrap items-baseline gap-3">
+                  <span className="rounded bg-primary px-2 py-0.5 font-mono text-xs font-bold text-primary-foreground">
+                    {p.id}
+                  </span>
+                  <h3 className="text-base font-semibold text-foreground">{p.title}</h3>
+                </div>
+                <p className="mb-3 text-sm text-muted-foreground">{p.description}</p>
+                {p.prework && p.prework.length > 0 && (
+                  <div className="mb-3 rounded-md border border-cta/40 bg-cta/5 p-3">
+                    <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-cta">
+                      Blocking prework
+                    </p>
+                    <ul className="list-disc space-y-1 pl-5 text-sm text-foreground">
+                      {p.prework.map((pw, i) => (
+                        <li key={i}>{pw}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                <ul className="grid list-disc gap-1 pl-5 text-sm text-muted-foreground md:grid-cols-2">
+                  {p.items.map((it, i) => (
+                    <li
+                      key={i}
+                      dangerouslySetInnerHTML={{
+                        __html: it.replace(/`([^`]+)`/g, "<code>$1</code>"),
+                      }}
+                    />
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </section>
 
         {/* Hand-off notes */}
         <section className="mt-12 rounded-lg border border-border bg-surface p-6">
