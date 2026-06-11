@@ -121,17 +121,17 @@ export const CollectionDetail = () => {
 const checkoutStepper = (current: 1 | 2 | 3 | 4) => {
   const labels = ["Address", "Shipping", "Payment", "Confirm"];
   return (
-    <ol className="flex flex-wrap items-center gap-3 text-sm">
+    <ol className="flex items-center gap-2 overflow-x-auto text-sm sm:flex-wrap sm:gap-3">
       {labels.map((l, i) => {
         const n = i + 1;
         const done = n < current;
         const active = n === current;
         return (
-          <li key={l} className="flex items-center gap-3">
-            <span className={`grid h-7 w-7 place-items-center rounded-full text-xs font-bold ${done ? "bg-success text-success-foreground" : active ? "bg-primary text-primary-foreground" : "bg-surface text-muted-foreground"}`}>
+          <li key={l} className="flex shrink-0 items-center gap-2 sm:gap-3">
+            <span className={`grid h-7 w-7 shrink-0 place-items-center rounded-full text-xs font-bold ${done ? "bg-success text-success-foreground" : active ? "bg-primary text-primary-foreground" : "bg-surface text-muted-foreground"}`}>
               {done ? <Check className="h-4 w-4" /> : n}
             </span>
-            <span className={`font-medium ${active ? "text-foreground" : done ? "text-foreground/80" : "text-muted-foreground"}`}>{l}</span>
+            <span className={`whitespace-nowrap font-medium ${active ? "text-foreground inline" : done ? "text-foreground/80 hidden sm:inline" : "text-muted-foreground hidden sm:inline"}`}>{l}</span>
             {n < labels.length && <span className="hidden h-px w-8 bg-border sm:block" />}
           </li>
         );
@@ -347,8 +347,8 @@ export const Compare = () => {
           </thead>
           <tbody className="text-sm">
             {["Brand", "SKU", "Lamp type", "Dimensions", "In stock"].map((label, i) => (
-              <tr key={label} className={i % 2 ? "bg-surface" : ""}>
-                <td className="sticky left-0 bg-inherit p-3 font-semibold">{label}</td>
+              <tr key={label} className={i % 2 ? "bg-surface" : "bg-background"}>
+                <td className={`sticky left-0 p-3 font-semibold ${i % 2 ? "bg-surface" : "bg-background"}`}>{label}</td>
                 {picked.map((p) => (
                   <td key={p.slug} className="p-3">
                     {label === "Brand" ? p.brand : label === "SKU" ? p.sku : label === "Lamp type" ? (p.specs[0]?.value ?? "—") : label === "Dimensions" ? (p.specs.find((s) => /dimension/i.test(s.label))?.value ?? "—") : p.inStock ? <span className="text-success">In stock</span> : "—"}
@@ -378,7 +378,7 @@ export const LoginOtp = () => (
     >
       <div className="flex justify-between gap-2">
         {Array.from({ length: 6 }).map((_, i) => (
-          <input key={i} maxLength={1} inputMode="numeric" className="h-14 w-12 rounded-md border border-input bg-background text-center font-display text-2xl font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" />
+          <input key={i} maxLength={1} inputMode="numeric" className="h-12 w-full min-w-0 rounded-md border border-input bg-background text-center font-display text-xl font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:h-14 sm:text-2xl" />
         ))}
       </div>
       <Btn variant="cta" size="lg" className="w-full">Verify & sign in</Btn>
@@ -1081,7 +1081,7 @@ export const RightOfWithdrawal = () => (
 export const PaymentOptions = () => (
   <Page crumbs={[{ label: "Info" }, { label: "Payment options" }]}>
     <PageHero eyebrow="Payment" title="Pay the way that suits you" description="All transactions are secured by Stripe-via-Odoo with 3D Secure / SCA." />
-    <div className="mt-10 grid gap-3 sm:grid-cols-3 md:grid-cols-5">
+    <div className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5">
       {["Visa", "Mastercard", "Amex", "Bancontact", "iDEAL", "PayPal", "Apple Pay", "Google Pay", "Klarna", "Wire (B2B)"].map((m) => (
         <Card key={m} className="text-center"><Wallet className="mx-auto h-6 w-6 text-primary" /><p className="mt-2 text-sm font-semibold">{m}</p></Card>
       ))}
