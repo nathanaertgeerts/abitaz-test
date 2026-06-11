@@ -535,3 +535,151 @@ export const countByStatus = () => {
   sitemap.forEach((s) => walk(s.nodes));
   return counts;
 };
+
+/* ---------- Route resolution (sitemap path → real Vite URL) ---------- */
+
+/**
+ * Set of route *patterns* that are actually mounted in <App />.
+ * Patterns are written in the unprefixed, react-router-dom form
+ * (`:slug`, `:id`), without the `/[locale]` segment.
+ * Keep in sync with App.tsx.
+ */
+export const MOUNTED_ROUTES = new Set<string>([
+  "/",
+  "/categories",
+  "/category/:slug",
+  "/product/:slug",
+  "/sale",
+  "/search",
+  "/brands",
+  "/brands/:slug",
+  "/collections",
+  "/collections/:slug",
+  "/cart",
+  "/checkout",
+  "/checkout/shipping",
+  "/checkout/payment",
+  "/checkout/return",
+  "/checkout/pending",
+  "/checkout/failed",
+  "/order-confirmation",
+  "/orders/:id",
+  "/sitemap",
+  "/rooms",
+  "/rooms/:slug",
+  "/inspiration",
+  "/inspiration/:slug",
+  "/blog",
+  "/blog/:slug",
+  "/new",
+  "/best-sellers",
+  "/gift-cards",
+  "/wishlist",
+  "/compare",
+  "/login",
+  "/login/otp",
+  "/signup/particulier",
+  "/signup/b2b",
+  "/register",
+  "/forgot-password",
+  "/account",
+  "/account/orders",
+  "/account/orders/:id",
+  "/account/orders/:id/tracking",
+  "/account/orders/:id/pay",
+  "/account/orders/:id/return",
+  "/account/invoices",
+  "/account/invoices/:id",
+  "/account/addresses",
+  "/account/payment-methods",
+  "/account/returns",
+  "/account/preferences",
+  "/account/delete-account",
+  "/help",
+  "/faq",
+  "/contact",
+  "/delivery",
+  "/returns",
+  "/warranty",
+  "/track-order",
+  "/guides/size-spec",
+  "/guides/lighting-planner",
+  "/pro",
+  "/pro/apply",
+  "/pro/quote",
+  "/pro/projects",
+  "/pro/bulk-order",
+  "/pro/spec-sheets",
+  "/pro/faq",
+  "/about",
+  "/sustainability",
+  "/careers",
+  "/press",
+  "/stores",
+  "/terms",
+  "/privacy",
+  "/cookies",
+  "/imprint",
+  "/right-of-withdrawal",
+  "/payment-options",
+  "/shipping-policy",
+  "/accessibility",
+  "/maintenance",
+  "/500",
+]);
+
+/** Sample values used when a sitemap node has a dynamic segment. */
+const SAMPLE = {
+  slug: "louis-poulsen-ph5-mini-orange",
+  id: "demo-order",
+  brandSlug: "louis-poulsen",
+  categorySlug: "verlichting",
+  roomSlug: "living-room",
+  collectionSlug: "scandinavian-essentials",
+  inspirationSlug: "warm-minimalism",
+  blogSlug: "choosing-the-right-pendant",
+};
+
+/**
+ * Take a sitemap canonical path (e.g. `/[locale]/products/[slug]`)
+ * and return a real Vite URL the router can navigate to
+ * (e.g. `/product/louis-poulsen-ph5-mini-orange`), or null if no
+ * skeleton/page is mounted for that pattern yet.
+ */
+export const resolveInternalHref = (sitemapPath?: string): string | null => {
+  if (!sitemapPath) return null;
+  if (sitemapPath.startsWith("/api")) return null;
+  if (sitemapPath.endsWith(".xml") || sitemapPath.endsWith(".txt")) return null;
+  if (sitemapPath === "*") return null;
+
+  // 1) Strip the `/[locale]` prefix (router does not use locales yet).
+  let p = sitemapPath.replace(/^\/\[locale\]/, "");
+  if (p === "") p = "/";
+
+  // 2) Translate sitemap plural-nest → currently mounted Vite paths.
+  //    Keep this small + explicit so it's easy to audit.
+  const pluralToMounted: Record<string, string> = {
+    "/categories/[slug]": "/category/:slug",
+    "/products/[slug]": "/product/:slug",
+  };
+  if (pluralToMounted[p]) p = pluralToMounted[p];
+
+  // 3) Convert `[slug]`/`[id]` to react-router `:slug`/`:id` to look up the
+  //    mounted pattern, then build the concrete URL with SAMPLE values.
+  const pattern = p.replace(/\[(\w+)\]/g, ":$1");
+  if (!MOUNTED_ROUTES.has(pattern)) return null;
+
+  let url = pattern
+    .replace(/:slug/g, () => {
+      if (pattern.startsWith("/brands/")) return SAMPLE.brandSlug;
+      if (pattern.startsWith("/category/")) return SAMPLE.categorySlug;
+      if (pattern.startsWith("/rooms/")) return SAMPLE.roomSlug;
+      if (pattern.startsWith("/collections/")) return SAMPLE.collectionSlug;
+      if (pattern.startsWith("/inspiration/")) return SAMPLE.inspirationSlug;
+      if (pattern.startsWith("/blog/")) return SAMPLE.blogSlug;
+      return SAMPLE.slug;
+    })
+    .replace(/:id/g, SAMPLE.id);
+
+  return url;
+};
