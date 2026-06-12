@@ -171,14 +171,6 @@ const ProductDetail = () => {
 
   return (
     <SiteLayout>
-      {/* promo bar — staffel teaser */}
-      <div className="bg-secondary text-secondary-foreground">
-        <div className="container-abitaz flex h-9 items-center justify-center text-sm">
-          Veel nodig? <strong className="ml-1 font-semibold">−14% vanaf 12 stuks</strong>
-          <span className="ml-1 text-secondary-foreground/80">— staffelkorting automatisch in je mandje.</span>
-        </div>
-      </div>
-
       <div className="container-abitaz py-8">
         {/* A1 — breadcrumb */}
         <nav aria-label="Breadcrumb" className="mb-4 text-sm text-muted-foreground">
@@ -280,31 +272,6 @@ const ProductDetail = () => {
                 <span className="text-sm text-muted-foreground">/ stuk · incl. btw</span>
               </div>
               <div className="mt-1 text-xs text-muted-foreground">SKU: {product.sku}</div>
-
-              {/* A6 — variant selector (thumbnails per blueprint §4.4) */}
-              {siblings.length > 1 && (
-                <div className="mt-5">
-                  <div className="mb-2 text-sm text-muted-foreground">
-                    Variant: <span className="font-semibold text-foreground">{product.name}</span>
-                    <span className="ml-2 text-[11px] font-bold uppercase tracking-wider text-primary">eigen url</span>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {siblings.map((s) => (
-                      <Link
-                        key={s.slug}
-                        to={`/products/${s.slug}`}
-                        aria-label={s.name}
-                        title={s.name}
-                        className={`grid h-[58px] w-[58px] place-items-center rounded-md border-2 bg-surface transition ${
-                          s.slug === product.slug ? "border-primary" : "border-transparent outline outline-1 outline-border hover:outline-primary/50"
-                        }`}
-                      >
-                        <img src={s.image} alt="" className="h-[78%] w-[78%] object-contain" />
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              )}
 
               {/* A8 — qty stepper + CTA */}
               <div className="mt-5 flex gap-2">
