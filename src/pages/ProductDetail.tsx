@@ -111,10 +111,10 @@ const ProductDetail = () => {
   /* sticky on scroll past buy-box */
   const buyBoxRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    /* Header is sticky and ~140px tall (USP 40 + main 64 + ribbon 36).
-       Trigger the sticky add-to-cart only once the buy-box bottom sits
-       above the header bottom, so the two bars don't overlap. */
-    const HEADER_OFFSET = 140;
+    /* Only the blue main bar is sticky (64px). Trigger the sticky
+       add-to-cart once the buy-box bottom passes below it, so the
+       two bars dock flush without overlap. */
+    const HEADER_OFFSET = 64;
     const onScroll = () => {
       const el = buyBoxRef.current;
       if (!el) return;
@@ -706,7 +706,7 @@ const ProductDetail = () => {
           mode (there is no cart action). */}
       {product.salesMode !== "affiliate" && (
       <div
-        className={`fixed left-0 right-0 z-30 border-border bg-card shadow-lg transition-transform md:top-[140px] md:border-b ${
+        className={`fixed left-0 right-0 z-30 border-border bg-card shadow-lg transition-transform md:top-16 md:border-b ${
           showSticky ? "translate-y-0" : "-translate-y-full max-md:translate-y-full"
         } max-md:bottom-0 max-md:top-auto max-md:border-t`}
       >
