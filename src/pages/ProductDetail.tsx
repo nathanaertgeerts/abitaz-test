@@ -80,8 +80,10 @@ const ProductDetail = () => {
   /* variant siblings — same brand + category (blueprint §4.4) */
   const siblings = useMemo(
     () => products.filter((p) =>
-      p.brandSlug === product.brandSlug && p.categorySlug === product.categorySlug,
-    ).slice(0, 6),
+      p.slug !== product.slug &&
+      p.brandSlug === product.brandSlug &&
+      p.categorySlug === product.categorySlug,
+    ).slice(0, 4),
     [product],
   );
 
