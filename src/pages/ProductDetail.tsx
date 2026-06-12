@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "sonner";
 import { SiteLayout } from "@/components/layout/SiteLayout";
-import { ProductCard, formatPrice } from "@/components/products/ProductCard";
+import { ProductCard, formatPrice } from "@/components/product/ProductCard";
 import { productBySlug, products } from "@/data/products";
 import { useCart } from "@/context/CartContext";
 

@@ -2,7 +2,7 @@ import { useEffect, useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
 import { brandLogos } from "@/components/home/BrandLogos";
 import { SiteLayout } from "@/components/layout/SiteLayout";
-import { ProductCard } from "@/components/products/ProductCard";
+import { ProductCard } from "@/components/product/ProductCard";
 import { brands, products } from "@/data/products";
 
 /* ---------- Short editorial blurbs per brand (used in the hero) ---------- */

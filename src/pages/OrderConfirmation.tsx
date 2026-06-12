@@ -2,7 +2,7 @@ import { CheckCircle2, Mail, Package } from "lucide-react";
 import { useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { SiteLayout } from "@/components/layout/SiteLayout";
-import { formatPrice } from "@/components/products/ProductCard";
+import { formatPrice } from "@/components/product/ProductCard";
 
 type Summary = {
   orderId: string;

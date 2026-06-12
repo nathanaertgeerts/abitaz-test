@@ -65,7 +65,7 @@ import {
   TextInput,
   Timeline,
 } from "@/components/design/primitives";
-import { ProductCard } from "@/components/products/ProductCard";
+import { ProductCard } from "@/components/product/ProductCard";
 import { products } from "@/data/products";
 
 /* =========================================================================

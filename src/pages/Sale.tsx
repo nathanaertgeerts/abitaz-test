@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { SiteLayout } from "@/components/layout/SiteLayout";
-import { ProductCard } from "@/components/products/ProductCard";
+import { ProductCard } from "@/components/product/ProductCard";
 import { products } from "@/data/products";
 import { brandLogos } from "@/components/home/BrandLogos";
 

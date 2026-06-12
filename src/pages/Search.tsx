@@ -2,7 +2,7 @@ import { ChevronDown, Search as SearchIcon, SlidersHorizontal } from "lucide-rea
 import { useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { SiteLayout } from "@/components/layout/SiteLayout";
-import { ProductCard } from "@/components/products/ProductCard";
+import { ProductCard } from "@/components/product/ProductCard";
 import { products } from "@/data/products";
 
 /* ---------- Filter facets (cross-category set tailored for search) ---------- */

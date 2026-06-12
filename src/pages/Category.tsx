@@ -2,7 +2,7 @@ import { ChevronDown, SlidersHorizontal, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { SiteLayout } from "@/components/layout/SiteLayout";
-import { ProductCard } from "@/components/products/ProductCard";
+import { ProductCard } from "@/components/product/ProductCard";
 import { categories, products } from "@/data/products";
 import promoDesigner from "@/assets/promo-designer-sale.jpg";
 import {

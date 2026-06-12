@@ -14,7 +14,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { SiteLayout } from "@/components/layout/SiteLayout";
-import { ProductCard } from "@/components/products/ProductCard";
+import { ProductCard } from "@/components/product/ProductCard";
 import { categories, products } from "@/data/products";
 
 /* ---------- Visual mapping (icon + hero image per category) ---------- */

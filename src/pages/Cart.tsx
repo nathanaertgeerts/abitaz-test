@@ -2,7 +2,7 @@ import { ArrowLeft, Check, ChevronDown, Clock, Headset, Minus, Package, Plus, Ro
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { SiteLayout } from "@/components/layout/SiteLayout";
-import { formatPrice } from "@/components/products/ProductCard";
+import { formatPrice } from "@/components/product/ProductCard";
 import {
   AlertDialog,
   AlertDialogAction,
