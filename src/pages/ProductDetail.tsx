@@ -119,10 +119,18 @@ const ProductDetail = () => {
       const el = buyBoxRef.current;
       if (!el) return;
       const rect = el.getBoundingClientRect();
-      setShowSticky(rect.bottom < HEADER_OFFSET);
+      /* Only show when the buy-box bottom is above the sticky header
+         AND the user has actually scrolled the page. Guards against
+         showing on initial mount / short viewports. */
+      setShowSticky(window.scrollY > 200 && rect.bottom < HEADER_OFFSET);
     };
+    onScroll(); // run once on mount so initial state is correct
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    window.addEventListener("resize", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
   }, []);
 
   /* reset state on slug change */
