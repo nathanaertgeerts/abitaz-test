@@ -611,6 +611,17 @@ export const products: Product[] = [
       { label: "Dimensions", value: "Ø 480 × H 200 mm" },
       { label: "Color temperature", value: "3000K" },
     ],
+    salesMode: "affiliate",
+    affiliateOffers: [
+      { retailer: "Artemide.com", price: 1289.0, url: "https://www.artemide.com", note: "Official store · free shipping" },
+      { retailer: "Light11", price: 1199.0, url: "https://www.light11.com", note: "In stock · ships from DE" },
+      { retailer: "Lampefeber", price: 1149.0, url: "https://www.lampefeber.com", note: "Best price · 14-day delivery" },
+    ],
+    designer: {
+      name: "Giuseppe Maurizio Scutellà",
+      years: "b. 1969",
+      bio: "Italian architect and product designer based in Milano. Works with light as a sculptural medium — Pirce (2009) is his best-known piece for Artemide.",
+    },
   },
   {
     slug: "artemide-tizio-classic-black",
