@@ -574,7 +574,6 @@ export const MOUNTED_ROUTES = new Set<string>([
   "/signup/particulier",
   "/signup/b2b",
   "/register",
-  "/forgot-password",
   "/account",
   "/account/orders",
   "/account/orders/:id",
