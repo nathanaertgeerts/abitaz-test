@@ -575,7 +575,7 @@ export const Header = () => {
   };
 
   return (
-    <header className="relative z-40 w-full">
+    <header className="contents">
       {/* USP bar (light grey, matches footer) — scrolls away with the page */}
       <div className="border-b border-border bg-surface text-foreground">
         <div className="container-abitaz flex h-10 items-center justify-between gap-2 text-[11px] sm:gap-3 md:gap-6 md:overflow-x-auto md:text-xs">
