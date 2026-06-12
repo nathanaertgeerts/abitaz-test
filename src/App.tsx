@@ -118,9 +118,6 @@ const App = () => (
             <Route path="/checkout/return" element={<CheckoutReturn />} />
             <Route path="/checkout/pending" element={<CheckoutPending />} />
             <Route path="/checkout/failed" element={<CheckoutFailed />} />
-            {/* Collections (Payload curated) */}
-            <Route path="/collections" element={<CollectionsIndex />} />
-            <Route path="/collections/:slug" element={<CollectionDetail />} />
             {/* Compare */}
             <Route path="/compare" element={<Compare />} />
             {/* Guest order lookup */}
