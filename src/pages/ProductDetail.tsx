@@ -601,6 +601,25 @@ const ProductDetail = () => {
           </section>
         )}
 
+        {/* B6 — Kies je lichtbron — only when PIM links compatible bulbs */}
+        {product.salesMode !== "affiliate" && bulbs.length > 0 && (
+          <section className="mt-11 border-t border-border pt-11">
+            <div className="mb-2 flex items-center gap-2">
+              <span className="text-xs font-bold uppercase tracking-widest text-primary">Aanbevolen lichtbron</span>
+              <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                PIM · compatibleBulbs
+              </span>
+            </div>
+            <h2 className="mb-5 font-display text-3xl font-bold tracking-tight">Kies je lichtbron</h2>
+            <p className="mb-5 max-w-[72ch] text-sm text-muted-foreground">
+              Deze armatuur heeft fitting <strong className="text-foreground">{product.specs.find((s) => /socket|fitting|lamp type/i.test(s.label))?.value ?? "E14"}</strong>. We hebben deze lampen voor je geselecteerd.
+            </p>
+            <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
+              {bulbs.map((b) => <ProductCard key={b.slug} product={b} />)}
+            </div>
+          </section>
+        )}
+
         {/* C1 — FAQ */}
         <section className="mt-11 border-t border-border pt-11">
           <div className="mb-2 text-xs font-bold uppercase tracking-widest text-primary">Veelgestelde vragen</div>
