@@ -615,11 +615,6 @@ const ProductDetail = () => {
                 Set in winkelmand
               </button>
             </div>
-            {related.length > 0 && (
-              <div className="grid gap-4 md:grid-cols-3">
-                {related.map((p) => <ProductCard key={p.slug} product={p} />)}
-              </div>
-            )}
           </section>
         )}
 
