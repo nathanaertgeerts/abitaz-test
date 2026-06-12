@@ -416,49 +416,30 @@ export const Wishlist = () => (
    AUTH — Login / Register / Forgot
    ============================================================ */
 
-export const Login = () => {
-  const [showPw, setShowPw] = useState(false);
-  return (
-    <Page crumbs={[{ label: "Sign in" }]}>
-      <AuthCard
-        eyebrow="Welcome back"
-        title="Sign in to Abitaz"
-        description="Use email + one-time code, or your password. New here? Pick the right account type below."
-        footer={
-          <>
-            New customer?{" "}
-            <Link to="/signup/particulier" className="font-semibold text-primary hover:underline">Create a personal account</Link>{" "}or{" "}
-            <Link to="/signup/b2b" className="font-semibold text-primary hover:underline">apply for trade</Link>.
-          </>
-        }
-      >
-        <Field label="Email" required><TextInput type="email" autoComplete="email" placeholder="you@example.com" /></Field>
-        <Field label="Password">
-          <div className="relative">
-            <TextInput type={showPw ? "text" : "password"} autoComplete="current-password" placeholder="Or skip and use a one-time code" />
-            <button type="button" onClick={() => setShowPw(!showPw)} className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-muted-foreground hover:text-foreground" aria-label="Toggle password">
-              {showPw ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-            </button>
-          </div>
-        </Field>
-        <div className="flex items-center justify-between text-sm">
-          <label className="inline-flex items-center gap-2"><input type="checkbox" className="h-4 w-4 accent-primary" /> Remember me</label>
-          <Link to="/forgot-password" className="text-primary hover:underline">Forgot password?</Link>
-        </div>
-        <Btn variant="cta" size="lg" className="w-full">Sign in</Btn>
-        <Btn to="/login/otp" variant="outline" className="w-full">Send me a one-time code instead</Btn>
-        <div className="relative my-2 text-center text-xs text-muted-foreground">
-          <span className="bg-card px-2 relative z-10">or continue with</span>
-          <span className="absolute left-0 right-0 top-1/2 h-px bg-border" />
-        </div>
-        <div className="grid grid-cols-2 gap-2">
-          <Btn variant="outline">Google</Btn>
-          <Btn variant="outline">Apple</Btn>
-        </div>
-      </AuthCard>
-    </Page>
-  );
-};
+export const Login = () => (
+  <Page crumbs={[{ label: "Sign in" }]}>
+    <AuthCard
+      eyebrow="Welcome back"
+      title="Sign in to Abitaz"
+      description="Passwordless login. We'll email you a 6-digit code — valid for 10 minutes."
+      footer={
+        <>
+          New customer?{" "}
+          <Link to="/signup/particulier" className="font-semibold text-primary hover:underline">Create a personal account</Link>{" "}or{" "}
+          <Link to="/signup/b2b" className="font-semibold text-primary hover:underline">apply for trade</Link>.
+        </>
+      }
+    >
+      <Field label="Email" required>
+        <TextInput type="email" autoComplete="email" placeholder="you@example.com" />
+      </Field>
+      <Btn to="/login/otp" variant="cta" size="lg" className="w-full">Email me a code</Btn>
+      <div className="rounded-md bg-surface p-3 text-xs text-muted-foreground">
+        Codes verified by our Odoo identity service (ADR 0005). No passwords stored, ever.
+      </div>
+    </AuthCard>
+  </Page>
+);
 
 export const Register = () => (
   <Page crumbs={[{ label: "Create account" }]}>
@@ -479,17 +460,6 @@ export const Register = () => (
   </Page>
 );
 
-export const ForgotPassword = () => (
-  <Page crumbs={[{ label: "Forgot password" }]}>
-    <AuthCard title="Reset your password" description="Enter your email and we'll send you a reset link. The link is valid for 30 minutes.">
-      <Field label="Email" required><TextInput type="email" placeholder="you@example.com" /></Field>
-      <Btn variant="cta" size="lg" className="w-full">Send reset link</Btn>
-      <p className="text-center text-sm text-muted-foreground">
-        Remembered it? <Link to="/login" className="text-primary hover:underline">Back to sign in</Link>
-      </p>
-    </AuthCard>
-  </Page>
-);
 
 /* ============================================================
    ACCOUNT — Overview / Orders / Addresses / Returns

@@ -29,7 +29,6 @@ import {
   Wishlist,
   Login,
   Register,
-  ForgotPassword,
   AccountOverview,
   AccountOrders,
   AccountAddresses,
@@ -54,6 +53,7 @@ import {
   Cookies,
 } from "./pages/skeletons.tsx";
 import {
+  BrandCollection,
   CheckoutShipping,
   CheckoutPayment,
   CheckoutReturn,
@@ -109,6 +109,7 @@ const App = () => (
             <Route path="/search" element={<Search />} />
             <Route path="/brands" element={<Brands />} />
             <Route path="/brands/:slug" element={<Brand />} />
+            <Route path="/brands/:slug/:collection" element={<BrandCollection />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/order-confirmation" element={<OrderConfirmation />} />
@@ -144,7 +145,6 @@ const App = () => (
             <Route path="/signup/particulier" element={<SignupParticulier />} />
             <Route path="/signup/b2b" element={<SignupB2B />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
             {/* Account */}
             <Route path="/account" element={<AccountOverview />} />
             <Route path="/account/orders" element={<AccountOrders />} />

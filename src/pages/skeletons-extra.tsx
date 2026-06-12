@@ -51,6 +51,62 @@ import { products } from "@/data/products";
    ========================================================================= */
 
 /* ============================================================
+   BRAND COLLECTION — child node under a brand (D6, 12 Jun)
+   Route: /brands/[brand]/[collection] (e.g. /brands/louis-poulsen/ph-series)
+   ============================================================ */
+
+export const BrandCollection = () => {
+  const { slug: brandSlug = "louis-poulsen", collection: collectionSlug = "ph-series" } =
+    useParams<{ slug: string; collection: string }>();
+  const brandLabel = brandSlug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+  const collectionLabel = collectionSlug.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+  return (
+    <Page
+      crumbs={[
+        { label: "Brands", to: "/brands" },
+        { label: brandLabel, to: `/brands/${brandSlug}` },
+        { label: collectionLabel },
+      ]}
+    >
+      <section className="overflow-hidden rounded-2xl bg-foreground text-background">
+        <div className="grid gap-0 md:grid-cols-2">
+          <div className="p-8 md:p-12">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cta">
+              {brandLabel} · Collection
+            </p>
+            <h1 className="mt-2 font-display text-3xl font-bold md:text-5xl">{collectionLabel}</h1>
+            <p className="mt-4 max-w-prose text-background/80">
+              Editorial intro for this brand collection — designer's note, year, materials.
+              Lives in the CMS as a rich-text block tied to the brand-tree.
+            </p>
+            <p className="mt-3 text-sm text-background/60">
+              Child of <Link to={`/brands/${brandSlug}`} className="underline">{brandLabel}</Link> · 12 products
+            </p>
+          </div>
+          <ImagePlaceholder aspect="aspect-[4/3]" label="Collection cover" tone="primary" />
+        </div>
+      </section>
+
+      <div className="mt-10">
+        <SectionHeading kicker="Collection" title={`All ${collectionLabel} products`} />
+        <SampleProductGrid count={9} />
+      </div>
+
+      <div className="mt-12 rounded-2xl border border-border bg-surface p-6 md:p-10">
+        <SectionHeading kicker="About" title={`More from ${brandLabel}`} />
+        <p className="max-w-3xl text-muted-foreground">
+          Cross-link to other collections under the same brand. Brand-tree navigation lives in
+          the PIM; this page is a leaf node beneath the brand template.
+        </p>
+        <Btn to={`/brands/${brandSlug}`} variant="outline" className="mt-4">
+          Back to {brandLabel}
+        </Btn>
+      </div>
+    </Page>
+  );
+};
+
+/* ============================================================
    CHECKOUT SUBSTATES (D1 — Stripe-via-Odoo)
    ============================================================ */
 

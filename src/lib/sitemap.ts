@@ -548,6 +548,7 @@ export const MOUNTED_ROUTES = new Set<string>([
   "/search",
   "/brands",
   "/brands/:slug",
+  "/brands/:slug/:collection",
   "/cart",
   "/checkout",
   "/checkout/shipping",
@@ -574,7 +575,6 @@ export const MOUNTED_ROUTES = new Set<string>([
   "/signup/particulier",
   "/signup/b2b",
   "/register",
-  "/forgot-password",
   "/account",
   "/account/orders",
   "/account/orders/:id",
@@ -654,6 +654,8 @@ export const resolveInternalHref = (sitemapPath?: string): string | null => {
   const pluralToMounted: Record<string, string> = {
     "/categories/[slug]": "/categories/:slug",
     "/products/[slug]": "/products/:slug",
+    "/brands/[brand]": "/brands/:slug",
+    "/brands/[brand]/[collection]": "/brands/:slug/:collection",
   };
   if (pluralToMounted[p]) p = pluralToMounted[p];
 
@@ -667,11 +669,11 @@ export const resolveInternalHref = (sitemapPath?: string): string | null => {
       if (pattern.startsWith("/brands/")) return SAMPLE.brandSlug;
       if (pattern.startsWith("/categories/")) return SAMPLE.categorySlug;
       if (pattern.startsWith("/rooms/")) return SAMPLE.roomSlug;
-      if (pattern.startsWith("/collections/")) return SAMPLE.collectionSlug;
       if (pattern.startsWith("/inspiration/")) return SAMPLE.inspirationSlug;
       if (pattern.startsWith("/blog/")) return SAMPLE.blogSlug;
       return SAMPLE.slug;
     })
+    .replace(/:collection/g, SAMPLE.collectionSlug)
     .replace(/:id/g, SAMPLE.id);
 
   return url;
