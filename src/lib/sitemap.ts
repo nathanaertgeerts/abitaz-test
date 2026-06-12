@@ -253,6 +253,62 @@ export const priorities: Priority[] = [
 ];
 
 /**
+ * Snapshot of where we stand on 12 June — what's built, what's still on the
+ * P0/P1 to-do list, and what Sprint 0 has to validate before P0 can start.
+ * Rendered on /sitemap so the team can read the next concrete steps.
+ */
+export type Sprint0 = {
+  built: string[];
+  todo: string[];
+  spikes: { id: string; title: string; goal: string; blocks: string }[];
+};
+
+export const june12Status: Sprint0 = {
+  built: [
+    "Consent-gated analytics layer",
+    "Privacy + cookie policy pages",
+    "Homepage (hero + featured modules)",
+    "PIM health endpoint",
+    "Postgres connection pooling (PgBouncer)",
+    "Lovable prototype migrated to plural URLs (D6)",
+  ],
+  todo: [
+    "robots.txt + sitemap.xml (root, language-neutral)",
+    "Terms page (`/[locale]/terms`)",
+    "OTP bridge to Odoo xl_otp + login UI (D8)",
+    "Cart + checkout endpoints (create-payment, status poll)",
+    "Webhooks: /api/webhooks/odoo + /api/webhooks/stripe",
+    "All shop pages except home (categories, brands, PDP, search, sale, …)",
+  ],
+  spikes: [
+    {
+      id: "S0-1",
+      title: "Stripe-via-Odoo POC (staging)",
+      goal: "End-to-end round-trip: create-payment → payment.transaction → Stripe redirect + 3DS → webhook → status poll → SO confirmed.",
+      blocks: "P0 build (D1)",
+    },
+    {
+      id: "S0-2",
+      title: "OTP module smoke-test",
+      goal: "Exercise Jef's xl_otp from a FE bridge: request → 6-digit code email → verify → iron-session cookie. Cover TTL + attempt-limit edges.",
+      blocks: "Login/signup UI (D8)",
+    },
+    {
+      id: "S0-3",
+      title: "Cart-store spike",
+      goal: "Decide Redis vs Postgres for the anon cart. Benchmark merge-on-login round-trip with Odoo pricelist recompute + price-shift banner.",
+      blocks: "Cart endpoints (D10)",
+    },
+    {
+      id: "S0-4",
+      title: "Env inventory",
+      goal: "Audit every required secret across staging/prod (Odoo, Stripe, Payload, Postgres, Redis, SMTP, CMP). Single source of truth, rotated keys.",
+      blocks: "Sprint 1 deploy",
+    },
+  ],
+};
+
+/**
  * Cross-cutting concerns — components/flows, not single pages, but launch-relevant.
  */
 export const crossCutting = [
