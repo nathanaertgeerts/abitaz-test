@@ -268,10 +268,30 @@ export const priorities: Priority[] = [
 export type Sprint0 = {
   built: string[];
   todo: { text: string; needsBackend?: boolean }[];
-  spikes: { id: string; title: string; goal: string; blocks: string }[];
+  spikes: {
+    id: string;
+    title: string;
+    goal: string;
+    blocks: string;
+    /** Sprint 0 outcome (12 Jun): the spike landed and unblocks P0. */
+    done?: boolean;
+    /** Short proof line shown on /sitemap once the spike is complete. */
+    evidence?: string;
+    /** Issue / ADR references attached to this spike. */
+    refs?: string[];
+  }[];
+  /** Sprint 0 closed end-to-end on this date (P0 gate open, pending sign-off). */
+  sprint0CompletedOn?: string;
+  /** Plain-language summary of the Sprint 0 close, rendered as a banner. */
+  sprint0Summary?: string;
+  /** Hand-on instructions so the PO/team can re-verify each spike. */
+  verification?: { id: string; title: string; steps: string }[];
 };
 
 export const june12Status: Sprint0 = {
+  sprint0CompletedOn: "12 Jun 2026",
+  sprint0Summary:
+    "Sprint 0 de-risking landed end-to-end on 12 Jun: all four spikes green, P0 gate open and waiting on PO sign-off. Full trail in docs/history/2026-06-12-sprint0-derisking.md and issues #340–#343 (ADR 0014, 0015, amendment to ADR 0005).",
   built: [
     "Consent-gated analytics layer",
     "Privacy + cookie policy pages",
@@ -279,12 +299,14 @@ export const june12Status: Sprint0 = {
     "PIM health endpoint",
     "Postgres connection pooling (PgBouncer)",
     "Lovable prototype migrated to plural URLs (D6)",
+    "Sprint 0 de-risking complete (12 Jun): Stripe-via-Odoo, Postgres cart, OTP login, env inventory — see banner below",
   ],
   todo: [
     { text: "robots.txt + sitemap.xml (root, language-neutral)", needsBackend: true },
     { text: "Terms page (`/[locale]/terms`)" },
-    { text: "OTP bridge to Odoo xl_otp + login UI (D8)", needsBackend: true },
-    { text: "Cart + checkout endpoints (create-payment, status poll)", needsBackend: true },
+    { text: "OTP login UI on the proven bridge contract (D8) — bridge done (#342)", needsBackend: true },
+    { text: "Cart UI on Postgres foundation (#341) + checkout pages on proven Stripe contract (#340)", needsBackend: true },
+    { text: "3DS browser test — rides along with the first checkout-UI delivery", needsBackend: true },
     { text: "Webhooks: /api/webhooks/odoo + /api/webhooks/stripe", needsBackend: true },
     { text: "All shop pages except home (categories, brands, PDP, search, sale, …)", needsBackend: true },
   ],
@@ -294,24 +316,60 @@ export const june12Status: Sprint0 = {
       title: "Stripe-via-Odoo POC (staging)",
       goal: "End-to-end round-trip: create-payment → payment.transaction → Stripe redirect + 3DS → webhook → status poll → SO confirmed.",
       blocks: "P0 build (D1)",
+      done: true,
+      evidence:
+        "Headless order → transaction → Stripe PaymentIntent → test payment → webhook flips transaction to done in <5s → order auto-confirmed. Fail path verified: declined card leaves the order untouched. 3DS browser test rides along with first checkout UI. Staging Odoo: S01667 (happy path, paid+confirmed) / S01668 (fail path, transaction error, order draft).",
+      refs: ["#340", "ADR 0005 amendment"],
     },
     {
       id: "S0-2",
       title: "OTP module smoke-test",
       goal: "Exercise Jef's xl_otp from a FE bridge: request → 6-digit code email → verify → iron-session cookie. Cover TTL + attempt-limit edges.",
       blocks: "Login/signup UI (D8)",
+      done: true,
+      evidence:
+        "Full passwordless flow tested on both stagings incl. anti-enumeration, rate-limiting and session build-up. FE bridge contract locked. Code mails caught in Odoo.sh mailcatcher.",
+      refs: ["#342"],
     },
     {
       id: "S0-3",
-      title: "Cart-store spike",
+      title: "Cart-store spike — Postgres wins (no Redis)",
       goal: "Decide Redis vs Postgres for the anon cart. Benchmark merge-on-login round-trip with Odoo pricelist recompute + price-shift banner.",
       blocks: "Cart endpoints (D10)",
+      done: true,
+      evidence:
+        "Working prototype on development, 9–17 ms response, live. Redis dropped — no infra needed beyond Postgres.",
+      refs: ["#341", "ADR 0015"],
     },
     {
       id: "S0-4",
       title: "Env inventory",
       goal: "Audit every required secret across staging/prod (Odoo, Stripe, Payload, Postgres, Redis, SMTP, CMP). Single source of truth, rotated keys.",
       blocks: "Sprint 1 deploy",
+      done: true,
+      evidence:
+        "Complete. Surprise finding: no Odoo env-vars required on the FE side.",
+      refs: ["#343"],
+    },
+  ],
+  verification: [
+    {
+      id: "S0-3",
+      title: "Cart API on development",
+      steps:
+        "Grab the Frontend/API key from PIM admin (Settings → Integrations), then: `curl -s https://dev.peeq.com/api/commerce/cart -H \"X-API-Key: <key>\" -H \"x-cart-token: pm-demo-50f4d1b5\"`. Returns a cart with a Clickfit recessed spot (qty 2, snapshot price €61,90). Without the key → 401. Create your own cart with POST; qty 0 removes a line.",
+    },
+    {
+      id: "S0-1",
+      title: "Stripe chain on staging",
+      steps:
+        "Open the staging Odoo (jef2220-odoo-staging-33171242) → Sales. Order S01667 is the fully headless happy path: created, paid and confirmed, with the linked transaction carrying the Stripe reference. Order S01668 shows the fail path: transaction in error, order stays draft.",
+    },
+    {
+      id: "S0-2",
+      title: "OTP login on staging",
+      steps:
+        "Open https://jef2220-abitaz-odoo-staging-33451645.dev.odoo.com/web/login — the passwordless screen renders. The code email lands in the Odoo.sh mailcatcher (Jef can surface it via dashboard → Mails).",
     },
   ],
 };

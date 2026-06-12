@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { Check, ChevronRight, Copy, ExternalLink, FileCode2, Layers, Library, AlertTriangle, Flag, Sparkles, Server } from "lucide-react";
+import { Check, CheckCircle2, ChevronRight, Copy, ExternalLink, FileCode2, Layers, Library, AlertTriangle, Flag, Sparkles, Server } from "lucide-react";
 import { SiteLayout } from "@/components/layout/SiteLayout";
 import { OdooArchitecture } from "@/components/sitemap/OdooArchitecture";
 import {
@@ -325,6 +325,19 @@ const Sitemap = () => {
             to-do list, and the four spikes Sprint 0 has to land before P0 build
             can start.
           </p>
+          {june12Status.sprint0CompletedOn && (
+            <div className="mb-5 rounded-md border border-success/50 bg-success/10 p-4">
+              <div className="mb-1 flex items-center gap-2">
+                <CheckCircle2 className="h-5 w-5 text-success" />
+                <p className="text-sm font-bold text-success">
+                  Sprint 0 complete — {june12Status.sprint0CompletedOn} · P0 gate open, awaiting PO sign-off
+                </p>
+              </div>
+              {june12Status.sprint0Summary && (
+                <p className="mt-1 text-sm text-foreground">{june12Status.sprint0Summary}</p>
+              )}
+            </div>
+          )}
           <div className="grid gap-4 md:grid-cols-2">
             <div className="rounded-md border border-success/40 bg-success/5 p-4">
               <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-success">
@@ -356,13 +369,17 @@ const Sitemap = () => {
           </div>
           <div className="mt-5">
             <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-cta">
-              Sprint 0 spikes (must land first)
+              Sprint 0 spikes (de-risking — all landed 12 Jun)
             </p>
             <div className="grid gap-3 md:grid-cols-2">
               {june12Status.spikes.map((s) => (
                 <div
                   key={s.id}
-                  className="rounded-md border border-border bg-card p-4"
+                  className={`rounded-md border p-4 ${
+                    s.done
+                      ? "border-success/40 bg-success/5"
+                      : "border-border bg-card"
+                  }`}
                 >
                   <div className="mb-1 flex items-baseline gap-2">
                     <span className="rounded bg-cta px-1.5 py-0.5 font-mono text-[10px] font-bold text-cta-foreground">
@@ -371,16 +388,57 @@ const Sitemap = () => {
                     <h3 className="text-sm font-semibold text-foreground">
                       {s.title}
                     </h3>
+                    {s.done && (
+                      <span className="ml-auto inline-flex items-center gap-1 rounded-full border border-success/50 bg-success/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-success">
+                        <CheckCircle2 className="h-3 w-3" />
+                        Done
+                      </span>
+                    )}
                   </div>
                   <p className="mt-1 text-sm text-muted-foreground">{s.goal}</p>
+                  {s.evidence && (
+                    <p className="mt-2 rounded border border-success/30 bg-success/5 p-2 text-xs text-foreground">
+                      <span className="font-semibold text-success">Proof:</span>{" "}
+                      {s.evidence}
+                    </p>
+                  )}
                   <p className="mt-2 text-xs text-muted-foreground">
                     <span className="font-semibold text-foreground">Blocks:</span>{" "}
                     {s.blocks}
                   </p>
+                  {s.refs && s.refs.length > 0 && (
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      <span className="font-semibold text-foreground">Refs:</span>{" "}
+                      {s.refs.join(" · ")}
+                    </p>
+                  )}
                 </div>
               ))}
             </div>
           </div>
+          {june12Status.verification && june12Status.verification.length > 0 && (
+            <div className="mt-5 rounded-md border border-border bg-card p-4">
+              <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-cta">
+                Verify it yourself (hand-on)
+              </p>
+              <ul className="space-y-3 text-sm text-foreground">
+                {june12Status.verification.map((v) => (
+                  <li key={v.id} className="border-l-2 border-cta/40 pl-3">
+                    <p className="mb-1 flex items-baseline gap-2">
+                      <span className="rounded bg-cta px-1.5 py-0.5 font-mono text-[10px] font-bold text-cta-foreground">
+                        {v.id}
+                      </span>
+                      <span className="font-semibold">{v.title}</span>
+                    </p>
+                    <p className="text-sm text-muted-foreground">{v.steps}</p>
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-3 text-xs text-muted-foreground">
+                Full guide: <code>docs/history/2026-06-12-sprint0-derisking.md</code> · Issues #340–#343 · ADR 0014 / 0015 / ADR 0005-amendement.
+              </p>
+            </div>
+          )}
         </section>
 
         {/* Sections */}
