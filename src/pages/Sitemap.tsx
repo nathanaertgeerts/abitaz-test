@@ -342,12 +342,14 @@ const Sitemap = () => {
               </p>
               <ul className="list-disc space-y-1 pl-5 text-sm text-foreground">
                 {june12Status.todo.map((t, i) => (
-                  <li
-                    key={i}
-                    dangerouslySetInnerHTML={{
-                      __html: t.replace(/`([^`]+)`/g, "<code>$1</code>"),
-                    }}
-                  />
+                  <li key={i} className="flex flex-wrap items-center gap-2">
+                    <span
+                      dangerouslySetInnerHTML={{
+                        __html: t.text.replace(/`([^`]+)`/g, "<code>$1</code>"),
+                      }}
+                    />
+                    {t.needsBackend && <BackendPill />}
+                  </li>
                 ))}
               </ul>
             </div>
