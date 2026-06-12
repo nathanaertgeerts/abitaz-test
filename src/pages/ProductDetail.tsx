@@ -284,7 +284,102 @@ const ProductDetail = () => {
               </div>
               <div className="mt-1 text-xs text-muted-foreground">SKU: {product.sku}</div>
 
+              {/* A6 — variant axes (color / size / finish) — only when present in PIM */}
+              {product.axes && (
+                <div className="mt-5 space-y-4">
+                  {product.axes.color && product.axes.color.length > 1 && (
+                    <div>
+                      <div className="mb-1.5 text-sm">
+                        <span className="text-muted-foreground">Kleur: </span>
+                        <span className="font-semibold text-foreground">
+                          {product.axes.color.find((c) => c.slug === product.slug)?.label ?? product.axes.color[0].label}
+                        </span>
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        {product.axes.color.map((c) => {
+                          const active = c.slug === product.slug;
+                          return (
+                            <Link
+                              key={c.label}
+                              to={`/products/${c.slug}`}
+                              aria-label={c.label}
+                              title={c.label}
+                              className={`grid h-9 w-9 place-items-center rounded-full border-2 transition ${
+                                active ? "border-primary ring-2 ring-primary/20" : "border-border hover:border-primary/50"
+                              }`}
+                            >
+                              <span className="h-6 w-6 rounded-full border border-black/10" style={{ backgroundColor: c.hex }} />
+                            </Link>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+                  {product.axes.size && product.axes.size.length > 1 && (
+                    <div>
+                      <div className="mb-1.5 text-sm text-muted-foreground">Maat</div>
+                      <div className="flex flex-wrap gap-2">
+                        {product.axes.size.map((s, i) => (
+                          <Link key={s.label} to={`/products/${s.slug}`}
+                            className={`rounded-md border px-3 py-2 text-sm font-semibold transition ${
+                              i === 1 ? "border-primary bg-primary/5 text-primary" : "border-border hover:border-primary/50"
+                            }`}>
+                            {s.label}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  {product.axes.finish && product.axes.finish.length > 1 && (
+                    <div>
+                      <div className="mb-1.5 text-sm text-muted-foreground">Afwerking</div>
+                      <div className="flex flex-wrap gap-2">
+                        {product.axes.finish.map((f, i) => (
+                          <Link key={f.label} to={`/products/${f.slug}`}
+                            className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
+                              i === 0 ? "border-primary bg-primary/5 text-primary" : "border-border hover:border-primary/50"
+                            }`}>
+                            {f.label}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
               {/* A8 — qty stepper + CTA */}
+              {product.salesMode === "affiliate" && product.affiliateOffers ? (
+                <div className="mt-5">
+                  <div className="mb-2 flex items-center justify-between">
+                    <div className="text-sm font-semibold text-foreground">Verkrijgbaar bij</div>
+                    <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                      Affiliate
+                    </span>
+                  </div>
+                  <ul className="divide-y divide-border rounded-md border border-border">
+                    {product.affiliateOffers.map((o) => (
+                      <li key={o.retailer} className="flex items-center gap-3 p-3">
+                        <div className="grid h-10 w-10 place-items-center rounded-md bg-muted font-display text-xs font-bold text-muted-foreground">
+                          {o.retailer.slice(0, 2).toUpperCase()}
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <div className="text-sm font-semibold">{o.retailer}</div>
+                          {o.note && <div className="text-xs text-muted-foreground">{o.note}</div>}
+                        </div>
+                        <div className="text-right font-display text-base font-extrabold">{eur(o.price)}</div>
+                        <a href={o.url} target="_blank" rel="sponsored noopener noreferrer"
+                          className="inline-flex h-10 items-center gap-1.5 rounded-md bg-primary px-3 text-sm font-bold text-primary-foreground hover:bg-primary-hover">
+                          Bekijk <ExternalLink className="h-3.5 w-3.5" />
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                  <p className="mt-2 text-[11px] text-muted-foreground">
+                    Wij verkopen dit product niet zelf — Abitaz toont de beste verkrijgbare optie.
+                  </p>
+                </div>
+              ) : (
               <div className="mt-5 flex gap-2">
                 <div className="inline-flex items-center rounded-md border border-foreground/40">
                   <button type="button" aria-label="Minder" onClick={() => setQty((q) => Math.max(1, q - 1))}
@@ -304,8 +399,10 @@ const ProductDetail = () => {
                   In winkelmand
                 </button>
               </div>
+              )}
 
-              {/* A8 — staffel-nudge (subtle, collapsible per §4.1) */}
+              {/* A8 — staffel-nudge (subtle, collapsible per §4.1) — hidden in affiliate mode */}
+              {product.salesMode !== "affiliate" && (
               <div className="mt-4">
                 <button type="button" onClick={() => setStaffelOpen((o) => !o)} aria-expanded={staffelOpen}
                   className="flex w-full items-center justify-between gap-3 border-b border-border py-2 text-left text-[13px] text-muted-foreground">
@@ -334,6 +431,7 @@ const ProductDetail = () => {
                   </div>
                 )}
               </div>
+              )}
 
               {/* A9 — reassurance row */}
               <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-[13px] font-medium">
