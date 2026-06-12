@@ -17,6 +17,14 @@ export type SitemapNode = {
   path?: string;
   status: PageStatus;
   note?: string;
+  /**
+   * Marks a node that cannot work end-to-end until backend wiring lands
+   * (Odoo endpoint, edge function, webhook, DB table, auth, etc.).
+   * Rendered as a "Backend" pill on /sitemap so the BE dev sees the
+   * surface they own. Frontend can scaffold the page; the page becomes
+   * functional only when the backend piece is in place.
+   */
+  needsBackend?: boolean;
   children?: SitemapNode[];
 };
 
@@ -259,7 +267,7 @@ export const priorities: Priority[] = [
  */
 export type Sprint0 = {
   built: string[];
-  todo: string[];
+  todo: { text: string; needsBackend?: boolean }[];
   spikes: { id: string; title: string; goal: string; blocks: string }[];
 };
 
@@ -273,12 +281,12 @@ export const june12Status: Sprint0 = {
     "Lovable prototype migrated to plural URLs (D6)",
   ],
   todo: [
-    "robots.txt + sitemap.xml (root, language-neutral)",
-    "Terms page (`/[locale]/terms`)",
-    "OTP bridge to Odoo xl_otp + login UI (D8)",
-    "Cart + checkout endpoints (create-payment, status poll)",
-    "Webhooks: /api/webhooks/odoo + /api/webhooks/stripe",
-    "All shop pages except home (categories, brands, PDP, search, sale, …)",
+    { text: "robots.txt + sitemap.xml (root, language-neutral)", needsBackend: true },
+    { text: "Terms page (`/[locale]/terms`)" },
+    { text: "OTP bridge to Odoo xl_otp + login UI (D8)", needsBackend: true },
+    { text: "Cart + checkout endpoints (create-payment, status poll)", needsBackend: true },
+    { text: "Webhooks: /api/webhooks/odoo + /api/webhooks/stripe", needsBackend: true },
+    { text: "All shop pages except home (categories, brands, PDP, search, sale, …)", needsBackend: true },
   ],
   spikes: [
     {
