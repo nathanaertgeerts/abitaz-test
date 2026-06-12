@@ -516,7 +516,34 @@ export const sitemap: SitemapSection[] = [
     title: "Product & purchase flow",
     description: "The buying funnel. Must support success, failure, pending and retry states — payment is Stripe-via-Odoo (D1), FE polls Odoo for state.",
     nodes: [
-      { label: "Product detail (PDP)", path: "/[locale]/products/[slug]", status: "done", needsBackend: true, note: "Renamed from `/products/[slug]` — now matches the `/api/products/[slug]` endpoint." },
+      {
+        label: "Product detail (PDP)",
+        path: "/[locale]/products/[slug]",
+        status: "done",
+        needsBackend: true,
+        note: "Renamed from `/products/[slug]` — now matches the `/api/products/[slug]` endpoint. Three live demo products below cover the three template modes devs need to support.",
+        children: [
+          {
+            label: "PDP — transactional (full PIM)",
+            path: "/products/louis-poulsen-ph5-mini-orange",
+            status: "done",
+            note: "Example: PH5 Mini. Renders every optional block — colour axis (7 swatches → own slugs), extra gallery, technical drawing, 13 specs, designer block (Poul Henningsen), compatible bulbs cross-sell, staffel-nudge, sticky add-to-cart.",
+          },
+          {
+            label: "PDP — size + finish axes",
+            path: "/products/tradition-flowerpot-vp2-darkgreen",
+            status: "done",
+            note: "Example: FlowerPot VP2. Demonstrates size (VP1/VP2/VP3) + finish (Matt/Glossy/Brass) axis selectors next to the buy-box. Designer block for Verner Panton.",
+          },
+          {
+            label: "PDP — affiliate mode",
+            path: "/products/artemide-pirce-mini-suspension",
+            status: "done",
+            needsBackend: true,
+            note: "Example: Pirce Mini. `salesMode = affiliate` → cart CTA replaced by `Verkrijgbaar bij` retailer list (Artemide / Light11 / Lampefeber). Staffel, bundle and sticky cart auto-hide. Outbound links carry rel=sponsored.",
+          },
+        ],
+      },
       { label: "Cart", path: "/[locale]/cart", status: "done", needsBackend: true },
       { label: "Checkout", path: "/[locale]/checkout", status: "done", needsBackend: true },
       { label: "Checkout — shipping step", path: "/[locale]/checkout/shipping", status: "planned", needsBackend: true, note: "Validate address, Odoo carrier calc." },

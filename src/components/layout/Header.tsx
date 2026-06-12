@@ -575,8 +575,8 @@ export const Header = () => {
   };
 
   return (
-    <header className="sticky top-0 z-40 w-full">
-      {/* USP bar (light grey, matches footer) — visible on all viewports */}
+    <header className="relative z-40 w-full">
+      {/* USP bar (light grey, matches footer) — scrolls away with the page */}
       <div className="border-b border-border bg-surface text-foreground">
         <div className="container-abitaz flex h-10 items-center justify-between gap-2 text-[11px] sm:gap-3 md:gap-6 md:overflow-x-auto md:text-xs">
           <span className="flex min-w-0 items-center gap-1.5 md:gap-2">
@@ -610,7 +610,7 @@ export const Header = () => {
       </div>
 
       {/* Combined blue bar: logo + nav + search + actions */}
-      <div className="bg-primary text-primary-foreground">
+      <div className="sticky top-0 z-40 bg-primary text-primary-foreground shadow-sm">
         <div className="container-abitaz flex h-16 items-center gap-3 md:gap-6">
           {/* Mobile hamburger */}
           <MobileMenu items={mainNav} />

@@ -111,10 +111,10 @@ const ProductDetail = () => {
   /* sticky on scroll past buy-box */
   const buyBoxRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    /* Header is sticky and ~140px tall (USP 40 + main 64 + ribbon 36).
-       Trigger the sticky add-to-cart only once the buy-box bottom sits
-       above the header bottom, so the two bars don't overlap. */
-    const HEADER_OFFSET = 140;
+    /* Only the blue main bar is sticky (64px). Trigger the sticky
+       add-to-cart once the buy-box bottom passes below it, so the
+       two bars dock flush without overlap. */
+    const HEADER_OFFSET = 64;
     const onScroll = () => {
       const el = buyBoxRef.current;
       if (!el) return;
@@ -537,12 +537,30 @@ const ProductDetail = () => {
                     <div className="pb-5">
                           {g.key === "dimensions" && product.techDrawing && (
                             <div className="mb-4 overflow-hidden rounded-md border border-border bg-surface p-4">
-                              <img
-                                src={product.techDrawing}
-                                alt={`Maattekening ${product.name}`}
-                                loading="lazy"
-                                className="mx-auto h-[220px] w-auto object-contain"
-                              />
+                              <svg
+                                role="img"
+                                aria-label={`Maattekening ${product.name}`}
+                                viewBox="0 0 360 240"
+                                className="mx-auto h-[220px] w-auto"
+                              >
+                                {/* Placeholder line drawing — vervangen door
+                                    PIM-aangeleverde SVG/DWG per product. */}
+                                <g fill="none" stroke="hsl(var(--foreground))" strokeWidth="1.5">
+                                  <line x1="40" y1="40" x2="320" y2="40" />
+                                  <path d="M 60 40 Q 180 220 300 40" />
+                                  <line x1="180" y1="40" x2="180" y2="200" strokeDasharray="4 4" />
+                                  <line x1="60" y1="210" x2="300" y2="210" />
+                                  <line x1="60" y1="205" x2="60" y2="215" />
+                                  <line x1="300" y1="205" x2="300" y2="215" />
+                                  <line x1="335" y1="40" x2="335" y2="180" />
+                                  <line x1="330" y1="40" x2="340" y2="40" />
+                                  <line x1="330" y1="180" x2="340" y2="180" />
+                                </g>
+                                <text x="180" y="228" textAnchor="middle" fontSize="11" fill="hsl(var(--muted-foreground))">
+                                  Ø {product.specs.find(s => /dimension|afmeting/i.test(s.label))?.value ?? "—"}
+                                </text>
+                                <text x="345" y="115" fontSize="11" fill="hsl(var(--muted-foreground))" transform="rotate(90 345 115)">H</text>
+                              </svg>
                               <div className="mt-2 text-center text-[11px] uppercase tracking-wider text-muted-foreground">
                                 Maattekening (Ø × H, mm)
                               </div>
@@ -706,7 +724,7 @@ const ProductDetail = () => {
           mode (there is no cart action). */}
       {product.salesMode !== "affiliate" && (
       <div
-        className={`fixed left-0 right-0 z-30 border-border bg-card shadow-lg transition-transform md:top-[140px] md:border-b ${
+        className={`fixed left-0 right-0 z-30 border-border bg-card shadow-lg transition-transform md:top-16 md:border-b ${
           showSticky ? "translate-y-0" : "-translate-y-full max-md:translate-y-full"
         } max-md:bottom-0 max-md:top-auto max-md:border-t`}
       >
