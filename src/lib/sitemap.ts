@@ -542,6 +542,12 @@ export const sitemap: SitemapSection[] = [
             needsBackend: true,
             note: "Example: Pirce Mini. `salesMode = affiliate` → cart CTA replaced by `Verkrijgbaar bij` retailer list (Artemide / Light11 / Lampefeber). Staffel, bundle and sticky cart auto-hide. Outbound links carry rel=sponsored.",
           },
+          {
+            label: "PDP — all axes combined (color + size + finish)",
+            path: "/products/artemide-tolomeo-tavolo",
+            status: "done",
+            note: "Example: Tolomeo Tavolo. Stress test combining everything from PH5 + FlowerPot: 4 colour swatches, 3 sizes (Micro/Tavolo/Mega), 2 finishes (Polished/Matt), designer block (De Lucchi & Fassina), gallery, tech drawing, staffel, compatible bulbs.",
+          },
         ],
       },
       { label: "Cart", path: "/[locale]/cart", status: "done", needsBackend: true },
