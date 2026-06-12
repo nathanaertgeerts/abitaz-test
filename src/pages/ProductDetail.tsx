@@ -510,6 +510,19 @@ const ProductDetail = () => {
                   </button>
                   {open && (
                     <div className="pb-5">
+                          {g.key === "dimensions" && product.techDrawing && (
+                            <div className="mb-4 overflow-hidden rounded-md border border-border bg-surface p-4">
+                              <img
+                                src={product.techDrawing}
+                                alt={`Maattekening ${product.name}`}
+                                loading="lazy"
+                                className="mx-auto h-[220px] w-auto object-contain"
+                              />
+                              <div className="mt-2 text-center text-[11px] uppercase tracking-wider text-muted-foreground">
+                                Maattekening (Ø × H, mm)
+                              </div>
+                            </div>
+                          )}
                       <div className="grid gap-x-7 md:grid-cols-2">
                         {grouped[g.key].map((s) => (
                           <div key={s.label} className="flex justify-between gap-3 border-b border-border py-2 text-sm">
@@ -532,7 +545,7 @@ const ProductDetail = () => {
         </section>
 
         {/* B5 — bundle + cross-sell */}
-        {accessory && (
+        {product.salesMode !== "affiliate" && accessory && (
           <section className="mt-11 border-t border-border pt-11">
             <div className="mb-2 text-xs font-bold uppercase tracking-widest text-primary">Compleet maken</div>
             <h2 className="mb-5 font-display text-3xl font-bold tracking-tight">Vergeet je lichtbron niet</h2>
