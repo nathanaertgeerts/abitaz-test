@@ -135,7 +135,7 @@ const ProductDetail = () => {
 
   /* reset state on slug change */
   useEffect(() => {
-    setActiveImage(0); setQty(1); setStaffelOpen(false);
+    setActiveImage(0); setQty(1); setStaffelOpen(false); setShowSticky(false);
   }, [product.slug]);
 
   /* SEO */
