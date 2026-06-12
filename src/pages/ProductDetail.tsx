@@ -494,6 +494,27 @@ const ProductDetail = () => {
           <p className="max-w-[72ch] text-base text-muted-foreground">{product.description}</p>
         </section>
 
+        {/* B2 — Over de maker / designer */}
+        {product.designer && (
+          <section className="mt-11 border-t border-border pt-11">
+            <div className="mb-2 text-xs font-bold uppercase tracking-widest text-primary">Over de maker</div>
+            <h2 className="mb-5 font-display text-3xl font-bold tracking-tight">{product.designer.name}{product.designer.years ? `, ${product.designer.years}` : ""}</h2>
+            <div className="grid gap-6 md:grid-cols-[120px_1fr] md:items-start">
+              <div className="grid h-[120px] w-[120px] place-items-center rounded-full bg-muted font-display text-3xl font-extrabold text-muted-foreground">
+                {product.designer.name.split(" ").map((w) => w[0]).slice(0, 2).join("")}
+              </div>
+              <div className="max-w-[72ch]">
+                <p className="text-base text-muted-foreground">{product.designer.bio}</p>
+                {product.designer.quote && (
+                  <blockquote className="mt-4 border-l-4 border-primary pl-4 font-display text-lg italic text-foreground">
+                    {product.designer.quote}
+                  </blockquote>
+                )}
+              </div>
+            </div>
+          </section>
+        )}
+
         {/* B4 — specs accordions (with dims group open by default) */}
         <section id="tech" className="mt-11 border-t border-border pt-11">
           <div className="mb-2 text-xs font-bold uppercase tracking-widest text-primary">Specificaties</div>
