@@ -293,20 +293,15 @@ export const sitemap: SitemapSection[] = [
             status: "cms",
             note:
               "Reused for every brand. CMS controls hero, story, banner, featured collections.",
-          },
-        ],
-      },
-      {
-        label: "Collections",
-        path: "/[locale]/collections",
-        status: "planned",
-        note: "NEW in v3.1. D5 Collection = curated merchandising edit (Payload selection over PIM/Odoo products). Distinct from Category (taxonomy) and Room (spatial).",
-        children: [
-          {
-            label: "Collection template",
-            path: "/[locale]/collections/[slug]",
-            status: "cms",
-            note: "Payload manual or rule-based selection. Can be temporary (campaigns/themes). Reuses CategoryTemplate.",
+            children: [
+              {
+                label: "Brand collection",
+                path: "/[locale]/brands/[brand]/[collection]",
+                status: "planned",
+                note:
+                  "D6 (12 Jun) — Collections are CHILD NODES under brands in the existing brand-tree (e.g. /brands/louis-poulsen/ph-series). Standalone /collections/* routes are dropped from the sitemap. Editorial cross-brand edits (Spring edit, etc.) become CMS pages in P2.",
+              },
+            ],
           },
         ],
       },
