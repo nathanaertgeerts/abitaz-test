@@ -566,6 +566,33 @@ export const products: Product[] = [
       { label: "Arm reach", value: "780 mm (max)" },
       { label: "Base", value: "Ø 230 mm" },
     ],
+    salesMode: "transactional",
+    gallery: [artemideNesso, artemidePirce],
+    techDrawing: "/placeholder.svg",
+    axes: {
+      color: [
+        { label: "Aluminium", hex: "#c9c9c9", slug: "artemide-tolomeo-tavolo" },
+        { label: "Satin black", hex: "#1f1f1f", slug: "artemide-tolomeo-tavolo" },
+        { label: "Pearl gold", hex: "#cfa37a", slug: "artemide-tolomeo-tavolo" },
+        { label: "Bronze", hex: "#7a4a2a", slug: "artemide-tolomeo-tavolo" },
+      ],
+      size: [
+        { label: "Micro", slug: "artemide-tolomeo-tavolo", note: "Ø 110 mm shade" },
+        { label: "Tavolo", slug: "artemide-tolomeo-tavolo", note: "Ø 180 mm shade" },
+        { label: "Mega", slug: "artemide-tolomeo-tavolo", note: "Ø 360 mm shade" },
+      ],
+      finish: [
+        { label: "Polished", slug: "artemide-tolomeo-tavolo" },
+        { label: "Matt", slug: "artemide-tolomeo-tavolo" },
+      ],
+    },
+    designer: {
+      name: "Michele De Lucchi & Giancarlo Fassina",
+      years: "Tolomeo, 1987",
+      bio: "Memphis-era Milanese designers. Tolomeo (Artemide, 1987) reduced the articulated desk lamp to its essentials — counter-balanced springs, polished aluminium, and a diffuser that always points where you need it. Compasso d'Oro 1989.",
+      quote: "“The best object is the one you stop noticing — it just works.”",
+    },
+    compatibleBulbs: ["philips-led-e14-43w", "philips-led-e14-65w"],
   },
   {
     slug: "artemide-nesso-orange",
