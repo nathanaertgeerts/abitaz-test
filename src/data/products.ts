@@ -39,6 +39,25 @@ export type Product = {
   colors?: string[];
   description: string;
   specs: { label: string; value: string }[];
+  /* ----- optional PIM-fed extras (blueprint v3) ----- */
+  /** Sales mode. 'affiliate' replaces the cart CTA with a retailer list. */
+  salesMode?: "transactional" | "affiliate";
+  /** Retailer offers shown in affiliate mode. */
+  affiliateOffers?: { retailer: string; price: number; url: string; note?: string }[];
+  /** Extra gallery shots (lifestyle, detail). First entry is shown after the hero image. */
+  gallery?: string[];
+  /** Technical line drawing (SVG/PNG) shown inside the "Afmetingen & inbouw" group. */
+  techDrawing?: string;
+  /** Variant axes — only render when present. Each option links to its own product slug. */
+  axes?: {
+    color?: { label: string; hex: string; slug: string }[];
+    size?: { label: string; slug: string; note?: string }[];
+    finish?: { label: string; slug: string }[];
+  };
+  /** Designer / "Over de maker" block. */
+  designer?: { name: string; years?: string; bio: string; quote?: string };
+  /** Recommended light bulbs — product slugs from this catalogue. */
+  compatibleBulbs?: string[];
 };
 
 export const products: Product[] = [
