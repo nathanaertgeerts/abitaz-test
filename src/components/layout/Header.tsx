@@ -532,12 +532,12 @@ const mainNav: MegaMenuItem[] = [
       },
       {
         title: "Lookbook",
-        to: "/collections",
+        to: "/inspiration",
         links: [
           { label: "Outdoor dining", to: "/inspiration/outdoor-dining-lights" },
           { label: "Spa-mood bathroom", to: "/inspiration/spa-bathroom-mood" },
           { label: "Kids' room", to: "/inspiration/kids-room-rainbow" },
-          { label: "All collections", to: "/collections" },
+          { label: "All inspiration", to: "/inspiration" },
         ],
       },
       {
