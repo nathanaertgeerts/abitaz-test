@@ -70,13 +70,21 @@ const ProductDetail = () => {
 
   /* gallery — main image + related thumbs (no extra assets needed) */
   const gallery = useMemo(() => {
-    const related = products
-      .filter((p) => p.slug !== product.slug &&
-        (p.brandSlug === product.brandSlug || p.categorySlug === product.categorySlug))
-      .slice(0, 4)
-      .map((p) => ({ src: p.image, alt: `${product.name} — ${p.name}` }));
-    return [{ src: product.image, alt: product.name }, ...related];
+    const main = { src: product.image, alt: product.name };
+    const extras = (product.gallery ?? []).map((src, i) => ({
+      src,
+      alt: `${product.name} — beeld ${i + 2}`,
+    }));
+    return [main, ...extras];
   }, [product]);
+
+  /* compatible bulbs (Odoo cross-sell — blueprint §4.6) */
+  const bulbs = useMemo(
+    () => (product.compatibleBulbs ?? [])
+      .map((s) => products.find((p) => p.slug === s))
+      .filter((p): p is Product => !!p),
+    [product],
+  );
 
   /* variant siblings — same brand + category (blueprint §4.4) */
   const siblings = useMemo(
