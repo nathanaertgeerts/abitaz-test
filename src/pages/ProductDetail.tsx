@@ -728,7 +728,9 @@ const ProductDetail = () => {
       {product.salesMode !== "affiliate" && (
       <div
         className={`fixed left-0 right-0 z-30 border-border bg-card shadow-lg transition-transform md:top-16 md:border-b ${
-          showSticky ? "translate-y-0" : "-translate-y-full max-md:translate-y-full"
+          showSticky
+            ? "translate-y-0"
+            : "pointer-events-none md:-translate-y-[calc(100%+4rem)] max-md:translate-y-full"
         } max-md:bottom-0 max-md:top-auto max-md:border-t`}
       >
         <div className="container-abitaz flex h-[70px] items-center gap-4">
