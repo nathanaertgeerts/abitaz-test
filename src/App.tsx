@@ -29,7 +29,6 @@ import {
   Wishlist,
   Login,
   Register,
-  ForgotPassword,
   AccountOverview,
   AccountOrders,
   AccountAddresses,
@@ -144,7 +143,6 @@ const App = () => (
             <Route path="/signup/particulier" element={<SignupParticulier />} />
             <Route path="/signup/b2b" element={<SignupB2B />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
             {/* Account */}
             <Route path="/account" element={<AccountOverview />} />
             <Route path="/account/orders" element={<AccountOrders />} />
