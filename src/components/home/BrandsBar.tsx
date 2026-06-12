@@ -18,7 +18,7 @@ export const BrandsBar = () => {
             return (
               <Link
                 key={b.slug}
-                to={`/brand/${b.slug}`}
+                to={`/brands/${b.slug}`}
                 aria-label={b.name}
                 className="group flex h-20 w-[160px] flex-none items-center justify-center rounded-md bg-card px-4 text-foreground/70 transition hover:text-primary hover:shadow-md sm:w-[180px] md:w-[200px]"
               >

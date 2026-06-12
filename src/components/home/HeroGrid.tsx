@@ -44,7 +44,7 @@ const tiles: Tile[] = [
     sizes: "(min-width: 1280px) 640px, (min-width: 768px) 50vw, 88vw",
   },
   {
-    to: "/category/pendant-lamps",
+    to: "/categories/pendant-lamps",
     image: heroIndoor,
     srcSet: heroIndoorSet,
     eyebrow: "All your lights for",
@@ -53,7 +53,7 @@ const tiles: Tile[] = [
     sizes: "(min-width: 1280px) 320px, (min-width: 768px) 25vw, 88vw",
   },
   {
-    to: "/category/outdoor-lighting",
+    to: "/categories/outdoor-lighting",
     image: heroOutdoor,
     srcSet: heroOutdoorSet,
     eyebrow: "All your lights for",
@@ -64,7 +64,7 @@ const tiles: Tile[] = [
     sizes: "(min-width: 1280px) 320px, (min-width: 768px) 25vw, 88vw",
   },
   {
-    to: "/category/installation",
+    to: "/categories/installation",
     image: heroInstall,
     srcSet: heroInstallSet,
     eyebrow: "Everything for your project",

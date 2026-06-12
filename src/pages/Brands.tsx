@@ -232,7 +232,7 @@ const Brands = () => {
               Top brand picks
             </h2>
             <Link
-              to="/category/pendant-lamps"
+              to="/categories/pendant-lamps"
               className="text-sm font-medium text-primary hover:underline"
             >
               See all products
@@ -349,7 +349,7 @@ const Brands = () => {
 
       <div className="container-abitaz mt-12 mb-16 text-center">
         <Link
-          to="/category/pendant-lamps"
+          to="/categories/pendant-lamps"
           className="inline-flex h-12 items-center justify-center rounded-md bg-cta px-8 text-sm font-semibold text-cta-foreground transition hover:bg-cta-hover"
         >
           Browse the full catalogue

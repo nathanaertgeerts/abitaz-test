@@ -104,9 +104,9 @@ const App = () => (
           <ScrollToTop />
           <Routes>
             <Route path="/" element={<Index />} />
-            <Route path="/category/:slug" element={<Category />} />
+            <Route path="/categories/:slug" element={<Category />} />
             <Route path="/categories" element={<Categories />} />
-            <Route path="/product/:slug" element={<ProductDetail />} />
+            <Route path="/products/:slug" element={<ProductDetail />} />
             <Route path="/sale" element={<Sale />} />
             <Route path="/search" element={<Search />} />
             <Route path="/brands" element={<Brands />} />

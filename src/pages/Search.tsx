@@ -386,7 +386,7 @@ const Search = () => {
                     </p>
                     <p className="mt-2 text-sm text-muted-foreground">
                       Try a different keyword, clear filters, or{" "}
-                      <Link to="/category/pendant-lamps" className="text-primary hover:underline">
+                      <Link to="/categories/pendant-lamps" className="text-primary hover:underline">
                         browse the catalogue
                       </Link>
                       .

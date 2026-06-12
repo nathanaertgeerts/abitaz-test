@@ -12,7 +12,7 @@ export const ProductCard = ({ product }: { product: Product }) => {
 
   return (
     <Link
-      to={`/product/${product.slug}`}
+      to={`/products/${product.slug}`}
       className="group flex h-full flex-col rounded-lg bg-card p-3 transition hover:shadow-md"
     >
       <div className="relative aspect-square overflow-hidden rounded-md bg-surface">

@@ -723,7 +723,7 @@ const Category = () => {
               <ol className="flex items-center gap-2">
                 <li><a href="/" className="hover:text-primary">Home</a></li>
                 <li aria-hidden>/</li>
-                <li><a href="/category/pendant-lamps" className="hover:text-primary">Lighting</a></li>
+                <li><a href="/categories/pendant-lamps" className="hover:text-primary">Lighting</a></li>
                 <li aria-hidden>/</li>
                 <li className="text-foreground">{cat?.name ?? "Pendant lamps"}</li>
               </ol>
@@ -940,7 +940,7 @@ const Category = () => {
                   return (
                     <li key={group.slug} className="ml-3">
                       <Link
-                        to={`/category/${group.slug}`}
+                        to={`/categories/${group.slug}`}
                         aria-current={group.slug === slug ? "page" : undefined}
                         className={
                           group.slug === slug
@@ -956,7 +956,7 @@ const Category = () => {
                           {group.subs.map((s) => (
                             <li key={s.slug}>
                               <Link
-                                to={`/category/${s.slug}`}
+                                to={`/categories/${s.slug}`}
                                 aria-current={s.slug === slug ? "page" : undefined}
                                 className={
                                   s.slug === slug

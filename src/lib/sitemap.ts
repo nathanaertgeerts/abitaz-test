@@ -93,7 +93,7 @@ export const decisions: Decision[] = [
     topic: "Search backend",
     status: "open-deferred",
     summary:
-      "Engine choice (Typesense / Meilisearch / Algolia) deferred. Minimum buildable behavior: keyword/prefix match over Postgres-synced PIM (name, SKU, category, brand) + header typeahead + product/category/brand suggestions + no-results recovery. Pricing from Odoo pricelists. NOT yet: relevance tuning, synonyms, typo-tolerance, faceted ranking. Revisit before catalog scale.",
+      "Engine choice (Typesense / Meilisearch / Algolia) deferred. Minimum buildable behavior: keyword/prefix match over Postgres-synced PIM (name, SKU, category, brand) + header typeahead + product/categories/brand suggestions + no-results recovery. Pricing from Odoo pricelists. NOT yet: relevance tuning, synonyms, typo-tolerance, faceted ranking. Revisit before catalog scale.",
   },
   {
     id: "D4",
@@ -124,8 +124,8 @@ export const changelog = [
   "v3.1 — Localized slugs (D2): per-locale slug authored in CMS; hreflang pairs the localized URLs.",
   "v3.1 — Search (D3) deferred; minimum behavior documented (Postgres-synced PIM keyword).",
   "v2 — Added `/[locale]` prefix to every user-facing route; kept `/sitemap.xml` & `/robots.txt` language-neutral at root.",
-  "`/category/[slug]` → `/categories/[slug]` (plural-nest convention).",
-  "`/product/[slug]` → `/products/[slug]` to match `/api/products/[slug]`.",
+  "`/categories/[slug]` → `/categories/[slug]` (plural-nest convention).",
+  "`/products/[slug]` → `/products/[slug]` to match `/api/products/[slug]`.",
   "`/order-confirmation` → `/checkout/return` (XL HUB redirect + polling). Pending Stripe-vs-Mollie decision.",
   "Collapsed duplicate `/account/wishlist` into the single canonical `/wishlist`.",
   "Converted dynamic segments from `:slug` to Next.js bracket syntax (`[slug]`, `[id]`).",
@@ -293,20 +293,15 @@ export const sitemap: SitemapSection[] = [
             status: "cms",
             note:
               "Reused for every brand. CMS controls hero, story, banner, featured collections.",
-          },
-        ],
-      },
-      {
-        label: "Collections",
-        path: "/[locale]/collections",
-        status: "planned",
-        note: "NEW in v3.1. D5 Collection = curated merchandising edit (Payload selection over PIM/Odoo products). Distinct from Category (taxonomy) and Room (spatial).",
-        children: [
-          {
-            label: "Collection template",
-            path: "/[locale]/collections/[slug]",
-            status: "cms",
-            note: "Payload manual or rule-based selection. Can be temporary (campaigns/themes). Reuses CategoryTemplate.",
+            children: [
+              {
+                label: "Brand collection",
+                path: "/[locale]/brands/[brand]/[collection]",
+                status: "planned",
+                note:
+                  "D6 (12 Jun) — Collections are CHILD NODES under brands in the existing brand-tree (e.g. /brands/louis-poulsen/ph-series). Standalone /collections/* routes are dropped from the sitemap. Editorial cross-brand edits (Spring edit, etc.) become CMS pages in P2.",
+              },
+            ],
           },
         ],
       },
@@ -355,7 +350,7 @@ export const sitemap: SitemapSection[] = [
     title: "Product & purchase flow",
     description: "The buying funnel. Must support success, failure, pending and retry states — payment is Stripe-via-Odoo (D1), FE polls Odoo for state.",
     nodes: [
-      { label: "Product detail (PDP)", path: "/[locale]/products/[slug]", status: "done", note: "Renamed from `/product/[slug]` — now matches the `/api/products/[slug]` endpoint." },
+      { label: "Product detail (PDP)", path: "/[locale]/products/[slug]", status: "done", note: "Renamed from `/products/[slug]` — now matches the `/api/products/[slug]` endpoint." },
       { label: "Cart", path: "/[locale]/cart", status: "done" },
       { label: "Checkout", path: "/[locale]/checkout", status: "done" },
       { label: "Checkout — shipping step", path: "/[locale]/checkout/shipping", status: "planned", note: "Validate address, Odoo carrier calc." },
@@ -547,8 +542,8 @@ export const countByStatus = () => {
 export const MOUNTED_ROUTES = new Set<string>([
   "/",
   "/categories",
-  "/category/:slug",
-  "/product/:slug",
+  "/categories/:slug",
+  "/products/:slug",
   "/sale",
   "/search",
   "/brands",
@@ -643,7 +638,7 @@ const SAMPLE = {
 /**
  * Take a sitemap canonical path (e.g. `/[locale]/products/[slug]`)
  * and return a real Vite URL the router can navigate to
- * (e.g. `/product/louis-poulsen-ph5-mini-orange`), or null if no
+ * (e.g. `/products/louis-poulsen-ph5-mini-orange`), or null if no
  * skeleton/page is mounted for that pattern yet.
  */
 export const resolveInternalHref = (sitemapPath?: string): string | null => {
@@ -659,8 +654,8 @@ export const resolveInternalHref = (sitemapPath?: string): string | null => {
   // 2) Translate sitemap plural-nest → currently mounted Vite paths.
   //    Keep this small + explicit so it's easy to audit.
   const pluralToMounted: Record<string, string> = {
-    "/categories/[slug]": "/category/:slug",
-    "/products/[slug]": "/product/:slug",
+    "/categories/[slug]": "/categories/:slug",
+    "/products/[slug]": "/products/:slug",
   };
   if (pluralToMounted[p]) p = pluralToMounted[p];
 
@@ -672,7 +667,7 @@ export const resolveInternalHref = (sitemapPath?: string): string | null => {
   let url = pattern
     .replace(/:slug/g, () => {
       if (pattern.startsWith("/brands/")) return SAMPLE.brandSlug;
-      if (pattern.startsWith("/category/")) return SAMPLE.categorySlug;
+      if (pattern.startsWith("/categories/")) return SAMPLE.categorySlug;
       if (pattern.startsWith("/rooms/")) return SAMPLE.roomSlug;
       if (pattern.startsWith("/collections/")) return SAMPLE.collectionSlug;
       if (pattern.startsWith("/inspiration/")) return SAMPLE.inspirationSlug;

@@ -167,7 +167,7 @@ const Brand = () => {
             </p>
             <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
               <Link
-                to="/category/pendant-lamps"
+                to="/categories/pendant-lamps"
                 className="inline-flex h-11 items-center justify-center rounded-md bg-cta px-6 text-sm font-semibold text-cta-foreground transition hover:bg-cta-hover"
               >
                 Browse the catalogue
