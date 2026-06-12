@@ -54,8 +54,6 @@ import {
   Cookies,
 } from "./pages/skeletons.tsx";
 import {
-  CollectionsIndex,
-  CollectionDetail,
   CheckoutShipping,
   CheckoutPayment,
   CheckoutReturn,
