@@ -12,6 +12,7 @@ import {
   decisions,
   priorities,
   crossCutting,
+  june12Status,
   resolveInternalHref,
   type PageStatus,
   type SitemapNode,
@@ -296,6 +297,76 @@ const Sitemap = () => {
                 <p className="text-sm text-foreground">{d.summary}</p>
               </div>
             ))}
+          </div>
+        </section>
+
+        {/* 12 June status + Sprint 0 */}
+        <section className="mb-10 rounded-lg border border-cta/40 bg-cta/5 p-6">
+          <div className="mb-3 flex items-center gap-2">
+            <Flag className="h-5 w-5 text-cta" />
+            <h2 className="text-lg font-bold text-foreground">
+              12 June status &amp; Sprint 0
+            </h2>
+          </div>
+          <p className="mb-5 text-sm text-muted-foreground">
+            Snapshot agreed on 12 June. The decisions above (D6–D10) drive the
+            list below — this is what is already built, what's still on the P0/P1
+            to-do list, and the four spikes Sprint 0 has to land before P0 build
+            can start.
+          </p>
+          <div className="grid gap-4 md:grid-cols-2">
+            <div className="rounded-md border border-success/40 bg-success/5 p-4">
+              <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-success">
+                Already built
+              </p>
+              <ul className="list-disc space-y-1 pl-5 text-sm text-foreground">
+                {june12Status.built.map((b, i) => (
+                  <li key={i}>{b}</li>
+                ))}
+              </ul>
+            </div>
+            <div className="rounded-md border border-primary/40 bg-primary/5 p-4">
+              <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-primary">
+                Still to build (per plan)
+              </p>
+              <ul className="list-disc space-y-1 pl-5 text-sm text-foreground">
+                {june12Status.todo.map((t, i) => (
+                  <li
+                    key={i}
+                    dangerouslySetInnerHTML={{
+                      __html: t.replace(/`([^`]+)`/g, "<code>$1</code>"),
+                    }}
+                  />
+                ))}
+              </ul>
+            </div>
+          </div>
+          <div className="mt-5">
+            <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-cta">
+              Sprint 0 spikes (must land first)
+            </p>
+            <div className="grid gap-3 md:grid-cols-2">
+              {june12Status.spikes.map((s) => (
+                <div
+                  key={s.id}
+                  className="rounded-md border border-border bg-card p-4"
+                >
+                  <div className="mb-1 flex items-baseline gap-2">
+                    <span className="rounded bg-cta px-1.5 py-0.5 font-mono text-[10px] font-bold text-cta-foreground">
+                      {s.id}
+                    </span>
+                    <h3 className="text-sm font-semibold text-foreground">
+                      {s.title}
+                    </h3>
+                  </div>
+                  <p className="mt-1 text-sm text-muted-foreground">{s.goal}</p>
+                  <p className="mt-2 text-xs text-muted-foreground">
+                    <span className="font-semibold text-foreground">Blocks:</span>{" "}
+                    {s.blocks}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
         </section>
 

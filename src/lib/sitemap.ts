@@ -109,9 +109,49 @@ export const decisions: Decision[] = [
     summary:
       "Category vs Collection vs Room intent locked. Category = catalog taxonomy (PIM + Odoo). Collection = curated merchandising (Payload selection over PIM/Odoo products), can be temporary. Room = spatial/use-case intent. One primary indexable page per search intent; new top-level listing requires editorial sign-off.",
   },
+  {
+    id: "D6",
+    topic: "URL shape — plural + flat products (12 Jun)",
+    status: "decided",
+    summary:
+      "Plural everywhere: /categories/[slug], /products/[slug], /brands/[brand], /brands/[brand]/[collection]. Product URLs stay FLAT (no category in path) so SEO is stable across re-categorisation. Lovable prototype migrated from singular to plural; old singular paths must 301.",
+  },
+  {
+    id: "D7",
+    topic: "Collections live under brands (12 Jun)",
+    status: "decided",
+    summary:
+      "Standalone /collections/* routes dropped. A collection is a child node of its brand at /brands/[brand]/[collection] (e.g. /brands/louis-poulsen/ph-series). Cross-brand editorial edits become CMS pages in P2 (not a /collections hub).",
+  },
+  {
+    id: "D8",
+    topic: "OTP-only login (12 Jun, ADR 0005)",
+    status: "decided",
+    summary:
+      "Passwordless. Email → 6-digit code (10 min TTL, 5 attempts), verified by Odoo xl_otp module. No password field, no 'forgot password', no social login at launch. Session = 30-day iron-session cookie. Step-up OTP for sensitive actions (delete account, guest-return).",
+  },
+  {
+    id: "D9",
+    topic: "Checkout = Odoo, Stripe as PSP (12 Jun, ADR 0004/0005)",
+    status: "decided",
+    summary:
+      "Odoo is source of truth for orders, prices, stock and customers — no double administration, no drift. Stripe sits underneath Odoo as the PSP only. Invoicing and fulfilment stay in Odoo. FE talks to Odoo; Odoo talks to Stripe.",
+  },
+  {
+    id: "D10",
+    topic: "Anon cart storage (12 Jun, spike)",
+    status: "open-deferred",
+    summary:
+      "Sprint-0 spike: Redis vs Postgres for the anonymous cart. Decision criteria: merge-on-login UX (price/stock recompute via Odoo), TTL, ops cost, blast radius. Authenticated cart is always an Odoo draft sale.order — only the anon store is in play.",
+  },
 ];
 
 export const changelog = [
+  "v3.2 (12 Jun) — D6 plural URLs + flat product paths; Lovable prototype migrated from singular.",
+  "v3.2 (12 Jun) — D7 collections nested under brands; standalone `/collections/*` dropped.",
+  "v3.2 (12 Jun) — D8 OTP-only login (passwordless); `forgot-password` removed.",
+  "v3.2 (12 Jun) — D9 checkout via Odoo with Stripe as PSP (ADR 0004/0005).",
+  "v3.2 (12 Jun) — D10 anon-cart store (Redis vs Postgres) added to Sprint 0 spikes.",
   "v3.1 — Added Decisions log (D1–D5) and Build priority (P0–P3) to the doc.",
   "v3.1 — Locked DEFAULT_LOCALE=nl; root `/` → 307 to resolved locale, not indexed; x-default → /nl/.",
   "v3.1 — Faceted PLP policy: clean PLP canonical+indexable; `?filter/?sort` → canonical to clean + noindex,follow.",
@@ -211,6 +251,62 @@ export const priorities: Priority[] = [
     ],
   },
 ];
+
+/**
+ * Snapshot of where we stand on 12 June — what's built, what's still on the
+ * P0/P1 to-do list, and what Sprint 0 has to validate before P0 can start.
+ * Rendered on /sitemap so the team can read the next concrete steps.
+ */
+export type Sprint0 = {
+  built: string[];
+  todo: string[];
+  spikes: { id: string; title: string; goal: string; blocks: string }[];
+};
+
+export const june12Status: Sprint0 = {
+  built: [
+    "Consent-gated analytics layer",
+    "Privacy + cookie policy pages",
+    "Homepage (hero + featured modules)",
+    "PIM health endpoint",
+    "Postgres connection pooling (PgBouncer)",
+    "Lovable prototype migrated to plural URLs (D6)",
+  ],
+  todo: [
+    "robots.txt + sitemap.xml (root, language-neutral)",
+    "Terms page (`/[locale]/terms`)",
+    "OTP bridge to Odoo xl_otp + login UI (D8)",
+    "Cart + checkout endpoints (create-payment, status poll)",
+    "Webhooks: /api/webhooks/odoo + /api/webhooks/stripe",
+    "All shop pages except home (categories, brands, PDP, search, sale, …)",
+  ],
+  spikes: [
+    {
+      id: "S0-1",
+      title: "Stripe-via-Odoo POC (staging)",
+      goal: "End-to-end round-trip: create-payment → payment.transaction → Stripe redirect + 3DS → webhook → status poll → SO confirmed.",
+      blocks: "P0 build (D1)",
+    },
+    {
+      id: "S0-2",
+      title: "OTP module smoke-test",
+      goal: "Exercise Jef's xl_otp from a FE bridge: request → 6-digit code email → verify → iron-session cookie. Cover TTL + attempt-limit edges.",
+      blocks: "Login/signup UI (D8)",
+    },
+    {
+      id: "S0-3",
+      title: "Cart-store spike",
+      goal: "Decide Redis vs Postgres for the anon cart. Benchmark merge-on-login round-trip with Odoo pricelist recompute + price-shift banner.",
+      blocks: "Cart endpoints (D10)",
+    },
+    {
+      id: "S0-4",
+      title: "Env inventory",
+      goal: "Audit every required secret across staging/prod (Odoo, Stripe, Payload, Postgres, Redis, SMTP, CMP). Single source of truth, rotated keys.",
+      blocks: "Sprint 1 deploy",
+    },
+  ],
+};
 
 /**
  * Cross-cutting concerns — components/flows, not single pages, but launch-relevant.
