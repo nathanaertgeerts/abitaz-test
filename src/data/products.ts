@@ -39,6 +39,25 @@ export type Product = {
   colors?: string[];
   description: string;
   specs: { label: string; value: string }[];
+  /* ----- optional PIM-fed extras (blueprint v3) ----- */
+  /** Sales mode. 'affiliate' replaces the cart CTA with a retailer list. */
+  salesMode?: "transactional" | "affiliate";
+  /** Retailer offers shown in affiliate mode. */
+  affiliateOffers?: { retailer: string; price: number; url: string; note?: string }[];
+  /** Extra gallery shots (lifestyle, detail). First entry is shown after the hero image. */
+  gallery?: string[];
+  /** Technical line drawing (SVG/PNG) shown inside the "Afmetingen & inbouw" group. */
+  techDrawing?: string;
+  /** Variant axes — only render when present. Each option links to its own product slug. */
+  axes?: {
+    color?: { label: string; hex: string; slug: string }[];
+    size?: { label: string; slug: string; note?: string }[];
+    finish?: { label: string; slug: string }[];
+  };
+  /** Designer / "Over de maker" block. */
+  designer?: { name: string; years?: string; bio: string; quote?: string };
+  /** Recommended light bulbs — product slugs from this catalogue. */
+  compatibleBulbs?: string[];
 };
 
 export const products: Product[] = [
@@ -57,11 +76,39 @@ export const products: Product[] = [
     colors: ["#1f3a5f", "#2c8d7a", "#d8423a", "#e8a13a", "#3f5c3a", "#cfa37a", "#e5e1d3", "#1f1f1f"],
     description:
       "All the trumps of the Louis Poulsen PH 5, but in a smaller format. That's exactly what the PH 5 Mini is. The most popular PH lamp from Danish designer Poul Henningsen, reproduced in a different format. The design of the new, handy model is fully aligned with the contemporary creative lifestyle.",
+    salesMode: "transactional",
+    gallery: [pendantWhite, pendantGreen, pendantDome],
+    techDrawing: "/placeholder.svg",
+    axes: {
+      color: [
+        { label: "Orange tones", hex: "#e8a13a", slug: "louis-poulsen-ph5-mini-orange" },
+        { label: "Hues of green", hex: "#3f5c3a", slug: "tradition-flowerpot-vp2-darkgreen" },
+        { label: "Modern white", hex: "#e5e1d3", slug: "louis-poulsen-snowball" },
+        { label: "Pale rose", hex: "#cfa37a", slug: "louis-poulsen-doo-wop-darkgrey" },
+        { label: "Classic black", hex: "#1f1f1f", slug: "louis-poulsen-doo-wop-darkgrey" },
+      ],
+    },
+    designer: {
+      name: "Poul Henningsen",
+      years: "1894 – 1967",
+      bio: "Danish designer and writer. Spent decades perfecting glare-free, three-shade lighting that turns raw bulbs into soft, atmospheric light. His PH series for Louis Poulsen (1925–) remains a benchmark in functional lighting design.",
+      quote: "“The aim is to beautify the home and those who live in it — to make the evening restful.”",
+    },
+    compatibleBulbs: ["philips-led-e14-43w", "philips-led-e14-65w"],
     specs: [
       { label: "Lamp type", value: "1 x E14 max. 20W" },
+      { label: "Socket", value: "E14" },
       { label: "Dimmable", value: "Yes (dimmer not included)" },
+      { label: "Energy class", value: "F (with recommended bulb)" },
+      { label: "Material", value: "Powder-coated aluminium, painted top reflector" },
+      { label: "Cord length", value: "3 m fabric cable, white" },
+      { label: "Mounting", value: "Ceiling cup included, Ø 80 mm" },
       { label: "Water resistance", value: "IP20 No/limited protection" },
       { label: "Dimensions", value: "300 x 163 mm (Ø x H)" },
+      { label: "Weight", value: "0,9 kg" },
+      { label: "Color temperature", value: "Bulb dependent — 2700K recommended" },
+      { label: "Beam angle", value: "Wide, downward distribution" },
+      { label: "Warranty", value: "5 years manufacturer warranty" },
     ],
   },
   {
@@ -86,6 +133,24 @@ export const products: Product[] = [
       { label: "Water resistance", value: "IP20" },
       { label: "Dimensions", value: "230 x 245 mm (Ø x H)" },
     ],
+    axes: {
+      size: [
+        { label: "VP1 — Ø 230 mm", slug: "tradition-flowerpot-vp2-darkgreen", note: "Pendant" },
+        { label: "VP2 — Ø 500 mm", slug: "tradition-flowerpot-vp2-darkgreen", note: "Pendant" },
+        { label: "VP3 — Table", slug: "tradition-flowerpot-vp2-darkgreen", note: "Table version" },
+      ],
+      finish: [
+        { label: "Matt", slug: "tradition-flowerpot-vp2-darkgreen" },
+        { label: "Glossy", slug: "tradition-flowerpot-vp2-darkgreen" },
+        { label: "Brass-plated", slug: "tradition-flowerpot-vp2-darkgreen" },
+      ],
+    },
+    designer: {
+      name: "Verner Panton",
+      years: "1926 – 1998",
+      bio: "Danish designer who broke with Scandinavian restraint in the 1960s. Bold colour, geometric shapes and futuristic optimism — the FlowerPot (1968) captures all three in a single object.",
+    },
+    compatibleBulbs: ["philips-led-e14-43w", "philips-led-e14-65w"],
   },
   {
     slug: "louis-poulsen-snowball",
@@ -546,6 +611,17 @@ export const products: Product[] = [
       { label: "Dimensions", value: "Ø 480 × H 200 mm" },
       { label: "Color temperature", value: "3000K" },
     ],
+    salesMode: "affiliate",
+    affiliateOffers: [
+      { retailer: "Artemide.com", price: 1289.0, url: "https://www.artemide.com", note: "Official store · free shipping" },
+      { retailer: "Light11", price: 1199.0, url: "https://www.light11.com", note: "In stock · ships from DE" },
+      { retailer: "Lampefeber", price: 1149.0, url: "https://www.lampefeber.com", note: "Best price · 14-day delivery" },
+    ],
+    designer: {
+      name: "Giuseppe Maurizio Scutellà",
+      years: "b. 1969",
+      bio: "Italian architect and product designer based in Milano. Works with light as a sculptural medium — Pirce (2009) is his best-known piece for Artemide.",
+    },
   },
   {
     slug: "artemide-tizio-classic-black",

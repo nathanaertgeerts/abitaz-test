@@ -2,6 +2,7 @@ import {
   Check,
   ChevronDown,
   Download,
+  ExternalLink,
   Minus,
   Plus,
   ShieldCheck,
@@ -69,13 +70,21 @@ const ProductDetail = () => {
 
   /* gallery — main image + related thumbs (no extra assets needed) */
   const gallery = useMemo(() => {
-    const related = products
-      .filter((p) => p.slug !== product.slug &&
-        (p.brandSlug === product.brandSlug || p.categorySlug === product.categorySlug))
-      .slice(0, 4)
-      .map((p) => ({ src: p.image, alt: `${product.name} — ${p.name}` }));
-    return [{ src: product.image, alt: product.name }, ...related];
+    const main = { src: product.image, alt: product.name };
+    const extras = (product.gallery ?? []).map((src, i) => ({
+      src,
+      alt: `${product.name} — beeld ${i + 2}`,
+    }));
+    return [main, ...extras];
   }, [product]);
+
+  /* compatible bulbs (Odoo cross-sell — blueprint §4.6) */
+  const bulbs = useMemo(
+    () => (product.compatibleBulbs ?? [])
+      .map((s) => products.find((p) => p.slug === s))
+      .filter((p): p is Product => !!p),
+    [product],
+  );
 
   /* variant siblings — same brand + category (blueprint §4.4) */
   const siblings = useMemo(
@@ -102,11 +111,15 @@ const ProductDetail = () => {
   /* sticky on scroll past buy-box */
   const buyBoxRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
+    /* Header is sticky and ~140px tall (USP 40 + main 64 + ribbon 36).
+       Trigger the sticky add-to-cart only once the buy-box bottom sits
+       above the header bottom, so the two bars don't overlap. */
+    const HEADER_OFFSET = 140;
     const onScroll = () => {
       const el = buyBoxRef.current;
       if (!el) return;
       const rect = el.getBoundingClientRect();
-      setShowSticky(rect.bottom < 0);
+      setShowSticky(rect.bottom < HEADER_OFFSET);
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -275,7 +288,102 @@ const ProductDetail = () => {
               </div>
               <div className="mt-1 text-xs text-muted-foreground">SKU: {product.sku}</div>
 
+              {/* A6 — variant axes (color / size / finish) — only when present in PIM */}
+              {product.axes && (
+                <div className="mt-5 space-y-4">
+                  {product.axes.color && product.axes.color.length > 1 && (
+                    <div>
+                      <div className="mb-1.5 text-sm">
+                        <span className="text-muted-foreground">Kleur: </span>
+                        <span className="font-semibold text-foreground">
+                          {product.axes.color.find((c) => c.slug === product.slug)?.label ?? product.axes.color[0].label}
+                        </span>
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        {product.axes.color.map((c) => {
+                          const active = c.slug === product.slug;
+                          return (
+                            <Link
+                              key={c.label}
+                              to={`/products/${c.slug}`}
+                              aria-label={c.label}
+                              title={c.label}
+                              className={`grid h-9 w-9 place-items-center rounded-full border-2 transition ${
+                                active ? "border-primary ring-2 ring-primary/20" : "border-border hover:border-primary/50"
+                              }`}
+                            >
+                              <span className="h-6 w-6 rounded-full border border-black/10" style={{ backgroundColor: c.hex }} />
+                            </Link>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+                  {product.axes.size && product.axes.size.length > 1 && (
+                    <div>
+                      <div className="mb-1.5 text-sm text-muted-foreground">Maat</div>
+                      <div className="flex flex-wrap gap-2">
+                        {product.axes.size.map((s, i) => (
+                          <Link key={s.label} to={`/products/${s.slug}`}
+                            className={`rounded-md border px-3 py-2 text-sm font-semibold transition ${
+                              i === 1 ? "border-primary bg-primary/5 text-primary" : "border-border hover:border-primary/50"
+                            }`}>
+                            {s.label}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  {product.axes.finish && product.axes.finish.length > 1 && (
+                    <div>
+                      <div className="mb-1.5 text-sm text-muted-foreground">Afwerking</div>
+                      <div className="flex flex-wrap gap-2">
+                        {product.axes.finish.map((f, i) => (
+                          <Link key={f.label} to={`/products/${f.slug}`}
+                            className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
+                              i === 0 ? "border-primary bg-primary/5 text-primary" : "border-border hover:border-primary/50"
+                            }`}>
+                            {f.label}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
               {/* A8 — qty stepper + CTA */}
+              {product.salesMode === "affiliate" && product.affiliateOffers ? (
+                <div className="mt-5">
+                  <div className="mb-2 flex items-center justify-between">
+                    <div className="text-sm font-semibold text-foreground">Verkrijgbaar bij</div>
+                    <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                      Affiliate
+                    </span>
+                  </div>
+                  <ul className="divide-y divide-border rounded-md border border-border">
+                    {product.affiliateOffers.map((o) => (
+                      <li key={o.retailer} className="flex items-center gap-3 p-3">
+                        <div className="grid h-10 w-10 place-items-center rounded-md bg-muted font-display text-xs font-bold text-muted-foreground">
+                          {o.retailer.slice(0, 2).toUpperCase()}
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <div className="text-sm font-semibold">{o.retailer}</div>
+                          {o.note && <div className="text-xs text-muted-foreground">{o.note}</div>}
+                        </div>
+                        <div className="text-right font-display text-base font-extrabold">{eur(o.price)}</div>
+                        <a href={o.url} target="_blank" rel="sponsored noopener noreferrer"
+                          className="inline-flex h-10 items-center gap-1.5 rounded-md bg-primary px-3 text-sm font-bold text-primary-foreground hover:bg-primary-hover">
+                          Bekijk <ExternalLink className="h-3.5 w-3.5" />
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                  <p className="mt-2 text-[11px] text-muted-foreground">
+                    Wij verkopen dit product niet zelf — Abitaz toont de beste verkrijgbare optie.
+                  </p>
+                </div>
+              ) : (
               <div className="mt-5 flex gap-2">
                 <div className="inline-flex items-center rounded-md border border-foreground/40">
                   <button type="button" aria-label="Minder" onClick={() => setQty((q) => Math.max(1, q - 1))}
@@ -295,8 +403,10 @@ const ProductDetail = () => {
                   In winkelmand
                 </button>
               </div>
+              )}
 
-              {/* A8 — staffel-nudge (subtle, collapsible per §4.1) */}
+              {/* A8 — staffel-nudge (subtle, collapsible per §4.1) — hidden in affiliate mode */}
+              {product.salesMode !== "affiliate" && (
               <div className="mt-4">
                 <button type="button" onClick={() => setStaffelOpen((o) => !o)} aria-expanded={staffelOpen}
                   className="flex w-full items-center justify-between gap-3 border-b border-border py-2 text-left text-[13px] text-muted-foreground">
@@ -325,6 +435,7 @@ const ProductDetail = () => {
                   </div>
                 )}
               </div>
+              )}
 
               {/* A9 — reassurance row */}
               <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-[13px] font-medium">
@@ -387,6 +498,27 @@ const ProductDetail = () => {
           <p className="max-w-[72ch] text-base text-muted-foreground">{product.description}</p>
         </section>
 
+        {/* B2 — Over de maker / designer */}
+        {product.designer && (
+          <section className="mt-11 border-t border-border pt-11">
+            <div className="mb-2 text-xs font-bold uppercase tracking-widest text-primary">Over de maker</div>
+            <h2 className="mb-5 font-display text-3xl font-bold tracking-tight">{product.designer.name}{product.designer.years ? `, ${product.designer.years}` : ""}</h2>
+            <div className="grid gap-6 md:grid-cols-[120px_1fr] md:items-start">
+              <div className="grid h-[120px] w-[120px] place-items-center rounded-full bg-muted font-display text-3xl font-extrabold text-muted-foreground">
+                {product.designer.name.split(" ").map((w) => w[0]).slice(0, 2).join("")}
+              </div>
+              <div className="max-w-[72ch]">
+                <p className="text-base text-muted-foreground">{product.designer.bio}</p>
+                {product.designer.quote && (
+                  <blockquote className="mt-4 border-l-4 border-primary pl-4 font-display text-lg italic text-foreground">
+                    {product.designer.quote}
+                  </blockquote>
+                )}
+              </div>
+            </div>
+          </section>
+        )}
+
         {/* B4 — specs accordions (with dims group open by default) */}
         <section id="tech" className="mt-11 border-t border-border pt-11">
           <div className="mb-2 text-xs font-bold uppercase tracking-widest text-primary">Specificaties</div>
@@ -403,6 +535,19 @@ const ProductDetail = () => {
                   </button>
                   {open && (
                     <div className="pb-5">
+                          {g.key === "dimensions" && product.techDrawing && (
+                            <div className="mb-4 overflow-hidden rounded-md border border-border bg-surface p-4">
+                              <img
+                                src={product.techDrawing}
+                                alt={`Maattekening ${product.name}`}
+                                loading="lazy"
+                                className="mx-auto h-[220px] w-auto object-contain"
+                              />
+                              <div className="mt-2 text-center text-[11px] uppercase tracking-wider text-muted-foreground">
+                                Maattekening (Ø × H, mm)
+                              </div>
+                            </div>
+                          )}
                       <div className="grid gap-x-7 md:grid-cols-2">
                         {grouped[g.key].map((s) => (
                           <div key={s.label} className="flex justify-between gap-3 border-b border-border py-2 text-sm">
@@ -425,7 +570,7 @@ const ProductDetail = () => {
         </section>
 
         {/* B5 — bundle + cross-sell */}
-        {accessory && (
+        {product.salesMode !== "affiliate" && accessory && (
           <section className="mt-11 border-t border-border pt-11">
             <div className="mb-2 text-xs font-bold uppercase tracking-widest text-primary">Compleet maken</div>
             <h2 className="mb-5 font-display text-3xl font-bold tracking-tight">Vergeet je lichtbron niet</h2>
@@ -457,6 +602,25 @@ const ProductDetail = () => {
                 {related.map((p) => <ProductCard key={p.slug} product={p} />)}
               </div>
             )}
+          </section>
+        )}
+
+        {/* B6 — Kies je lichtbron — only when PIM links compatible bulbs */}
+        {product.salesMode !== "affiliate" && bulbs.length > 0 && (
+          <section className="mt-11 border-t border-border pt-11">
+            <div className="mb-2 flex items-center gap-2">
+              <span className="text-xs font-bold uppercase tracking-widest text-primary">Aanbevolen lichtbron</span>
+              <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                PIM · compatibleBulbs
+              </span>
+            </div>
+            <h2 className="mb-5 font-display text-3xl font-bold tracking-tight">Kies je lichtbron</h2>
+            <p className="mb-5 max-w-[72ch] text-sm text-muted-foreground">
+              Deze armatuur heeft fitting <strong className="text-foreground">{product.specs.find((s) => /socket|fitting|lamp type/i.test(s.label))?.value ?? "E14"}</strong>. We hebben deze lampen voor je geselecteerd.
+            </p>
+            <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
+              {bulbs.map((b) => <ProductCard key={b.slug} product={b} />)}
+            </div>
           </section>
         )}
 
@@ -537,9 +701,12 @@ const ProductDetail = () => {
         </section>
       </div>
 
-      {/* Sticky add-to-cart — top on desktop, bottom on mobile */}
+      {/* Sticky add-to-cart — slides in flush under the sticky header on
+          desktop, slides up from the bottom on mobile. Hidden in affiliate
+          mode (there is no cart action). */}
+      {product.salesMode !== "affiliate" && (
       <div
-        className={`fixed left-0 right-0 z-50 border-border bg-card shadow-lg transition-transform md:top-0 md:border-b ${
+        className={`fixed left-0 right-0 z-30 border-border bg-card shadow-lg transition-transform md:top-[140px] md:border-b ${
           showSticky ? "translate-y-0" : "-translate-y-full max-md:translate-y-full"
         } max-md:bottom-0 max-md:top-auto max-md:border-t`}
       >
@@ -557,6 +724,7 @@ const ProductDetail = () => {
           </button>
         </div>
       </div>
+      )}
     </SiteLayout>
   );
 };
