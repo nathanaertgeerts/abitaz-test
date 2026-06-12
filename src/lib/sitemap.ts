@@ -548,6 +548,7 @@ export const MOUNTED_ROUTES = new Set<string>([
   "/search",
   "/brands",
   "/brands/:slug",
+  "/brands/:slug/:collection",
   "/cart",
   "/checkout",
   "/checkout/shipping",

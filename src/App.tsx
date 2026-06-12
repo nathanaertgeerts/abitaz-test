@@ -53,6 +53,7 @@ import {
   Cookies,
 } from "./pages/skeletons.tsx";
 import {
+  BrandCollection,
   CheckoutShipping,
   CheckoutPayment,
   CheckoutReturn,
@@ -108,6 +109,7 @@ const App = () => (
             <Route path="/search" element={<Search />} />
             <Route path="/brands" element={<Brands />} />
             <Route path="/brands/:slug" element={<Brand />} />
+            <Route path="/brands/:slug/:collection" element={<BrandCollection />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/order-confirmation" element={<OrderConfirmation />} />
