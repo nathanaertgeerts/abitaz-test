@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { Check, ChevronRight, Copy, ExternalLink, FileCode2, Layers, Library, AlertTriangle, Flag, Sparkles } from "lucide-react";
+import { Check, ChevronRight, Copy, ExternalLink, FileCode2, Layers, Library, AlertTriangle, Flag, Sparkles, Server } from "lucide-react";
 import { SiteLayout } from "@/components/layout/SiteLayout";
 import { OdooArchitecture } from "@/components/sitemap/OdooArchitecture";
 import {
@@ -34,6 +34,16 @@ const StatusPill = ({ status }: { status: PageStatus }) => (
   </span>
 );
 
+const BackendPill = () => (
+  <span
+    title="Needs backend wiring (Odoo endpoint, edge function, webhook, DB or auth) before the FE page can function."
+    className="inline-flex items-center gap-1 rounded-full border border-cta/50 bg-cta/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-cta"
+  >
+    <Server className="h-3 w-3" />
+    Backend
+  </span>
+);
+
 const NodeRow = ({ node, depth = 0 }: { node: SitemapNode; depth?: number }) => {
   // Resolve sitemap path → real Vite URL (strips /[locale], fills [slug]/[id]).
   const href = resolveInternalHref(node.path);
@@ -47,6 +57,7 @@ const NodeRow = ({ node, depth = 0 }: { node: SitemapNode; depth?: number }) => 
         </code>
       )}
       <StatusPill status={node.status} />
+      {node.needsBackend && <BackendPill />}
       {href && (
         <span className="ml-auto inline-flex items-center gap-1 text-xs text-primary opacity-70 transition group-hover:opacity-100">
           open <ExternalLink className="h-3 w-3" />
@@ -331,12 +342,14 @@ const Sitemap = () => {
               </p>
               <ul className="list-disc space-y-1 pl-5 text-sm text-foreground">
                 {june12Status.todo.map((t, i) => (
-                  <li
-                    key={i}
-                    dangerouslySetInnerHTML={{
-                      __html: t.replace(/`([^`]+)`/g, "<code>$1</code>"),
-                    }}
-                  />
+                  <li key={i} className="flex flex-wrap items-center gap-2">
+                    <span
+                      dangerouslySetInnerHTML={{
+                        __html: t.text.replace(/`([^`]+)`/g, "<code>$1</code>"),
+                      }}
+                    />
+                    {t.needsBackend && <BackendPill />}
+                  </li>
                 ))}
               </ul>
             </div>
