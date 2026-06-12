@@ -347,6 +347,21 @@ const ProductDetail = () => {
         </div>
 
         {/* B1 — key features */}
+        {siblings.length > 0 && (
+          <section className="mt-12 border-t border-border pt-11">
+            <div className="mb-2 text-xs font-bold uppercase tracking-widest text-primary">Andere maten & uitvoeringen</div>
+            <h2 className="mb-5 font-display text-3xl font-bold tracking-tight">Ook verkrijgbaar als</h2>
+            <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4">
+              {siblings.map((p) => (
+                <ProductCard key={p.slug} product={p} />
+              ))}
+            </div>
+            <p className="mt-3 text-xs text-muted-foreground">
+              Backend: gegroepeerd op <code>x_parent_sku</code> (Odoo PIM) — hier nu op merk + categorie als fallback.
+            </p>
+          </section>
+        )}
+
         <section className="mt-12 border-t border-border pt-11">
           <div className="mb-2 text-xs font-bold uppercase tracking-widest text-primary">Waarom dit product</div>
           <h2 className="mb-5 font-display text-3xl font-bold tracking-tight">Drie dingen die het verschil maken</h2>
