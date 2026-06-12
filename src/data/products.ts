@@ -133,6 +133,24 @@ export const products: Product[] = [
       { label: "Water resistance", value: "IP20" },
       { label: "Dimensions", value: "230 x 245 mm (Ø x H)" },
     ],
+    axes: {
+      size: [
+        { label: "VP1 — Ø 230 mm", slug: "tradition-flowerpot-vp2-darkgreen", note: "Pendant" },
+        { label: "VP2 — Ø 500 mm", slug: "tradition-flowerpot-vp2-darkgreen", note: "Pendant" },
+        { label: "VP3 — Table", slug: "tradition-flowerpot-vp2-darkgreen", note: "Table version" },
+      ],
+      finish: [
+        { label: "Matt", slug: "tradition-flowerpot-vp2-darkgreen" },
+        { label: "Glossy", slug: "tradition-flowerpot-vp2-darkgreen" },
+        { label: "Brass-plated", slug: "tradition-flowerpot-vp2-darkgreen" },
+      ],
+    },
+    designer: {
+      name: "Verner Panton",
+      years: "1926 – 1998",
+      bio: "Danish designer who broke with Scandinavian restraint in the 1960s. Bold colour, geometric shapes and futuristic optimism — the FlowerPot (1968) captures all three in a single object.",
+    },
+    compatibleBulbs: ["philips-led-e14-43w", "philips-led-e14-65w"],
   },
   {
     slug: "louis-poulsen-snowball",
