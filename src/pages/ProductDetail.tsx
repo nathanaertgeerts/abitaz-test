@@ -2,6 +2,7 @@ import {
   Check,
   ChevronDown,
   Download,
+  ExternalLink,
   Minus,
   Plus,
   ShieldCheck,
