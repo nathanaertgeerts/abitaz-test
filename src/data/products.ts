@@ -76,12 +76,6 @@ export const products: Product[] = [
     colors: ["#1f3a5f", "#2c8d7a", "#d8423a", "#e8a13a", "#3f5c3a", "#cfa37a", "#e5e1d3", "#1f1f1f"],
     description:
       "All the trumps of the Louis Poulsen PH 5, but in a smaller format. That's exactly what the PH 5 Mini is. The most popular PH lamp from Danish designer Poul Henningsen, reproduced in a different format. The design of the new, handy model is fully aligned with the contemporary creative lifestyle.",
-    specs: [
-      { label: "Lamp type", value: "1 x E14 max. 20W" },
-      { label: "Dimmable", value: "Yes (dimmer not included)" },
-      { label: "Water resistance", value: "IP20 No/limited protection" },
-      { label: "Dimensions", value: "300 x 163 mm (Ø x H)" },
-    ],
     salesMode: "transactional",
     gallery: [pendantWhite, pendantGreen, pendantDome],
     techDrawing: "/placeholder.svg",
