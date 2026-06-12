@@ -65,7 +65,7 @@ import {
   TextInput,
   Timeline,
 } from "@/components/design/primitives";
-import { ProductCard } from "@/components/product/ProductCard";
+import { ProductCard } from "@/components/products/ProductCard";
 import { products } from "@/data/products";
 
 /* =========================================================================
@@ -169,7 +169,7 @@ export const RoomDetail = () => {
               <li key={p.slug} className="flex gap-3 rounded-lg border border-border bg-card p-3">
                 <img src={p.image} alt="" className="h-16 w-16 rounded bg-surface object-contain" />
                 <div className="min-w-0 flex-1">
-                  <Link to={`/product/${p.slug}`} className="block truncate font-medium hover:text-primary">{p.name}</Link>
+                  <Link to={`/products/${p.slug}`} className="block truncate font-medium hover:text-primary">{p.name}</Link>
                   <p className="text-xs text-muted-foreground">{p.brand}</p>
                   <p className="mt-1 text-sm font-bold text-primary">€{p.price.toFixed(2)}</p>
                 </div>

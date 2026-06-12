@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { SiteLayout } from "@/components/layout/SiteLayout";
-import { ProductCard } from "@/components/product/ProductCard";
+import { ProductCard } from "@/components/products/ProductCard";
 import { products } from "@/data/products";
 import { brandLogos } from "@/components/home/BrandLogos";
 
@@ -166,7 +166,7 @@ const DealsRow = ({ title, deals }: { title: string; deals: Deal[] }) => {
           return (
             <Link
               key={d.slug}
-              to={`/product/${d.slug}`}
+              to={`/products/${d.slug}`}
               className="group flex w-[160px] flex-none flex-col gap-2 md:w-[180px]"
             >
               <div className="relative aspect-square overflow-hidden rounded-md bg-surface">
@@ -238,13 +238,13 @@ const SaleHero = () => (
         </p>
         <div className="flex flex-wrap gap-3 pt-1">
           <Link
-            to="/category/pendant-lamps"
+            to="/categories/pendant-lamps"
             className="rounded-md bg-cta px-5 py-2.5 text-sm font-semibold text-cta-foreground transition hover:bg-cta-hover"
           >
             Shop pendants
           </Link>
           <Link
-            to="/category/outdoor-lighting"
+            to="/categories/outdoor-lighting"
             className="rounded-md bg-white/15 px-5 py-2.5 text-sm font-semibold text-white ring-1 ring-inset ring-white/40 backdrop-blur-sm transition hover:bg-white/25"
           >
             Shop outdoor
@@ -270,13 +270,13 @@ const SaleHero = () => (
           </p>
           <div className="flex flex-wrap gap-3">
             <Link
-              to="/category/pendant-lamps"
+              to="/categories/pendant-lamps"
               className="rounded-md bg-cta px-5 py-2.5 text-sm font-semibold text-cta-foreground transition hover:bg-cta-hover"
             >
               Shop pendants
             </Link>
             <Link
-              to="/category/outdoor-lighting"
+              to="/categories/outdoor-lighting"
               className="rounded-md bg-background/10 px-5 py-2.5 text-sm font-semibold text-primary-foreground ring-1 ring-inset ring-primary-foreground/30 transition hover:bg-background/20"
             >
               Shop outdoor
@@ -315,7 +315,7 @@ const SaleBrands = () => {
             return (
               <Link
                 key={slug}
-                to={`/category/pendant-lamps`}
+                to={`/categories/pendant-lamps`}
                 className="group grid h-20 place-items-center rounded-md border border-border bg-background px-3 transition hover:border-primary hover:shadow-sm"
               >
                 <Logo className="h-6 w-full text-foreground/70 transition group-hover:text-primary" />
@@ -344,38 +344,38 @@ export const SaleContent = () => {
 
   /* ---- Tile content ---- */
   const indoorTiles: GridTile[] = [
-    { label: "Pendant lamps", image: productOrange, to: "/category/pendant-lamps" },
-    { label: "Ceiling lamps", image: productDome, to: "/category/ceiling-lamps" },
-    { label: "Wall lamps", image: productBlack, to: "/category/wall-lamps" },
-    { label: "Table lamps", image: productGlobe, to: "/category/table-lamps" },
+    { label: "Pendant lamps", image: productOrange, to: "/categories/pendant-lamps" },
+    { label: "Ceiling lamps", image: productDome, to: "/categories/ceiling-lamps" },
+    { label: "Wall lamps", image: productBlack, to: "/categories/wall-lamps" },
+    { label: "Table lamps", image: productGlobe, to: "/categories/table-lamps" },
   ];
 
   const outdoorTiles: GridTile[] = [
-    { label: "Garden lighting", image: heroOutdoor, to: "/category/outdoor-lighting" },
-    { label: "Wall outdoor", image: heroIndoor, to: "/category/outdoor-lighting" },
-    { label: "Path lighting", image: heroDesigner, to: "/category/outdoor-lighting" },
-    { label: "Spots & floods", image: heroInstall, to: "/category/outdoor-lighting" },
+    { label: "Garden lighting", image: heroOutdoor, to: "/categories/outdoor-lighting" },
+    { label: "Wall outdoor", image: heroIndoor, to: "/categories/outdoor-lighting" },
+    { label: "Path lighting", image: heroDesigner, to: "/categories/outdoor-lighting" },
+    { label: "Spots & floods", image: heroInstall, to: "/categories/outdoor-lighting" },
   ];
 
   const installTiles: GridTile[] = [
-    { label: "Switches", image: heroInstall, to: "/category/installation" },
-    { label: "Cables", image: heroInstall, to: "/category/installation" },
-    { label: "Sockets", image: heroInstall, to: "/category/installation" },
-    { label: "Tools", image: heroInstall, to: "/category/installation" },
+    { label: "Switches", image: heroInstall, to: "/categories/installation" },
+    { label: "Cables", image: heroInstall, to: "/categories/installation" },
+    { label: "Sockets", image: heroInstall, to: "/categories/installation" },
+    { label: "Tools", image: heroInstall, to: "/categories/installation" },
   ];
 
   const bulbsTiles: GridTile[] = [
-    { label: "E27 bulbs", image: productBulb, to: "/category/bulbs" },
-    { label: "E14 bulbs", image: productBulb, to: "/category/bulbs" },
-    { label: "GU10 spots", image: productBulb, to: "/category/bulbs" },
-    { label: "Smart bulbs", image: productBulb, to: "/category/bulbs" },
+    { label: "E27 bulbs", image: productBulb, to: "/categories/bulbs" },
+    { label: "E14 bulbs", image: productBulb, to: "/categories/bulbs" },
+    { label: "GU10 spots", image: productBulb, to: "/categories/bulbs" },
+    { label: "Smart bulbs", image: productBulb, to: "/categories/bulbs" },
   ];
 
   const designerTiles: GridTile[] = [
-    { label: "Louis Poulsen", image: productOrange, to: "/category/pendant-lamps" },
-    { label: "&tradition", image: productGreen, to: "/category/pendant-lamps" },
-    { label: "Flos", image: heroDesigner, to: "/category/pendant-lamps" },
-    { label: "Nordlux", image: productWhite, to: "/category/pendant-lamps" },
+    { label: "Louis Poulsen", image: productOrange, to: "/categories/pendant-lamps" },
+    { label: "&tradition", image: productGreen, to: "/categories/pendant-lamps" },
+    { label: "Flos", image: heroDesigner, to: "/categories/pendant-lamps" },
+    { label: "Nordlux", image: productWhite, to: "/categories/pendant-lamps" },
   ];
 
   return (
@@ -387,25 +387,25 @@ export const SaleContent = () => {
         <TileCard
           title="Indoor lighting deals"
           cta="See more indoor"
-          to="/category/pendant-lamps"
+          to="/categories/pendant-lamps"
           tiles={indoorTiles}
         />
         <TileCard
           title="Outdoor lighting deals"
           cta="See more outdoor"
-          to="/category/outdoor-lighting"
+          to="/categories/outdoor-lighting"
           tiles={outdoorTiles}
         />
         <BigCard
           title="Designer brands -30%"
           cta="Shop designers"
-          to="/category/pendant-lamps"
+          to="/categories/pendant-lamps"
           image={promoDesigner}
         />
         <TileCard
           title="Bulbs & smart"
           cta="Shop bulbs"
-          to="/category/bulbs"
+          to="/categories/bulbs"
           tiles={bulbsTiles}
         />
       </div>
@@ -426,19 +426,19 @@ export const SaleContent = () => {
         <TileCard
           title="Designer favourites"
           cta="See all designers"
-          to="/category/pendant-lamps"
+          to="/categories/pendant-lamps"
           tiles={designerTiles}
         />
         <TileCard
           title="Installation materials"
           cta="Shop installation"
-          to="/category/installation"
+          to="/categories/installation"
           tiles={installTiles}
         />
         <BigCard
           title="Outdoor season -25%"
           cta="Shop outdoor"
-          to="/category/outdoor-lighting"
+          to="/categories/outdoor-lighting"
           image={heroOutdoor}
         />
       </div>

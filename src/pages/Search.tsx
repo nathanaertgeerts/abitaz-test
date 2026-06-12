@@ -2,7 +2,7 @@ import { ChevronDown, Search as SearchIcon, SlidersHorizontal } from "lucide-rea
 import { useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { SiteLayout } from "@/components/layout/SiteLayout";
-import { ProductCard } from "@/components/product/ProductCard";
+import { ProductCard } from "@/components/products/ProductCard";
 import { products } from "@/data/products";
 
 /* ---------- Filter facets (cross-category set tailored for search) ---------- */
@@ -386,7 +386,7 @@ const Search = () => {
                     </p>
                     <p className="mt-2 text-sm text-muted-foreground">
                       Try a different keyword, clear filters, or{" "}
-                      <Link to="/category/pendant-lamps" className="text-primary hover:underline">
+                      <Link to="/categories/pendant-lamps" className="text-primary hover:underline">
                         browse the catalogue
                       </Link>
                       .

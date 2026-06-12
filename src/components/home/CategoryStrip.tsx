@@ -50,7 +50,7 @@ export const CategoryStrip = () => {
             return (
               <Link
                 key={cat.slug}
-                to={`/category/${cat.slug}`}
+                to={`/categories/${cat.slug}`}
                 className="group flex flex-col items-center justify-center gap-2 rounded-md bg-card p-4 text-center transition hover:-translate-y-0.5 hover:text-primary hover:shadow-md"
               >
                 <span className="grid h-12 w-12 place-items-center rounded-full bg-background text-primary transition-colors group-hover:bg-cta/10 group-hover:text-cta">

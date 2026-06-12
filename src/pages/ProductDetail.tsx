@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "sonner";
 import { SiteLayout } from "@/components/layout/SiteLayout";
-import { ProductCard, formatPrice } from "@/components/product/ProductCard";
+import { ProductCard, formatPrice } from "@/components/products/ProductCard";
 import { productBySlug, products } from "@/data/products";
 import { useCart } from "@/context/CartContext";
 
@@ -63,7 +63,7 @@ const ProductDetail = () => {
           <ol className="flex flex-wrap items-center gap-2">
             <li><a href="/" className="hover:text-primary">Home</a></li>
             <li aria-hidden>/</li>
-            <li><a href={`/category/${product.categorySlug}`} className="hover:text-primary">{product.category}</a></li>
+            <li><a href={`/categories/${product.categorySlug}`} className="hover:text-primary">{product.category}</a></li>
             <li aria-hidden>/</li>
             <li className="text-foreground">{product.name}</li>
           </ol>

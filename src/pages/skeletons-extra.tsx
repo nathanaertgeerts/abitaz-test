@@ -487,7 +487,7 @@ export const AccountOrderDetail = () => {
             <li key={p.slug} className="flex gap-4 py-4">
               <img src={p.image} alt="" className="h-20 w-20 rounded bg-surface object-contain" />
               <div className="min-w-0 flex-1">
-                <Link to={`/product/${p.slug}`} className="font-semibold hover:text-primary">{p.name}</Link>
+                <Link to={`/products/${p.slug}`} className="font-semibold hover:text-primary">{p.name}</Link>
                 <p className="text-xs text-muted-foreground">{p.brand} · SKU {p.sku}</p>
                 <p className="mt-1 text-sm">Qty 1 · €{p.price.toFixed(2)}</p>
               </div>

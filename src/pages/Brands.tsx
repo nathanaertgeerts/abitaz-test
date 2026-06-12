@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { brandLogos } from "@/components/home/BrandLogos";
 import { SiteLayout } from "@/components/layout/SiteLayout";
-import { ProductCard } from "@/components/product/ProductCard";
+import { ProductCard } from "@/components/products/ProductCard";
 import { brands, products } from "@/data/products";
 
 /* ---------- Brand tiers (mirrors the megamenu structure) ---------- */
@@ -232,7 +232,7 @@ const Brands = () => {
               Top brand picks
             </h2>
             <Link
-              to="/category/pendant-lamps"
+              to="/categories/pendant-lamps"
               className="text-sm font-medium text-primary hover:underline"
             >
               See all products
@@ -349,7 +349,7 @@ const Brands = () => {
 
       <div className="container-abitaz mt-12 mb-16 text-center">
         <Link
-          to="/category/pendant-lamps"
+          to="/categories/pendant-lamps"
           className="inline-flex h-12 items-center justify-center rounded-md bg-cta px-8 text-sm font-semibold text-cta-foreground transition hover:bg-cta-hover"
         >
           Browse the full catalogue

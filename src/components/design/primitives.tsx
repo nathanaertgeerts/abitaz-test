@@ -560,7 +560,7 @@ export const LegalDoc = ({
 
 /* ---------- Sample product grid (designer placeholder) ---------- */
 
-import { ProductCard } from "@/components/product/ProductCard";
+import { ProductCard } from "@/components/products/ProductCard";
 import { products } from "@/data/products";
 
 export const SampleProductGrid = ({

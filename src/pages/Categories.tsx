@@ -14,7 +14,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { SiteLayout } from "@/components/layout/SiteLayout";
-import { ProductCard } from "@/components/product/ProductCard";
+import { ProductCard } from "@/components/products/ProductCard";
 import { categories, products } from "@/data/products";
 
 /* ---------- Visual mapping (icon + hero image per category) ---------- */
@@ -217,7 +217,7 @@ const Categories = () => {
               Top picks across categories
             </h2>
             <Link
-              to="/category/pendant-lamps"
+              to="/categories/pendant-lamps"
               className="text-sm font-medium text-primary hover:underline"
             >
               See all products
@@ -246,7 +246,7 @@ const Categories = () => {
             return (
               <li key={c.slug}>
                 <Link
-                  to={`/category/${c.slug}`}
+                  to={`/categories/${c.slug}`}
                   aria-label={`${c.name} — shop all products`}
                   className="group block overflow-hidden rounded-md border border-border bg-card transition hover:shadow-md"
                 >
@@ -309,7 +309,7 @@ const Categories = () => {
                   <p className="text-sm text-muted-foreground">{group.blurb}</p>
                 </div>
                 <Link
-                  to={`/category/${group.slugs[0]}`}
+                  to={`/categories/${group.slugs[0]}`}
                   className="group inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
                 >
                   Shop the department
@@ -328,7 +328,7 @@ const Categories = () => {
                   return (
                     <Link
                       key={slug}
-                      to={`/category/${slug}`}
+                      to={`/categories/${slug}`}
                       className="rounded-full border border-border bg-background px-3 py-1 text-xs font-medium text-foreground transition hover:border-primary hover:text-primary"
                     >
                       {c.name}
@@ -348,7 +348,7 @@ const Categories = () => {
 
       <div className="container-abitaz mt-12 mb-16 text-center">
         <Link
-          to="/category/pendant-lamps"
+          to="/categories/pendant-lamps"
           className="inline-flex h-12 items-center justify-center rounded-md bg-cta px-8 text-sm font-semibold text-cta-foreground transition hover:bg-cta-hover"
         >
           Browse the full catalogue

@@ -6,10 +6,10 @@ const columns = [
   {
     title: "Shop",
     links: [
-      { label: "Indoor lighting", to: "/category/pendant-lamps" },
-      { label: "Outdoor lighting", to: "/category/outdoor-lighting" },
-      { label: "Installation materials", to: "/category/installation" },
-      { label: "Light bulbs", to: "/category/bulbs" },
+      { label: "Indoor lighting", to: "/categories/pendant-lamps" },
+      { label: "Outdoor lighting", to: "/categories/outdoor-lighting" },
+      { label: "Installation materials", to: "/categories/installation" },
+      { label: "Light bulbs", to: "/categories/bulbs" },
       { label: "Sale", to: "/sale" },
     ],
   },

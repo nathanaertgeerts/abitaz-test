@@ -2,7 +2,7 @@ import { ArrowLeft, Check, ChevronDown, Clock, Headset, Minus, Package, Plus, Ro
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { SiteLayout } from "@/components/layout/SiteLayout";
-import { formatPrice } from "@/components/product/ProductCard";
+import { formatPrice } from "@/components/products/ProductCard";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -54,7 +54,7 @@ const Cart = () => {
               Browse our catalogue and add a few products to get started.
             </p>
             <Link
-              to="/category/pendant-lamps"
+              to="/categories/pendant-lamps"
               className="mt-6 inline-flex h-11 items-center justify-center rounded-md bg-cta px-6 text-sm font-semibold text-cta-foreground transition hover:bg-cta-hover"
             >
               Start shopping
@@ -102,7 +102,7 @@ const Cart = () => {
                   className="grid grid-cols-[88px_1fr] gap-4 rounded-lg border border-border bg-card p-4 sm:grid-cols-[120px_1fr]"
                 >
                   <Link
-                    to={`/product/${line.slug}`}
+                    to={`/products/${line.slug}`}
                     className="aspect-square overflow-hidden rounded-md bg-surface"
                   >
                     <img
@@ -119,7 +119,7 @@ const Cart = () => {
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0">
                         <Link
-                          to={`/product/${line.slug}`}
+                          to={`/products/${line.slug}`}
                           className="block truncate font-display text-sm font-bold text-foreground hover:text-primary sm:text-base"
                         >
                           {line.name}

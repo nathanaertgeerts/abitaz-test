@@ -2,7 +2,7 @@ import { ArrowLeft, Check, Lock } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { SiteLayout } from "@/components/layout/SiteLayout";
-import { formatPrice } from "@/components/product/ProductCard";
+import { formatPrice } from "@/components/products/ProductCard";
 import { useCart } from "@/context/CartContext";
 
 type Step = 1 | 2 | 3;
