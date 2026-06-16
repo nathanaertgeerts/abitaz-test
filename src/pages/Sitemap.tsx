@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Check, CheckCircle2, ChevronRight, Copy, ExternalLink, FileCode2, Layers, Library, AlertTriangle, Flag, Sparkles, Server } from "lucide-react";
 import { SiteLayout } from "@/components/layout/SiteLayout";
 import { OdooArchitecture } from "@/components/sitemap/OdooArchitecture";
+import { SitemapExportButton } from "@/components/sitemap/ExportButton";
 import {
   countByStatus,
   sitemap,
@@ -145,13 +146,16 @@ const Sitemap = () => {
               single template — designers can mock banners once and they'll fit any new entry.
             </p>
           </div>
-          <button
-            onClick={copyAsMarkdown}
-            className="inline-flex items-center gap-2 rounded-md border border-border bg-card px-3 py-2 text-sm font-medium text-foreground transition hover:border-primary hover:text-primary"
-          >
-            {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-            {copied ? "Copied" : "Copy as Markdown"}
-          </button>
+          <div className="flex flex-wrap items-center gap-2">
+            <SitemapExportButton />
+            <button
+              onClick={copyAsMarkdown}
+              className="inline-flex items-center gap-2 rounded-md border border-border bg-card px-3 py-2 text-sm font-medium text-foreground transition hover:border-primary hover:text-primary"
+            >
+              {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+              {copied ? "Copied" : "Copy as Markdown"}
+            </button>
+          </div>
         </div>
 
         {/* Stats */}
