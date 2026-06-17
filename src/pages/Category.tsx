@@ -5,6 +5,7 @@ import { SiteLayout } from "@/components/layout/SiteLayout";
 import { ProductCard } from "@/components/product/ProductCard";
 import { categories, products } from "@/data/products";
 import promoDesigner from "@/assets/promo-designer-sale.jpg";
+import { SubcategoryQuickNav } from "@/components/category/SubcategoryQuickNav";
 import {
   Sheet,
   SheetContent,
@@ -760,6 +761,17 @@ const Category = () => {
             </div>
           </Link>
         </div>
+
+        {/* Quick-nav: sibling sub-categories within the active group.
+            Hidden on group landing pages with no subs to navigate between. */}
+        {activeGroup.subs.length > 0 && (
+          <SubcategoryQuickNav
+            groupSlug={activeGroup.slug}
+            groupName={activeGroup.name}
+            subs={activeGroup.subs}
+            activeSlug={slug}
+          />
+        )}
 
         <div className="grid gap-8 lg:grid-cols-[260px_1fr]">
           {/* ---------- Mobile filter trigger (opens bottom sheet) ---------- */}
