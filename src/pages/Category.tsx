@@ -8,6 +8,7 @@ import promoDesigner from "@/assets/promo-designer-sale.jpg";
 import { SubcategoryQuickNav } from "@/components/category/SubcategoryQuickNav";
 import { CategoryPagination } from "@/components/category/CategoryPagination";
 import { CategorySeoContent } from "@/components/category/CategorySeoContent";
+import { ExportPageButton } from "@/components/category/ExportPageButton";
 import { getCategoryContent } from "@/data/categoryContent";
 import {
   Sheet,
@@ -1187,6 +1188,7 @@ const Category = () => {
           </section>
         </div>
       </div>
+      <ExportPageButton />
     </SiteLayout>
   );
 };
