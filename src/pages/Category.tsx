@@ -6,6 +6,9 @@ import { ProductCard } from "@/components/product/ProductCard";
 import { categories, products } from "@/data/products";
 import promoDesigner from "@/assets/promo-designer-sale.jpg";
 import { SubcategoryQuickNav } from "@/components/category/SubcategoryQuickNav";
+import { CategoryPagination } from "@/components/category/CategoryPagination";
+import { CategorySeoContent } from "@/components/category/CategorySeoContent";
+import { getCategoryContent } from "@/data/categoryContent";
 import {
   Sheet,
   SheetContent,
@@ -550,6 +553,9 @@ const Category = () => {
   const [sort, setSort] = useState("popularity");
   // Filters are collapsed by default on mobile, always shown on desktop (lg+)
   const [filtersOpen, setFiltersOpen] = useState(false);
+  // Pagination — 24 products per page is a good balance for 2/3-col grids.
+  const PAGE_SIZE = 24;
+  const [page, setPage] = useState(1);
 
   // ----- Active filter state (reset whenever the filter set changes) -----
   const [minPrice, setMinPrice] = useState<number>(filterSet.range.min);
@@ -712,6 +718,55 @@ const Category = () => {
     return copy;
   }, [list, sort]);
 
+  // Reset to page 1 whenever the result set or sort changes.
+  useEffect(() => {
+    setPage(1);
+  }, [slug, sort, minPrice, maxPrice, checkedFacets, checkedSwatches]);
+
+  const pageCount = Math.max(1, Math.ceil(sorted.length / PAGE_SIZE));
+  const pageItems = useMemo(
+    () => sorted.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE),
+    [sorted, page],
+  );
+
+  // CMS-backed long-form content + intro lede for this category.
+  const seo = useMemo(() => getCategoryContent(slug), [slug]);
+
+  // FAQPage + BreadcrumbList JSON-LD for SEO/GEO.
+  // Injected into <head> on mount and cleaned up when the slug changes.
+  useEffect(() => {
+    const name = cat?.name ?? "Category";
+    const ld = [
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: "/" },
+          { "@type": "ListItem", position: 2, name: "Lighting", item: "/categories/pendant-lamps" },
+          { "@type": "ListItem", position: 3, name },
+        ],
+      },
+      seo.faqs.length > 0 && {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: seo.faqs.map((f) => ({
+          "@type": "Question",
+          name: f.q,
+          acceptedAnswer: { "@type": "Answer", text: f.a },
+        })),
+      },
+    ].filter(Boolean);
+
+    const script = document.createElement("script");
+    script.type = "application/ld+json";
+    script.dataset.categoryLd = "true";
+    script.text = JSON.stringify(ld);
+    document.head.appendChild(script);
+    return () => {
+      script.remove();
+    };
+  }, [slug, cat, seo]);
+
   return (
     <SiteLayout>
       <div className="container-abitaz py-8">
@@ -732,6 +787,9 @@ const Category = () => {
             <h1 className="font-display text-3xl font-bold md:text-4xl">
               {cat?.name ?? "Pendant lamps"}
             </h1>
+            <p className="mt-3 max-w-xl text-[15px] leading-relaxed text-muted-foreground">
+              {seo.lede}
+            </p>
           </div>
           <Link
             to="/sale"
@@ -1111,10 +1169,21 @@ const Category = () => {
             </div>
 
             <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
-              {sorted.map((p) => (
+              {pageItems.map((p) => (
                 <ProductCard key={p.slug} product={p} />
               ))}
             </div>
+
+            <CategoryPagination
+              page={page}
+              pageCount={pageCount}
+              onChange={setPage}
+            />
+
+            <CategorySeoContent
+              categoryName={cat?.name ?? "Pendant lamps"}
+              content={seo}
+            />
           </section>
         </div>
       </div>
