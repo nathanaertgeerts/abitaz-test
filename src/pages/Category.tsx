@@ -1180,13 +1180,16 @@ const Category = () => {
               pageCount={pageCount}
               onChange={setPage}
             />
-
-            <CategorySeoContent
-              categoryName={cat?.name ?? "Pendant lamps"}
-              content={seo}
-            />
           </section>
         </div>
+
+        {/* Full-width SEO/GEO guide + sponsored brand slot, below the
+            sidebar + grid so it can use the entire container width. */}
+        <CategorySeoContent
+          categoryName={cat?.name ?? "Pendant lamps"}
+          content={seo}
+          slug={slug ?? ""}
+        />
       </div>
       <ExportPageButton />
     </SiteLayout>
